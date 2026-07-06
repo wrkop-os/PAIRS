@@ -385,3 +385,6 @@ function resize() {
 addEventListener('resize', resize)
 resize()
 requestAnimationFrame(loop)
+
+/* read-only handle for the HUD telemetry readout */
+window.__flowWave = { camera, uniforms: pointsUniforms }

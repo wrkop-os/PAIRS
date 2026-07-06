@@ -1,14 +1,13 @@
 /* ============================================================
-   PAIRS — UI interactions (the Flow Wave scene lives in scene.js)
+   PAIRS — UI interactions & HUD (the Flow Wave scene lives in scene.js)
    ============================================================ */
 (() => {
   "use strict";
 
   const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const isTouch = window.matchMedia("(pointer: coarse)").matches;
 
   /* ---------- scroll: progress bar, nav state, timeline fill ---------- */
-  const progress = document.querySelector(".scroll-progress span");
+  const progress = document.getElementById("scrollFill");
   const nav = document.getElementById("nav");
   const timeline = document.querySelector(".timeline");
   const timelineFill = document.getElementById("timelineFill");
@@ -28,7 +27,7 @@
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry, i) => {
       if (entry.isIntersecting) {
-        entry.target.style.transitionDelay = `${(i % 4) * 80}ms`;
+        entry.target.style.transitionDelay = `${(i % 4) * 70}ms`;
         entry.target.classList.add("visible");
         revealObserver.unobserve(entry.target);
       }
@@ -42,7 +41,7 @@
       if (!entry.isIntersecting) return;
       const el = entry.target;
       const end = parseInt(el.dataset.count, 10);
-      const dur = 1400;
+      const dur = 1200;
       const t0 = performance.now();
       const tick = (t) => {
         const p = Math.min(1, (t - t0) / dur);
@@ -55,38 +54,6 @@
   }, { threshold: 0.6 });
   document.querySelectorAll(".stat__num").forEach((el) => counterObserver.observe(el));
 
-  /* ---------- 3D tilt cards ---------- */
-  if (!isTouch && !prefersReduced) {
-    document.querySelectorAll(".tilt").forEach((card) => {
-      card.addEventListener("pointermove", (e) => {
-        const rect = card.getBoundingClientRect();
-        const px = (e.clientX - rect.left) / rect.width;
-        const py = (e.clientY - rect.top) / rect.height;
-        card.style.transform = `perspective(800px) rotateX(${(0.5 - py) * 10}deg) rotateY(${(px - 0.5) * 12}deg) translateY(-4px)`;
-        card.style.setProperty("--mx", `${px * 100}%`);
-        card.style.setProperty("--my", `${py * 100}%`);
-      });
-      card.addEventListener("pointerleave", () => {
-        card.style.transform = "perspective(800px) rotateX(0) rotateY(0) translateY(0)";
-      });
-    });
-  }
-
-  /* ---------- magnetic buttons ---------- */
-  if (!isTouch && !prefersReduced) {
-    document.querySelectorAll(".magnetic").forEach((btn) => {
-      btn.addEventListener("pointermove", (e) => {
-        const rect = btn.getBoundingClientRect();
-        const x = e.clientX - rect.left - rect.width / 2;
-        const y = e.clientY - rect.top - rect.height / 2;
-        btn.style.transform = `translate(${x * 0.22}px, ${y * 0.3}px)`;
-      });
-      btn.addEventListener("pointerleave", () => {
-        btn.style.transform = "translate(0, 0)";
-      });
-    });
-  }
-
   /* ---------- mobile menu ---------- */
   const burger = document.getElementById("burger");
   if (burger) {
@@ -95,4 +62,59 @@
       a.addEventListener("click", () => nav.classList.remove("menu-open"))
     );
   }
+
+  /* ============================================================
+     HUD: clock, section tracker, live scene telemetry
+     ============================================================ */
+  const hudClock = document.getElementById("hudClock");
+  const hudSection = document.getElementById("hudSection");
+  const hudTelemetry = document.getElementById("hudTelemetry");
+
+  /* UTC clock */
+  const pad = (n) => String(n).padStart(2, "0");
+  const updateClock = () => {
+    const d = new Date();
+    hudClock.textContent =
+      `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())} ` +
+      `${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}:${pad(d.getUTCSeconds())} UTC`;
+  };
+  updateClock();
+  setInterval(updateClock, 1000);
+
+  /* section tracker */
+  const sections = [...document.querySelectorAll("[data-sec]")];
+  const TOTAL = sections.length;
+  const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        hudSection.textContent = `SEC ${el.dataset.sec}/${pad(TOTAL)} · ${el.dataset.name}`;
+      }
+    });
+  }, { rootMargin: "-45% 0px -45% 0px" });
+  sections.forEach((s) => sectionObserver.observe(s));
+
+  /* live telemetry from the Flow Wave scene */
+  let frames = 0, fps = 0, fpsT0 = performance.now();
+  const countFrame = (t) => {
+    frames++;
+    if (t - fpsT0 >= 1000) { fps = frames; frames = 0; fpsT0 = t; }
+    requestAnimationFrame(countFrame);
+  };
+  if (!prefersReduced) requestAnimationFrame(countFrame);
+
+  const signed = (v) => `${v < 0 ? "-" : "+"}${Math.abs(v).toFixed(2).padStart(5, "0")}`;
+  const updateTelemetry = () => {
+    const w = window.__flowWave;
+    if (w && hudTelemetry) {
+      const max = document.documentElement.scrollHeight - innerHeight;
+      const sc = max > 0 ? Math.round((scrollY / max) * 100) : 0;
+      const swell = (w.uniforms.uWaveHeight.value / 3).toFixed(2);
+      hudTelemetry.textContent =
+        `SCROLL ${String(sc).padStart(3, "0")}% · ` +
+        `CAM ${signed(w.camera.position.y)}/${signed(w.camera.position.z)} · ` +
+        `SWELL ${swell}x · ${fps || "--"} FPS`;
+    }
+  };
+  setInterval(updateTelemetry, 150);
 })();
