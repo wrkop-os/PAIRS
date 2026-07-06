@@ -4,12 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PAIRS — Summer AI/ML Research &amp; Mentorship Program</title>
-  <meta name="description" content="PAIRS is a summer AI/ML mentorship program that takes students from machine learning fundamentals to an independent research project — three evenings a week, June 29 to September 4." />
+  <meta name="description" content="PAIRS is a summer AI/ML mentorship program that takes students from machine learning fundamentals to an independent research project. Mon / Wed / Fri evenings, June 29 to September 4." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23030b07'/%3E%3Cpath d='M14 50 V14 h20 a10 10 0 0 1 0 20 h-20' fill='none' stroke='%2334e89a' stroke-width='6'/%3E%3Crect x='44' y='44' width='6' height='6' fill='%2334e89a'/%3E%3C/svg%3E" />
   <script type="importmap">
   {
     "imports": {
@@ -21,34 +21,45 @@
 </head>
 <body>
   <canvas id="scene" aria-hidden="true"></canvas>
-  <div class="scroll-progress" aria-hidden="true"><span></span></div>
+  <div class="scroll-progress" aria-hidden="true"><span id="scrollFill"></span></div>
+
+  <!-- ============ HUD CHROME ============ -->
+  <div class="hud" aria-hidden="true">
+    <span class="hud__rail hud__rail--l"></span>
+    <span class="hud__rail hud__rail--r"></span>
+    <div class="hud__bar mono">
+      <span id="hudTelemetry">SCROLL 000% · CAM +07.00/+16.00 · SWELL 1.00x · -- FPS</span>
+      <span class="hud__spacer"></span>
+      <span id="hudSection">SEC 00/08 · HERO</span>
+      <span class="hud__divider">|</span>
+      <span id="hudClock">---------- --:--:-- UTC</span>
+    </div>
+  </div>
 
   <!-- ============ NAV ============ -->
   <header class="nav" id="nav">
-    <a class="nav__logo" href="#top">
-      <span class="nav__logo-mark">P<span class="accent">AI</span>RS</span>
-    </a>
-    <nav class="nav__links" id="navLinks">
-      <a href="#about">About</a>
-      <a href="#phases">Phases</a>
-      <a href="#schedule">Schedule</a>
-      <a href="#toolkit">Toolkit</a>
-      <a href="#mentors">Mentors</a>
-      <a href="#faq">FAQ</a>
+    <a class="nav__logo mono" href="#top">PAIRS<span class="nav__logo-tick">_</span></a>
+    <nav class="nav__links mono" id="navLinks">
+      <a href="#about">01 About</a>
+      <a href="#phases">02 Phases</a>
+      <a href="#schedule">03 Schedule</a>
+      <a href="#toolkit">04 Toolkit</a>
+      <a href="#mentors">05 Mentors</a>
+      <a href="#faq">06 FAQ</a>
     </nav>
-    <a class="btn btn--small btn--primary magnetic" href="#apply">Join PAIRS</a>
+    <a class="btn btn--small btn--primary" href="#apply">Apply</a>
     <button class="nav__burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
   </header>
 
   <main class="content" id="top">
 
     <!-- ============ HERO ============ -->
-    <section class="hero">
+    <section class="hero" id="hero" data-sec="00" data-name="HERO">
       <div class="hero__content">
-        <p class="hero__eyebrow reveal-up mono">SUMMER '26–'27 COHORT · JUNE 29 – SEPTEMBER 4</p>
+        <p class="hero__eyebrow mono reveal-up">SUMMER '26–'27 COHORT · JUN 29 → SEP 04</p>
         <h1 class="hero__title">
           <span class="line reveal-up d1">Research real</span>
-          <span class="line reveal-up d2"><span class="gradient-text">AI &amp; ML</span> this</span>
+          <span class="line reveal-up d2"><span class="accent">AI&nbsp;&amp;&nbsp;ML</span> this</span>
           <span class="line reveal-up d3">summer<span class="accent">.</span></span>
         </h1>
         <p class="hero__sub reveal-up d4">
@@ -56,17 +67,21 @@
           machine-learning fundamentals to an independent AI/ML research project.
         </p>
         <div class="hero__cta reveal-up d5">
-          <a href="#apply" class="btn btn--primary magnetic">Join the program</a>
-          <a href="#phases" class="btn btn--ghost magnetic">How it works</a>
+          <a href="#apply" class="btn btn--primary">Join the program</a>
+          <a href="#phases" class="btn btn--ghost">How it works</a>
         </div>
+        <p class="hero__spec mono reveal-up d6">FIELD: 120,801 VERTICES · 2-OCTAVE SIMPLEX · WEBGL/THREE r143</p>
       </div>
-      <a class="hero__scroll-hint" id="scroll-hint" href="#about" aria-label="Scroll down">scroll ↓</a>
+      <a class="hero__scroll-hint mono" id="scroll-hint" href="#about" aria-label="Scroll down">SCROLL ▾</a>
     </section>
 
     <!-- ============ ABOUT ============ -->
-    <section class="section about" id="about">
+    <section class="section about" id="about" data-sec="01" data-name="ABOUT">
       <div class="section__inner">
-        <p class="section__eyebrow reveal mono">ABOUT</p>
+        <div class="sec-row reveal">
+          <p class="section__eyebrow mono">01 / ABOUT</p>
+          <p class="sec-meta mono">PROGRAM OVERVIEW</p>
+        </div>
         <h2 class="section__title reveal">A summer of guided research.</h2>
         <div class="about__grid">
           <p class="about__lead reveal">
@@ -75,37 +90,37 @@
             and turn that into an original machine-learning research project.
           </p>
           <div class="stats reveal">
-            <div class="stat tilt">
-              <span class="stat__num" data-count="10">0</span><span class="stat__unit">weeks</span>
+            <div class="stat">
+              <span class="stat__num mono" data-count="10">0</span><span class="stat__unit mono">WK</span>
               <p>of guided research, June 29 – September 4</p>
             </div>
-            <div class="stat tilt">
-              <span class="stat__num" data-count="3">0</span><span class="stat__unit">nights / week</span>
+            <div class="stat">
+              <span class="stat__num mono" data-count="3">0</span><span class="stat__unit mono">SESS/WK</span>
               <p>live sessions every Monday, Wednesday and Friday</p>
             </div>
-            <div class="stat tilt">
-              <span class="stat__num" data-count="1">0</span><span class="stat__unit stat__unit--tight">:1 mentorship</span>
-              <p>personal one-on-ones and project feedback</p>
+            <div class="stat">
+              <span class="stat__num mono" data-count="1">0</span><span class="stat__unit mono stat__unit--tight">:1</span>
+              <p>mentorship, personal one-on-ones and project feedback</p>
             </div>
-            <div class="stat tilt">
-              <span class="stat__num" data-count="2">0</span><span class="stat__unit stat__unit--tight">+ papers</span>
+            <div class="stat">
+              <span class="stat__num mono" data-count="2">0</span><span class="stat__unit mono stat__unit--tight">+ PAPERS</span>
               <p>annotated from real journals as you build your literature base</p>
             </div>
           </div>
         </div>
         <div class="about__cards">
-          <article class="card tilt reveal">
-            <p class="card__num mono">01</p>
+          <article class="card reveal">
+            <p class="card__num mono">FN.01</p>
             <h3>Explore</h3>
             <p>Survey ML specializations like clustering, PCA, computer vision, NLP and graph neural networks, and the applied fields where they matter: finance, medicine, construction, climate and more.</p>
           </article>
-          <article class="card tilt reveal">
-            <p class="card__num mono">02</p>
+          <article class="card reveal">
+            <p class="card__num mono">FN.02</p>
             <h3>Research</h3>
             <p>Find, read and annotate papers using citation networks and journals like Nature Machine Intelligence, JAIR, JMLR and IEEE.</p>
           </article>
-          <article class="card tilt reveal">
-            <p class="card__num mono">03</p>
+          <article class="card reveal">
+            <p class="card__num mono">FN.03</p>
             <h3>Build</h3>
             <p>Cross an applied field with an ML specialization to design your own project, solo or in a group, and work through the data, the impact and the ethics.</p>
           </article>
@@ -113,18 +128,21 @@
       </div>
     </section>
 
-    <!-- ============ JOURNEY / PHASES ============ -->
-    <section class="section journey" id="phases">
+    <!-- ============ PHASES ============ -->
+    <section class="section phases" id="phases" data-sec="02" data-name="PHASES">
       <div class="section__inner">
-        <p class="section__eyebrow reveal mono">PHASES</p>
+        <div class="sec-row reveal">
+          <p class="section__eyebrow mono">02 / PHASES</p>
+          <p class="sec-meta mono">T+00 → T+10 WK</p>
+        </div>
         <h2 class="section__title reveal">From fundamentals to your own research.</h2>
         <div class="timeline">
           <div class="timeline__line" aria-hidden="true"><span id="timelineFill"></span></div>
 
           <article class="tl-item reveal">
             <div class="tl-item__dot mono">00</div>
-            <div class="tl-item__card tilt">
-              <span class="tl-item__tag mono">PRE-SUMMER</span>
+            <div class="tl-item__card">
+              <span class="tl-item__tag mono">P.00 · PRE-SUMMER</span>
               <h3>Foundations</h3>
               <p>Hands-on ML fundamentals in Google Colab: regression on real housing data, k-Means clustering and PCA for high-dimensional data, plus DataCamp and StatQuest to build intuition.</p>
             </div>
@@ -132,8 +150,8 @@
 
           <article class="tl-item reveal">
             <div class="tl-item__dot mono">01</div>
-            <div class="tl-item__card tilt">
-              <span class="tl-item__tag mono">PHASE 1 · EXPLORE</span>
+            <div class="tl-item__card">
+              <span class="tl-item__tag mono">P.01 · EXPLORE</span>
               <h3>Fields &amp; Specializations</h3>
               <p>Pick 2–3 applied fields and 2–3 ML specializations that interest you. Define them, find real-world examples, and brainstorm the intersections that could become your project.</p>
             </div>
@@ -141,8 +159,8 @@
 
           <article class="tl-item reveal">
             <div class="tl-item__dot mono">02</div>
-            <div class="tl-item__card tilt">
-              <span class="tl-item__tag mono">RESEARCH</span>
+            <div class="tl-item__card">
+              <span class="tl-item__tag mono">P.02 · RESEARCH</span>
               <h3>Literature &amp; Annotation</h3>
               <p>Dig into scientific journals, annotate research papers related to your field and specialization, and map the landscape with citation-network tools like ResearchRabbit, SciSpace and NotebookLM.</p>
             </div>
@@ -150,8 +168,8 @@
 
           <article class="tl-item reveal">
             <div class="tl-item__dot mono">03</div>
-            <div class="tl-item__card tilt">
-              <span class="tl-item__tag mono">BUILD</span>
+            <div class="tl-item__card">
+              <span class="tl-item__tag mono">P.03 · BUILD</span>
               <h3>Your Project</h3>
               <p>Develop your own AI/ML project, from concept and data to model, impact and ethics, with mentor feedback in live sessions and one-on-ones.</p>
             </div>
@@ -161,25 +179,27 @@
     </section>
 
     <!-- ============ SCHEDULE ============ -->
-    <section class="section section--panel schedule" id="schedule">
+    <section class="section section--panel schedule" id="schedule" data-sec="03" data-name="SCHEDULE">
       <div class="section__inner">
-        <p class="section__eyebrow reveal mono">SCHEDULE</p>
+        <div class="sec-row reveal">
+          <p class="section__eyebrow mono">03 / SCHEDULE</p>
+          <p class="sec-meta mono">MON · WED · FRI · ET (UTC−4)</p>
+        </div>
         <h2 class="section__title reveal">Three evenings a week, all summer.</h2>
-        <p class="schedule__dates reveal mono">MON · WED · FRI · JUNE 29 – SEPTEMBER 4</p>
         <div class="schedule__grid">
-          <article class="sched-card tilt reveal">
-            <span class="sched-card__time mono">7:30 – 8:20 PM</span>
-            <h3>One-on-Ones <span class="sched-card__opt">by request</span></h3>
+          <article class="sched-card reveal">
+            <span class="sched-card__time mono">19:30 – 20:20</span>
+            <h3>One-on-Ones <span class="sched-card__opt mono">BY REQUEST</span></h3>
             <p>Personal meetings with mentors. Sign up for the day you want to talk through your project live instead of over chat.</p>
           </article>
-          <article class="sched-card sched-card--main tilt reveal">
-            <span class="sched-card__time mono">8:30 – 9:30 PM</span>
-            <h3>Main Session <span class="sched-card__opt sched-card__opt--core">core</span></h3>
+          <article class="sched-card sched-card--main reveal">
+            <span class="sched-card__time mono">20:30 – 21:30</span>
+            <h3>Main Session <span class="sched-card__opt sched-card__opt--core mono">CORE</span></h3>
             <p>Lessons, workshops and working sessions on ML specializations, research methods and your projects.</p>
           </article>
-          <article class="sched-card tilt reveal">
-            <span class="sched-card__time mono">9:30 – 10:30 PM</span>
-            <h3>Office Hour <span class="sched-card__opt">optional</span></h3>
+          <article class="sched-card reveal">
+            <span class="sched-card__time mono">21:30 – 22:30</span>
+            <h3>Office Hour <span class="sched-card__opt mono">OPTIONAL</span></h3>
             <p>Stay for questions, feedback and more personal inquiries about your project.</p>
           </article>
         </div>
@@ -187,38 +207,41 @@
     </section>
 
     <!-- ============ TOOLKIT ============ -->
-    <section class="section toolkit" id="toolkit">
+    <section class="section toolkit" id="toolkit" data-sec="04" data-name="TOOLKIT">
       <div class="section__inner">
-        <p class="section__eyebrow reveal mono">TOOLKIT</p>
+        <div class="sec-row reveal">
+          <p class="section__eyebrow mono">04 / TOOLKIT</p>
+          <p class="sec-meta mono">14 TOOLS · 3 GROUPS</p>
+        </div>
         <h2 class="section__title reveal">The researcher's toolkit.</h2>
         <div class="toolkit__groups">
           <div class="tool-group reveal">
-            <h3 class="mono">LEARN &amp; CODE</h3>
+            <h3 class="mono">A · LEARN &amp; CODE</h3>
             <ul>
-              <li class="tool tilt">Google Colab</li>
-              <li class="tool tilt">DataCamp</li>
-              <li class="tool tilt">StatQuest</li>
-              <li class="tool tilt">Google Classroom</li>
+              <li class="tool">Google Colab</li>
+              <li class="tool">DataCamp</li>
+              <li class="tool">StatQuest</li>
+              <li class="tool">Google Classroom</li>
             </ul>
           </div>
           <div class="tool-group reveal">
-            <h3 class="mono">DISCOVER PAPERS</h3>
+            <h3 class="mono">B · DISCOVER PAPERS</h3>
             <ul>
-              <li class="tool tilt">ResearchRabbit</li>
-              <li class="tool tilt">SciSpace</li>
-              <li class="tool tilt">NotebookLM</li>
-              <li class="tool tilt">Perplexity</li>
-              <li class="tool tilt">Claude</li>
+              <li class="tool">ResearchRabbit</li>
+              <li class="tool">SciSpace</li>
+              <li class="tool">NotebookLM</li>
+              <li class="tool">Perplexity</li>
+              <li class="tool">Claude</li>
             </ul>
           </div>
           <div class="tool-group reveal">
-            <h3 class="mono">READ THE LITERATURE</h3>
+            <h3 class="mono">C · READ THE LITERATURE</h3>
             <ul>
-              <li class="tool tilt">Nature Machine Intelligence</li>
-              <li class="tool tilt">JAIR</li>
-              <li class="tool tilt">JMLR</li>
-              <li class="tool tilt">IEEE Journals</li>
-              <li class="tool tilt">Nature Computational Science</li>
+              <li class="tool">Nature Machine Intelligence</li>
+              <li class="tool">JAIR</li>
+              <li class="tool">JMLR</li>
+              <li class="tool">IEEE Journals</li>
+              <li class="tool">Nature Computational Science</li>
             </ul>
           </div>
         </div>
@@ -226,83 +249,87 @@
     </section>
 
     <!-- ============ MENTORS ============ -->
-    <section class="section section--panel mentors" id="mentors">
+    <section class="section section--panel mentors" id="mentors" data-sec="05" data-name="MENTORS">
       <div class="section__inner">
-        <p class="section__eyebrow reveal mono">MENTORS</p>
+        <div class="sec-row reveal">
+          <p class="section__eyebrow mono">05 / MENTORS</p>
+          <p class="sec-meta mono">ROSTER · 3 ENTRIES</p>
+        </div>
         <h2 class="section__title reveal">Who you'll work with.</h2>
         <p class="mentors__lead reveal">
           PAIRS mentors run every session, grade and comment on your work, and are reachable
           by chat or one-on-one meetings throughout the week.
         </p>
-        <div class="mentors__grid">
-          <article class="mentor tilt reveal">
-            <div class="mentor__avatar" aria-hidden="true">AA</div>
-            <h3>Arian Akther</h3>
-            <p class="mono">Mentor</p>
-          </article>
-          <article class="mentor tilt reveal">
-            <div class="mentor__avatar" aria-hidden="true">KR</div>
-            <h3>Kashfi Rehan</h3>
-            <p class="mono">Mentor</p>
-          </article>
-          <article class="mentor tilt reveal">
-            <div class="mentor__avatar" aria-hidden="true">P</div>
-            <h3>The PAIRS Team</h3>
-            <p class="mono">Feedback · Grading · Support</p>
-          </article>
+        <div class="roster-wrap reveal">
+          <table class="roster">
+            <thead class="mono">
+              <tr><th>ID</th><th>Name</th><th>Role</th><th>Scope</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="mono">M-01</td><td>Arian Akther</td><td>Mentor</td><td>Sessions · Grading · One-on-ones</td></tr>
+              <tr><td class="mono">M-02</td><td>Kashfi Rehan</td><td>Mentor</td><td>Sessions · Grading · One-on-ones</td></tr>
+              <tr><td class="mono">M-00</td><td>PAIRS Team</td><td>Support</td><td>Feedback · Materials · Announcements</td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </section>
 
     <!-- ============ FAQ ============ -->
-    <section class="section faq" id="faq">
+    <section class="section faq" id="faq" data-sec="06" data-name="FAQ">
       <div class="section__inner">
-        <p class="section__eyebrow reveal mono">FAQ</p>
+        <div class="sec-row reveal">
+          <p class="section__eyebrow mono">06 / FAQ</p>
+          <p class="sec-meta mono">5 ENTRIES</p>
+        </div>
         <h2 class="section__title reveal">Common questions</h2>
         <div class="faq__list">
           <details class="faq__item reveal">
-            <summary>Do I need ML experience to join?<span class="faq__plus">+</span></summary>
+            <summary><span class="faq__q mono">Q.01</span>Do I need ML experience to join?<span class="faq__plus mono">+</span></summary>
             <p>No. The program starts with a pre-summer foundations assignment (regression, clustering, PCA in Colab) and resources like DataCamp and StatQuest, so everyone builds the same base before choosing specializations.</p>
           </details>
           <details class="faq__item reveal">
-            <summary>Can I work in a group?<span class="faq__plus">+</span></summary>
+            <summary><span class="faq__q mono">Q.02</span>Can I work in a group?<span class="faq__plus mono">+</span></summary>
             <p>Yes. Projects can be individual or group-based. Groups generally submit one deliverable together unless an assignment says otherwise.</p>
           </details>
           <details class="faq__item reveal">
-            <summary>How do one-on-one meetings work?<span class="faq__plus">+</span></summary>
-            <p>Sign up via the one-on-one form for a 7:30–8:20 PM slot on the day you want. Slots depend on demand, so a specific day isn't guaranteed.</p>
+            <summary><span class="faq__q mono">Q.03</span>How do one-on-one meetings work?<span class="faq__plus mono">+</span></summary>
+            <p>Sign up via the one-on-one form for a 19:30–20:20 ET slot on the day you want. Slots depend on demand, so a specific day isn't guaranteed.</p>
           </details>
           <details class="faq__item reveal">
-            <summary>What will I have at the end of the summer?<span class="faq__plus">+</span></summary>
+            <summary><span class="faq__q mono">Q.04</span>What will I have at the end of the summer?<span class="faq__plus mono">+</span></summary>
             <p>An annotated literature base in your chosen field, experience with the modern research toolkit, and your own AI/ML research project shaped by weeks of mentor feedback.</p>
           </details>
           <details class="faq__item reveal">
-            <summary>Where do sessions happen?<span class="faq__plus">+</span></summary>
-            <p>Everything runs online — live evening meetings plus Google Classroom for materials, assignments, recordings and announcements.</p>
+            <summary><span class="faq__q mono">Q.05</span>Where do sessions happen?<span class="faq__plus mono">+</span></summary>
+            <p>Everything runs online: live evening meetings plus Google Classroom for materials, assignments, recordings and announcements.</p>
           </details>
         </div>
       </div>
     </section>
 
     <!-- ============ APPLY / CONTACT ============ -->
-    <section class="section apply" id="apply">
+    <section class="section apply" id="apply" data-sec="07" data-name="JOIN">
       <div class="section__inner apply__inner">
-        <p class="section__eyebrow reveal mono">JOIN</p>
-        <h2 class="section__title section__title--big reveal">Apply to <span class="gradient-text">PAIRS</span></h2>
+        <div class="sec-row reveal">
+          <p class="section__eyebrow mono">07 / JOIN</p>
+          <p class="sec-meta mono">CHANNEL: EMAIL</p>
+        </div>
+        <h2 class="section__title section__title--big reveal">Apply to PAIRS<span class="accent">.</span></h2>
         <p class="apply__sub reveal">Reach out to the PAIRS team to apply or ask about the program.</p>
         <div class="apply__cta reveal">
-          <a class="btn btn--primary btn--big magnetic" href="mailto:pairsprogram@gmail.com">pairsprogram@gmail.com</a>
-          <a class="btn btn--ghost btn--big magnetic" href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a>
+          <a class="btn btn--primary btn--big mono" href="mailto:pairsprogram@gmail.com">pairsprogram@gmail.com</a>
+          <a class="btn btn--ghost btn--big" href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a>
         </div>
       </div>
     </section>
 
     <!-- ============ FOOTER ============ -->
     <footer class="footer">
-      <div class="footer__inner">
-        <span class="nav__logo-mark">P<span class="accent">AI</span>RS</span>
-        <p>Summer AI/ML Research &amp; Mentorship Program · June 29 – September 4</p>
-        <p class="mono footer__fine">© 2026 PAIRS</p>
+      <div class="footer__inner mono">
+        <span>PAIRS · SUMMER AI/ML RESEARCH &amp; MENTORSHIP</span>
+        <span>JUN 29 – SEP 04</span>
+        <span>STATIC BUILD · THREE r143 · NO TRACKING</span>
       </div>
     </footer>
 
