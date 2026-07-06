@@ -1,24 +1,27 @@
 # PAIRS — Summer AI/ML Research & Mentorship Program
 
-A complete redesign of the PAIRS program website ([original Google Site](https://sites.google.com/view/summermlairp/home)) as a fast, dependency-free static site.
-
-## Features
-
-- **3D parallax hero** — mouse-driven depth layers (`rotateX`/`rotateY`/`translate3d`), an animated perspective grid floor, floating code chips, and a live neural-network particle canvas that reacts to the cursor
-- **Full animation suite** — scroll-reveal sections, animated stat counters, 3D tilt cards with spotlight hover, magnetic buttons, gradient-shift text, glitch hover on the headline, typewriter ticker, scroll-progress bar, animated timeline fill, marquee strip, cursor glow
-- **Responsive** — mobile nav, stacked layouts, touch devices skip pointer-only effects
-- **Accessible** — respects `prefers-reduced-motion`, semantic HTML, keyboard-friendly FAQ accordions
+Static site for the PAIRS program ([original Google Site](https://sites.google.com/view/summermlairp/home)).
 
 ## Structure
 
 ```
-index.html      # all content/sections
-css/style.css   # design system + animations
-js/main.js      # canvas, parallax, reveals, interactions
+index.html      # content/sections + Three.js importmap
+css/style.css   # emerald theme, layout, UI animations
+js/scene.js     # "Flow Wave" Three.js scene (ES module)
+js/main.js      # UI interactions (reveals, counters, tilt, nav)
 ```
 
-No build step — open `index.html` in a browser, or serve the folder with any static host (GitHub Pages, Netlify, Vercel).
+The background is a WebGL "Flow Wave" scene (Three.js r143 via unpkg importmap): a particle
+sheet displaced by two octaves of simplex noise, rendered through three EffectComposers
+(torus/bloom/final) with an UnrealBloom pipeline and a composite pass that adds the dark-emerald
+background and corner-flame haze. Page scroll drives the camera dive from a high view down into
+the field; the cursor parallaxes the camera and parts the particles where it points. Ambient
+motes are camera-attached drifting points.
 
-## Program facts on the site
+No build step — serve the folder with any static host (GitHub Pages, Netlify, Vercel).
+Three.js loads from unpkg at runtime, so an internet connection is required.
 
-Meeting days/times, program dates (June 29 – September 4), phases, curriculum, tools and contact info are drawn from official PAIRS program materials. Edit `index.html` to update copy.
+## Program facts
+
+Meeting days/times, program dates (June 29 – September 4), phases, curriculum, tools and
+contact info come from official PAIRS program materials. Edit `index.html` to update copy.
