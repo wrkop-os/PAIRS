@@ -70,6 +70,7 @@ body {
 .scroll-progress span {
   display: block; height: 100%; width: 0;
   background: var(--accent);
+  box-shadow: 0 0 12px rgba(52, 232, 154, 0.8);
 }
 
 /* ============================================================
@@ -149,9 +150,20 @@ body {
   text-decoration: none;
   border-radius: var(--radius);
   padding: 14px 26px;
-  transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+  transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
   position: relative;
+  overflow: hidden;
 }
+.btn::before {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(100deg, transparent 20%, rgba(52, 232, 154, 0.14) 50%, transparent 80%);
+  transform: translateX(-101%);
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+.btn:hover::before { transform: translateX(101%); }
+.btn:hover { transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
 .btn--small { padding: 9px 18px; font-size: 0.7rem; }
 .btn--big { padding: 16px 30px; font-size: 0.85rem; }
 .btn--primary {
@@ -270,6 +282,21 @@ body {
   width: 14px; height: 14px;
   border-top: 1px solid var(--accent-dim);
   border-right: 1px solid var(--accent-dim);
+  transition: width 0.3s ease, height 0.3s ease, border-color 0.3s;
+}
+.card::before, .sched-card::before {
+  content: "";
+  position: absolute; bottom: -1px; left: -1px;
+  width: 14px; height: 14px;
+  border-bottom: 1px solid var(--accent-dim);
+  border-left: 1px solid var(--accent-dim);
+  transition: width 0.3s ease, height 0.3s ease, border-color 0.3s;
+  pointer-events: none;
+}
+.card:hover::after, .sched-card:hover::after,
+.card:hover::before, .sched-card:hover::before {
+  width: 30px; height: 30px;
+  border-color: var(--accent);
 }
 
 /* ============================================================
@@ -315,6 +342,11 @@ body {
 }
 .timeline__line span { display: block; width: 100%; height: 0; background: var(--accent); }
 .tl-item { position: relative; margin-bottom: clamp(28px, 4vw, 48px); }
+.tl-item.visible .tl-item__dot { animation: dot-ping 1.1s ease-out 1 0.3s; }
+@keyframes dot-ping {
+  0% { box-shadow: 0 0 0 0 rgba(52, 232, 154, 0.55); }
+  100% { box-shadow: 0 0 0 18px rgba(52, 232, 154, 0); }
+}
 .tl-item__dot {
   position: absolute; left: -48px; top: 8px;
   width: 34px; height: 34px; border-radius: var(--radius);
@@ -408,6 +440,8 @@ body {
 .roster tbody tr:last-child td { border-bottom: 0; }
 .roster tbody tr { transition: background 0.2s; }
 .roster tbody tr:hover { background: rgba(52, 232, 154, 0.05); }
+.roster td:first-child { border-left: 2px solid transparent; transition: border-left-color 0.2s; }
+.roster tbody tr:hover td:first-child { border-left-color: var(--accent); }
 .roster td.mono { color: var(--accent); font-size: 0.78rem; }
 .roster td:nth-child(3) { color: var(--text-dim); }
 .roster td:nth-child(4) { color: var(--text-dim); font-size: 0.85rem; }
@@ -433,7 +467,12 @@ body {
 .faq__q { color: var(--text-faint); font-size: 0.68rem; letter-spacing: 0.14em; flex-shrink: 0; }
 .faq__plus { color: var(--accent); font-size: 1.1rem; margin-left: auto; transition: transform 0.3s; }
 .faq__item[open] .faq__plus { transform: rotate(45deg); }
-.faq__item p { padding: 0 22px 20px 62px; color: var(--text-dim); font-size: 0.93rem; }
+.faq__item p {
+  padding: 0 22px 20px 62px; color: var(--text-dim); font-size: 0.93rem;
+  opacity: 0; transform: translateY(-6px);
+  transition: opacity 0.35s ease 0.05s, transform 0.35s ease 0.05s;
+}
+.faq__item[open] p { opacity: 1; transform: none; }
 
 /* ============================================================
    APPLY
@@ -456,6 +495,43 @@ body {
   color: var(--text-faint);
   font-size: 0.62rem; letter-spacing: 0.16em;
 }
+
+/* ============================================================
+   CUSTOM CURSOR (fine pointers only, added by JS)
+   ============================================================ */
+body.cursor-on, body.cursor-on a, body.cursor-on button,
+body.cursor-on summary, body.cursor-on .tool, body.cursor-on tr { cursor: none; }
+
+.cur-dot, .cur-ring {
+  position: fixed; top: 0; left: 0; z-index: 400;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+}
+body.cursor-seen .cur-dot, body.cursor-seen .cur-ring { opacity: 1; }
+.cur-dot {
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--accent);
+}
+.cur-ring {
+  width: 30px; height: 30px; border-radius: 50%;
+  border: 1px solid rgba(52, 232, 154, 0.45);
+  transition: width 0.25s ease, height 0.25s ease, border-color 0.25s, background 0.25s;
+}
+.cur-ring::before, .cur-ring::after {
+  content: ""; position: absolute; top: 50%; left: 50%;
+  background: var(--accent);
+  opacity: 0; transition: opacity 0.2s;
+}
+.cur-ring::before { width: 10px; height: 1px; transform: translate(-50%, -50%); }
+.cur-ring::after { width: 1px; height: 10px; transform: translate(-50%, -50%); }
+.cur-ring.is-active {
+  width: 46px; height: 46px;
+  border-color: var(--accent);
+  background: rgba(52, 232, 154, 0.06);
+}
+.cur-ring.is-active::before, .cur-ring.is-active::after { opacity: 1; }
+.cur-ring.is-down { width: 22px; height: 22px; }
 
 /* ============================================================
    RESPONSIVE
