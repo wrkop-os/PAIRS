@@ -6,254 +6,153 @@ window.PAIRS_DECKS = {
   "slides": [
    {
     "n": 1,
-    "title": "AI Detection Ensemble Model Based on DistillBERT, Ghostbusters, and Binoculars",
-    "body": [
-     "Ethan Tan, Arthur Zin, Dennis Zhuo"
-    ]
+    "image": "uploads/slides/P-01/01.webp",
+    "title": "",
+    "body": []
    },
    {
     "n": 2,
-    "title": "Issue",
-    "body": [
-     "Ever since the advent of LLMS, AI generated content has flooded the internet. In addition, AI being used in academia has caused intense suspicion to be placed on every piece of text both students and professionals.",
-     "There are many commercially available AI detectors, but most fall short when put to real life application. Some like Turnitin are biased towards false negatives, and others are biased to false positives.",
-     "In our project, we explore whether an ensemble model containing three separate AI detection methods results in higher efficiency than individually, and whether a more simple or complex meta-classifier affects the results.",
-     "Since the release of LLM models (ChatGPT, Gemini, etc), around 10% of the total internet’s pages are AI written. Furthermore, 35% of the pages created on the internet chronologically after ChatGPT are AI generated. (Figure from Pew Research Center “How Much of the Internet Is Written With AI?”, 2026)"
-    ]
+    "image": "uploads/slides/P-01/02.webp",
+    "title": "",
+    "body": []
    },
    {
     "n": 3,
-    "title": "Research Topic/Focus",
-    "body": [
-     "While kept under patent and proprietary, many current commercial brands focus on a single signaling system for their AI detection models. For example, ZeroGPT publicly describes that their “DeepAnalyse™ Technology” as a model more focused towards using perplexity calculations.",
-     "Our project aims to explore whether ensemble models could combine different signals of AI text generation for higher accuracy and accuracy retention in out of domain tests. In addition, we compared the effectiveness of a random forest meta-classifier like LightGBM vs. the industry standard linear regression meta-classifier.",
-     "For datasets, we wanted ones that use newer generation LLM (GPT-4o, Claude, etc.) because Binoculars, Ghostbusters, and distilBERT are relatively old and were tested on older LLM models. In addition, we wanted both short and long strings to represent real variance in inputs.",
-     "For the short strings, we used: AI Human Sentence Classification Dataset Nerdy37 from Hugging Face 80% training/10% validation/10% testing",
-     "(https://huggingface.co/datasets/Nerdy37/ai-human-text-classification)",
-     "For longer string, we used ahmadreza13’s human-vs-Ai-generated-dataset: (https://huggingface.co/datasets/ahmadreza13/human-vs-Ai-generated-dataset). This dataset is split between AI created (GPT-4o, Claude, etc) and Human (Wikipedia). 80% training/10% validation/10% testing",
-     "And to test and see if the model can work well outside of training scope, we will be using the Feedback Prize / ELLIPSE. 100% testing (https://www.kaggle.com/datasets/matthewjansen/ellipse-corpus)"
-    ]
+    "image": "uploads/slides/P-01/03.webp",
+    "title": "",
+    "body": []
    },
    {
     "n": 4,
-    "title": "Our Project: Datasets + Preprocessing",
-    "body": [
-     "For preprocessing, we took 50k examples from both the short and long string datasets and broadly made sure to drop missing and broken texts. Along with this we added a token_count column for the ensemble meta-classifier.",
-     "We made sure to shorten the amount of words/tokens of the longer strings because distilBERT has a 512 token limit it can process. So, we truncated the text so that to only take 256 tokens from the first half and 256 past from the exact middle of the text.",
-     "Finally, we also removed artifacts from wikipedia and AI prompt answering. This meant removing dates, citations, etc from the Wikipedia sourced data and removing the intro-snippets from the AI generated text (ex. “Sure, here is…”). Along with this, we masked numbers to eliminate the large amount of lists in the AI generated responses. Although this may have other unintended effects, for our purposes it was the most efficient way of preventing overfitting.",
-     "[token] [token] [token] [token] [token] [token] [token] [token] [token] [token] [token] [token]",
-     "[SEP]",
-     "[token] [token] [token] [token] [token] [token] [token] [token] [token] [token] [token] [token]",
-     "[NUM] [NUM] [NUM] -------> [NUM] [NUM] [NUM] [NUM]",
-     "Megara (; , ) is a historic town and a municipality in West Attica, Greece.",
-     "---------------------------->",
-     "Megara is a historic town and a municipality in West Attica, Greece."
-    ]
+    "image": "uploads/slides/P-01/04.webp",
+    "title": "",
+    "body": []
    },
    {
     "n": 5,
-    "title": "Our Project: Datasets + Preprocessing",
-    "body": [
-     "Training Dataset: This dataset had 80k examples, with a 50/50 split of short and long text. Within both the short and long texts, there was a 50/50 split between AI generated text and Human generated to prevent class imbalances.",
-     "Validation Dataset: This dataset had 10k examples, with a 50/50 split of short and long text. Within both the short and long texts, there was a 50/50 split between AI generated text and Human generated.",
-     "Training Dataset: This dataset had 10k examples, with a 50/50 split of short and long text. Within both the short and long texts, there was a 50/50 split between AI generated text and Human generated."
-    ]
+    "image": "uploads/slides/P-01/05.webp",
+    "title": "",
+    "body": []
    },
    {
     "n": 6,
-    "title": "Our Project: Outline",
-    "body": [
-     "We are taking 3 existing AI detection models with different AI detection methods and combining their signals through 2 meta-classifiers. Then we analyzed the efficiency and accuracy of the complete ensemble model + ablations.",
-     "Binoculars: Zero-Shot Perplexity Calculations",
-     "Ghostbusters: Log Probability Features",
-     "DistilBERT: Stylometric Analysis",
-     "LightGBM: Random Forest Gradient Booster",
-     "Logistic Regression: Regression Model"
-    ]
+    "image": "uploads/slides/P-01/06.webp",
+    "title": "",
+    "body": []
    },
    {
     "n": 7,
-    "title": "Ensemble Architecture",
-    "body": [
-     "Binoculars",
-     "Ghostbusters",
-     "DistilBERT",
-     "LightGBM",
-     "Logistic Regression",
-     "Results",
-     "Providing Zero-Shot Perplexity Calculations",
-     "Providing Stylometric Analysis",
-     "Log Probability",
-     "Results"
-    ]
+    "image": "uploads/slides/P-01/07.webp",
+    "title": "",
+    "body": []
    },
    {
     "n": 8,
-    "title": "Binoculars:",
-    "body": [
-     "Binoculars is a AI detector created in 2024 that leverages how AI generates text to detect its presence. It takes in AI models and uses perplexity calculations to find the likelihood of an AI choosing the next word. The lower likelihood, the more likely it is to be human made. Its internal mechanisms works like this:",
-     "Observer: This is the primary analyzer of the imputed text, and outputs a perplexity score based on how “surprised” it is at the next word.",
-     "Ex. The fire ____",
-     "Raged = .86",
-     "Blazed = .12",
-     "Spread = .02",
-     "Performer: The analysis from the observer is compared to the analysis of the performer, a closely related AI model. The performer then calculates the cross perplexity which creates a baseline for how complex the text is in general. This is meant to combat the “capybara problem” where a complex prompt makes a complex text with high surprisal.",
-     "Ex. Generate a PHD level paragraph about dolphins."
-    ]
+    "image": "uploads/slides/P-01/08.webp",
+    "title": "",
+    "body": []
    },
    {
     "n": 9,
-    "title": "Binoculars:",
-    "body": [
-     "A deeper look into the internal mechanisms:",
-     "Observer (M1)",
-     "Performer (M2)",
-     "log PPL_M₁(s) = −(1 / L) ∑ᵢ₌₁ᴸ log P_M₁(xᵢ | x₁:ᵢ₋₁)",
-     "log X-PPL_M₁,M₂(s) = −(1 / L) ∑ᵢ₌₁ᴸ ∑ᵥ∈ᵥ P_M₁(v | x₁:ᵢ₋₁) · log P_M₂(v | x₁:ᵢ₋₁)",
-     "B_M₁,M₂(s) = log PPL_M₁(s) / log X-PPL_M₁,M₂(s)",
-     "This is the step where the observer calculates the negative log likelihood of each string.",
-     "This step has the cross-perplexity calculations occurs, which essentially acts like a regulating factor to the observer.",
-     "The observer calculation to cross-perplexity ratio is used as a baseline perplexity of the model."
-    ]
+    "image": "uploads/slides/P-01/09.webp",
+    "title": "",
+    "body": []
    },
    {
     "n": 10,
-    "title": "Ghostbusters",
-    "body": [
-     "Ghostbuster is a AI detection model made in 2024, Ghostbuster detects AI-generated text by combining log-probability features, similar to Binoculars, from several weaker language models. It is meant to detect differences/defects in the writing that could indicate AI influence. Then a linear classifier used to give a single output on how AI it determines the text to be.",
-     "The main differentiation between Ghostbusters and Binoculars is that Ghostbusters passes text through a series of weaker models and then trains a custom classifier from those combined features, while Binoculars is a zero-shot model, meaning it does not require any training data and predicts by calculating perplexity ratios to leverage the predictability of AI. Ghostbusters is also less of a black box, because it can be examined how the classifiers interpret features."
-    ]
+    "image": "uploads/slides/P-01/10.webp",
+    "title": "",
+    "body": []
    },
    {
     "n": 11,
-    "title": "DistilBERT",
-    "body": [
-     "DistilBERT is a distilled version of a stylometric analysis tool called BERT, a natural language processing model. BERT stands for Bidirectional Encoder Representations from Transformers developed by Google AI. Basically, it looks across the entire sentence at once to understand what the word means in context.",
-     "To train, BERT masks certain words of a sentence and uses logits to determine its accuracy. Logits are scores built on the model’s predictions of the masked word vs. the actual masked word. Through these logits changing the weights and expanding the vocabulary of the model, BERT picks up on syntax, grammar, and more."
-    ]
+    "image": "uploads/slides/P-01/11.webp",
+    "title": "",
+    "body": []
    },
    {
     "n": 12,
-    "title": "DistilBERT",
-    "body": [
-     "Logit Calculations:",
-     "y = [ 1 ] (\"sat\") [ 0 ] (\"ran\") [ 0 ] (\"cat\") [ 0 ] (\"pizza\")",
-     "Logits = [ 2.0 ] (\"sat\") [ 1.0 ] (\"ran\") [ 0.1 ] (\"cat\") [ -1.5 ] (\"pizza\")",
-     "p = [ 7.39 / 11.44 ] [ 0.646 ] (64.6%)",
-     "[ 2.72 / 11.44 ] = [ 0.238 ] (23.8%)",
-     "[ 1.11 / 11.44 ] [ 0.097 ] (9.7%)",
-     "[ 0.22 / 11.44 ] [ 0.019 ] (1.9%)",
-     "L = - ( 1 * log(0.646) + 0 * log(0.238) + 0 * log(0.097) + 0 * log(0.019))",
-     "L = - ( 1 * -0.437 )",
-     "e^(2.0) ≈ 7.39",
-     "e^(1.0) ≈ 2.72",
-     "e^(0.1) ≈ 1.11",
-     "e^(-1.5) ≈ 0.22",
-     "Sum = 7.39 + 2.72 + 1.11 + 0.22 = 11.44"
-    ]
+    "image": "uploads/slides/P-01/12.webp",
+    "title": "",
+    "body": []
    },
    {
     "n": 13,
-    "title": "DistilBERT",
-    "body": [
-     "DistilBERT is meant to take the learning capabilities of BERT but use half of its computing resources, which makes it ideal for our limited resources. It can also easily be transformed into a AI detection model by adding a classification head.",
-     "Compared to its teacher model BERT, distilBERT only has half the layers and uses a temperature scaling method. Temperature scaling is the way that distilBERT can discern semantic relations between words while cutting down on BERT’s calculations. Basically, it transforms the fill in the answer knowledge of BERT to the knowledge of what words are close in meaning to each other."
-    ]
+    "image": "uploads/slides/P-01/13.webp",
+    "title": "",
+    "body": []
    },
    {
     "n": 14,
-    "title": "Methodology: Binoculars",
-    "body": [
-     "A major hurdle we had to overcome is to limit the VRAM consumption of the perplexity based models to fitting the available RAM on the free tier of Google Colab. Considering how much VRAM we had access to, we could not connect Binoculars to a high parameter AI model for its perplexity calculations.",
-     "As such, we used Qwen2.5-1.5B since it is known for being a good light model. In addition, the AI parameters went through 4 bit-quantization, which also drastically reduced the VRAM requirement by limiting the weights to 4 integers. The final step to decreasing the VRAM usage was to batch the data into 8’s, allowing for 8 lines of the data to be processed at once. Save checkpoints were made every 50 batches to protect against data loss in case of Colab timeouts, and VRAM was regularly cleared during processing."
-    ]
+    "image": "uploads/slides/P-01/14.webp",
+    "title": "",
+    "body": []
    },
    {
     "n": 15,
-    "title": "Methodology: Ghostbusters",
-    "body": [
-     "In our implementation of Ghostbusters, we adapted it to run on a single LLM. That being Qwen2.5-1.5B on 4-bit quantization, just like Binoculars, to reduce the VRAM requirement on Colab. For each text, we get the average loss per sequence, which is returned as negative for the feature score.",
-     "As for processing, we sorted text by character length and processed them in batches of 16. Save checkpoints were made every 50 batches to protect against data loss in case of Colab timeouts, and VRAM was regularly cleared during processing."
-    ]
+    "image": "uploads/slides/P-01/15.webp",
+    "title": "",
+    "body": []
    },
    {
     "n": 16,
-    "title": "Methodology: distilBERT",
-    "body": [
-     "In our implementation of distilBERT, we fine-tuned it as a two-class classifier. Text was tokenized with distilBERT tokenizer, truncated to 256 tokens. We used 5-fold stratified cross validation in order to prevent overfitting by keeping training and prediction data separate.",
-     "We used a batch size of 64 and had half precision for efficiency. Similarly to our other models, we used checkpoints and regularly cleared VRAM."
-    ]
+    "image": "uploads/slides/P-01/16.webp",
+    "title": "",
+    "body": []
    },
    {
     "n": 17,
-    "title": "Results",
-    "body": [
-     "Graph 1: Average Confusion Matrix Across Both Models and 10 Trials. This graph shows the average confusion matrix across both the LightGBM and Logistic Regression models over all 10 trials. The results show that both models consistently classify the large majority of samples correctly, with approximately 27,225.85 true negatives and 27,314.70 true positives. Classification errors remain relatively low, with approximately 274.15 false positives and 185.30 false negatives. This demonstrates that both models maintain strong and consistent classification performance across repeated trials while keeping the false positive rate close to the target of 1%."
-    ]
+    "image": "uploads/slides/P-01/17.webp",
+    "title": "",
+    "body": []
    },
    {
     "n": 18,
-    "title": "Results",
-    "body": [
-     "Bino (B): binoculars",
-     "Group (G): ghostbusters",
-     "Group (D): distilBERT",
-     "Graph 2: Ablation Study: LGBM vs Logistic Regression Accuracy (95% CI). This graph compares the classification accuracy of the LGBM and Logistic Regression (LR) models across the Full Model and each ablation configuration. The error bars represent 95% confidence intervals. The Full Model achieves very high accuracy, indicating the complete feature set for both models can perform near perfectly. In ablation configurations excluding feature set D (distillBERT), accuracy appears to drop significantly, with Bino (B), Group (G), and Group (BG) underperforming groups with feature set D. This demonstrates D is the dominant feature group, seeing that its removal leads to a roughly 50% drop in accuracy, whereas D operating on its own retains nearly all of the Full Model’s performance."
-    ]
+    "image": "uploads/slides/P-01/18.webp",
+    "title": "",
+    "body": []
    },
    {
     "n": 19,
-    "title": "Results",
-    "body": [
-     "Graph 3: Performance Drop vs Full Model: LGBM vs Logistic Regression (95% CI). This graph compares the loss in accuracy relative to the Full Model for each ablation configuration. Values close to 0% indicate that the configuration performs almost identical to the Full Model, while large values indicate predictive information has been removed. The largest performance drops occur when feature set D is absent. Seen in Bino (B) with a 44% drop, Group (G) with a 42-47% drop, and Group (BG) with a 40-43% drop. On the other hand, configurations containing D show near no reduction in performance. All of them having roughly a <0.01% drop. This shows that D contains nearly all information necessary for accurate classification, while B and G contribute little additional improvement to the model."
-    ]
+    "image": "uploads/slides/P-01/19.webp",
+    "title": "",
+    "body": []
    },
    {
     "n": 20,
-    "title": "Results",
-    "body": [
-     "Graph 4: Averaged Ablation Study: Accuracy Across All Models (95% CI). This graph shows the average accuracy across the two modeling runs, combining the LGBM and Logistic Regression results. The error bars represent a 95% confidence intervals. The dashed horizontal line represents the average performance of the Full Model, which is 99.16% accuracy. The results show a clear split on configurations: the Low-performing configurations (Bino (B), Group (G), Group (BG)), and the High-performing configurations (Group (D), Group (BD), Group (BGD)) which perform near identical to the Full Model. This contributes to the evaluation that B and G do not produce any meaningful improvement, as feature set D is near identical to the Full Model."
-    ]
+    "image": "uploads/slides/P-01/20.webp",
+    "title": "",
+    "body": []
    },
    {
     "n": 21,
-    "title": "Results",
-    "body": [
-     "Graph 5: Averaged Performance Drop vs. Full Model (with 95% CI). This graph shows the average reduction in accuracy relative to the Full Model across both runs. It provides the clearest overall picture of the importance of each feature configuration. On average, the largest accuracy drops were on Group (G), Bino (B), and Group (BG), while the least accuracy drops were Group (D), Group (BD), and Group (BGD). Further reinforcing how feature set D contains nearly all necessary information for accurate classification and is responsible for nearly all the predictive performance of the Full Model."
-    ]
+    "image": "uploads/slides/P-01/21.webp",
+    "title": "",
+    "body": []
    },
    {
     "n": 22,
-    "title": "Results",
-    "body": [
-     "Graph 6: Test Accuracy Across Ensemble Configurations (ESL). This graph compares the test accuracy of the LightGBM and Logistic Regression models across the different ensemble configurations for the ESL dataset. The results show a clear split between the configurations. Bino and GHOST achieve 100% accuracy for both models, while the Full Ensemble and DistilBERT configurations perform significantly worse, with accuracy ranging from approximately 1.58% to 4.90%. This demonstrates that, for the ESL dataset, Bino and GHOST are the strongest-performing configurations in terms of test accuracy, while the Full Ensemble and DistilBERT configurations show a significant reduction in classification performance."
-    ]
+    "image": "uploads/slides/P-01/22.webp",
+    "title": "",
+    "body": []
    },
    {
     "n": 23,
-    "title": "Discussion/Contributions",
-    "body": [
-     "The results show that in terms of our ensemble model, DistilBERT’s features were the strongest indicators of AI generation.",
-     "The ablation studies demonstrate that Ghostbuster and Binoculars, at least how we configured them, do not do well on more recent LLMs.",
-     "On standard tests, the Full Model reached about 99.16% accuracy. DistilBERT alone, or in combination with Ghostbusters and/or Binoculars, performed relatively identically to the Full Model.",
-     "The Full Ensemble and DistilBERT models were shown to have very poor accuracy on ESL writing (a known difficulty of DistilBERT).",
-     "Binoculars and Ghostbusters performed substantially better with ESL writing compared to DistilBERT and the Full Ensemble.",
-     "From this, we can conclude that DistilBERT is the main feature that the Full Model relies on, and it contains nearly all the information necessary for accurate classification. Whereas Binoculars and Ghostbusters, in this implementation, contribute very little improvement to the Full Model. However, when providing out of scope data like ESL writing, the model’s overreliance on DistilBERT poisons the efficiency seen in its accuracy rate when predicting ESL datasets.",
-     "As such, for limited ensemble AI detection models such as ours, it is important to have a method that does not need prior training in the domain. In addition, in terms of generalizing our findings to other AI detection model types, our research shows that there is no significant difference between random forest and linear regression meta-classifiers."
-    ]
+    "image": "uploads/slides/P-01/23.webp",
+    "title": "",
+    "body": []
    },
    {
     "n": 24,
-    "title": "Limitations/Future Changes",
-    "body": [
-     "For a majority of the time, we were on the free tier of Google Colab which severely restricted our ability to process data and how much we could scale everything. This only changed until very late, when it was clear there was no way we could finish in time without more compute.",
-     "In addition, our low starting compute power limited the scope of our project to things that could run in the Colab, which left us with admittedly outdated and less efficient models to use.",
-     "Many of the commercial AI detectors are paywalled and so we could not compare their models to ours on scale.",
-     "To change this project in the future, we will use newer models that can keep up with current LLMs.",
-     "It would be interesting to test if adding options such as (Schoolwork, News, etc) and having that adjust the model’s analysis would be possible.",
-     "We will look into further if there are other ways we could get a fair and accurate comparison of our model and commercially available AI detectors.",
-     "Explore the linguistic uniqueness of both human and AI writing to find stronger patterns."
-    ]
+    "image": "uploads/slides/P-01/24.webp",
+    "title": "",
+    "body": []
+   },
+   {
+    "n": 25,
+    "image": "uploads/slides/P-01/25.webp",
+    "title": "",
+    "body": []
    }
   ]
  },
@@ -263,275 +162,123 @@ window.PAIRS_DECKS = {
   "slides": [
    {
     "n": 1,
+    "image": "uploads/slides/P-02/01.webp",
     "title": "Reinforcement Learning for Robotic Arm Stabilization: How good will it be?",
-    "body": [
-     "Comparing Q-Learning, Threshold Controller, and PID"
-    ]
+    "body": []
    },
    {
     "n": 2,
+    "image": "uploads/slides/P-02/02.webp",
     "title": "Background/Context for this Project",
-    "body": [
-     "Initially, this project was meant to be a project to use Machine Learning and cross it with Electronics to optimize builds and make systems learn on their own, seeing if it would work well.",
-     "Of Course, this is very broad, so I decided to implement Machine Learning into this one specific scenario: seeing if Machine Learning would be able to stabilize a Robotic Arm when a weight is added onto it.",
-     "Using Machine Learning in Fields like this would help out the world of hardware tremendously as incorporating ML/AI to these physical systems can allow them to adapt on their own. The use of ML in physical systems are seen already everywhere today such as Independent Robots and autonomous cars. My specific case here isn't one that hasn't been done before, but to bring about ML into the world of Hardware in general is something that I find so awesome."
-    ]
+    "body": []
    },
    {
     "n": 3,
+    "image": "uploads/slides/P-02/03.webp",
     "title": "Project Goal…",
-    "body": [
-     "With my specific scenario of incorporating Machine Learning to Robotic Arms, it proposes the question: “How can Machine Learning and robotic arms be integrated? ” To answer this, I decided to incorporate ML so that it is able to stabilize a Robotic Arm when a weight is put onto it.",
-     "To do this, the field of Machine Learning I’d be using is Reinforcement Learning, which essentially is where the Model trains itself, and does NOT use outside data. This is best for my project because I want to incorporate this soon into a physical system, and that outside data probably won't be useful for my specific parts I'll be using for the arm. Arm strengths and sizes for example can vary greatly, and it's best if the Model gets used to the Arm that it has. With this Project are three Goals:",
-     "Training the Q-Learning controller to choose a motor torque output based off the arms current angle and angular velocity",
-     "Compare this Model Im creating against a Threshold Controller (Fixed Controller so if arm at this angle, “do this”, etc) and a PID controller",
-     "Determining which out of the 3 methods are able to get the arm closest to its desired target."
-    ]
+    "body": []
    },
    {
     "n": 4,
+    "image": "uploads/slides/P-02/04.webp",
     "title": "How the Robotic Arm Simulation Works",
-    "body": [
-     "First, some constants for the Arm have to be established:",
-     "This is a SINGLE Joint Robotic Arm and it is holding a weight of 1kg.",
-     "The Arm’s mass is 0.5kg",
-     "The Arm’s length is 0.5m",
-     "The Target position the Model has to aim for is 0 Degrees.",
-     "Forces acting on this Arm:",
-     "Gravity is pulling the arm down",
-     "The motor in the Arm is Counteracting gravity by applying torque",
-     "“Damping” is just an added friction inside the arm that slows the arm’s motion and to prevent endless movement up and down (Without this, think of the joint moving as literally smooth butter no really friction in the joint)",
-     "The Arm’s inertia that determines how difficult it will be to change the arms rotational motion",
-     "Simulation:",
-     "The sim represents the physical robotic arm using physics",
-     "Every 0.01 seconds, the controller chooses a motor torque to output to try and stabilize the arm based on its current position is",
-     "Motor Torque is combined with gravity and damping to get the net torque",
-     "The Net Torque determines the arms angular acceleration, which then changes its angular velocity",
-     "The updated angular velocity changes the arm’s angle, and this process is repeated continuously."
-    ]
+    "body": []
    },
    {
     "n": 5,
+    "image": "uploads/slides/P-02/05.webp",
     "title": "How “Q-Learning” Works + How I used it",
-    "body": [
-     "For my project, I decided to use Q-Learning, which is a Reinforcement Learning Algorithm that teaches the Model how to make decisions on its own based on exploration and reward feedback. Based off an action that it does in a state that it’s in, it gives that action a rating and stores it inside what's called a “Q-table”, which is a grid where the number of rows is the possible states and columns being the possible actions it can take. Initially, all the spaces start with 0 and as the Model is Learning, it fills up this grid, giving every action a rating at a certain state.",
-     "The main aspect of the Q-Learning process is deciding on a rating for the action it took at a specific state. This is called the Q-Value. It has a formula, here:",
-     "Explained on the next slide…"
-    ]
+    "body": []
    },
    {
     "n": 6,
+    "image": "uploads/slides/P-02/06.webp",
     "title": "How “Q-Learning” Works + How I used it (pt.2)",
-    "body": [
-     "As you can see, there are many variables here but the concept for it is pretty easy. To simplify this equation, I rewrote it like this:",
-     "new_q is the updated q-value for an action the Model is determining",
-     "old_q is what the model currently believes the q-value is for the action it took",
-     "Alpha is the learning rate on a scale of 0-1, which is how much it changes its old q-value, which then is added to the old value to update its ranking (Looking at where its placed in the equation makes it a little easier to understand)",
-     "Reward is the feedback the Model got after it took the action.",
-     "Gamma is how much we value the future outcome on a scale of 0-1.",
-     "Better-q the best q-value in the next state."
-    ]
+    "body": []
    },
    {
     "n": 7,
+    "image": "uploads/slides/P-02/07.webp",
     "title": "How “Q-Learning” Works + How I used it (pt.3)",
-    "body": [
-     "As I said in the last Slide, Q-Learning works with a grid of all its possible states and actions with a rating for each.",
-     "State and Action:",
-     "In my case, there are 75 rows and 9 columns, where 75 is because of multiplying my 15 possible angle categories and 5 velocity categories, making 75 possible states. There are 9 columns since there are 9 possible motor torque outputs (−8, −6, −4, −2, 0, +2, +4, +6, +8 N·m ).",
-     "Reward:",
-     "To calculate the reward for an action it took, it uses this formula:",
-     "Simply put, angle is the position error while velocity is the motion measure, so together they tell us what good stabilization is, which is what is used here to determine the reward.",
-     "Exploration:",
-     "During the Q-Learning process, the Model has a 20% chance of choosing a random action. The other 80% of the time, it chooses the action with the highest Q-value. This is to let the Model get a chance to explore new actions rather than what its learned so far, to maybe figure out if there is a better action to take"
-    ]
+    "body": []
    },
    {
     "n": 8,
+    "image": "uploads/slides/P-02/08.webp",
     "title": "How “Q-Learning” Works + How I used it (pt.4)",
-    "body": [
-     "Training",
-     "Episode Based Evaluation was used for this Project, with a total episode amount of 5000. Per episode, the Model takes up to 300 simulation steps, with each step representing 0.01 seconds. After every action, the Q-Table is updated.",
-     "Here's a Flowchart to sum it all up:",
-     "Angle",
-     "Angular Velocity",
-     "State",
-     "Torque Action",
-     "Arm Moves",
-     "Reward",
-     "Q-Table",
-     "Q-Table Update",
-     "Repeat"
-    ]
+    "body": []
    },
    {
     "n": 9,
+    "image": "uploads/slides/P-02/09.webp",
     "title": "Experimental Design and Comparison",
-    "body": [
-     "Once the Q-Learning Algorithm has done its job, we have the results for how well the Model has done in attempts to balance the arm. Along with this Model, I’ve also created a Threshold Controller as well as a PID Controller.",
-     "Comparing the Controllers:",
-     "One Aspect of this Project again is to really test Q-Learning to see how it does against the other methods of stabilizing a robotic arm listed above, which is what I will go over later.",
-     "Ablation Study:",
-     "Removing Angular Velocity from the Q-Learning State to test whether or not Velocity is actually useful for stabilizing the arm",
-     "Evaluation Metrics:",
-     "MAD (Mean Absolute Deviation): average distance from the target (0 degrees)",
-     "Settling Time: how long it takes the arm to become stable near the target",
-     "Episode Survival: how long the Q-Learning agent keeps the arm within the allowed range",
-     "Note: All methods used the same constants initially mentioned on Slide 5"
-    ]
+    "body": []
    },
    {
     "n": 10,
+    "image": "uploads/slides/P-02/10.webp",
     "title": "Findings: Training Results",
-    "body": [
-     "After training the Model for about 5000 episodes, I created a graph to display how it performed throughout its process. Two main learning metrics I tracked on the graphs were Episode Survival, which is how long the arm remained within the allowed range, and Average Reward, which is how well the Model was able to keep the arm close to 0 degrees.",
-     "Here are two Graphs that display the Episode Survival and Average Reward Per Episode:"
-    ]
+    "body": []
    },
    {
     "n": 11,
+    "image": "uploads/slides/P-02/11.webp",
     "title": "Findings: Training Results (pt. 2)",
-    "body": [
-     "Episode Survival:",
-     "From the Graph, the Model had more of an upward trend in terms of surviving for longer periods of time as it trained, which shows that it was indeed learning better actions overtime.",
-     "Directly from my terminal, the First 10 episodes averaged 23.3 steps survived, while the last 10 steps where 62.6 steps survived.",
-     "Average Reward:",
-     "Average reward as shown on the graph became less negative throughout the training, as you can see a more upward trend towards 0 on the y axis in the beginning than there are at the end, which shows better stabilization.",
-     "First 10 episodes averaged about -18.24, compared with about -12.07 for the final 10 episodes."
-    ]
+    "body": []
    },
    {
     "n": 12,
+    "image": "uploads/slides/P-02/12.webp",
     "title": "Findings: Controller Comparison",
-    "body": [
-     "After training the Q-Learning Model, I compared its final results to the Threshold Controller as well as the PID Controller using the exact same physics sim conditions, which allowed me to compare all three methods fairly and how they each behave while trying to reach the target angle of 0 degrees. The Graph that is able to show the differences in their stabilization is here:",
-     "As you can see…",
-     "Q-Learning Stayed close to 0 degrees throughout the 3 second test but still had small Oscillations at the end",
-     "The Threshold Controller stayed near 0 but oscillated much more",
-     "The PID Controller initially moved farther] From the target, but went into a smooth maintained transition toward the target angle and was the most stable at the end"
-    ]
+    "body": []
    },
    {
     "n": 13,
+    "image": "uploads/slides/P-02/13.webp",
     "title": "Side Controller 1: Threshold Controller",
-    "body": [
-     "In the previous slide, I showed you the results for the three Controllers, but haven't explained Threshold and PID yet. This Slide will focus on the Threshold Controller.",
-     "The Threshold Controller is a super simple Controller where the rules are written into the code. ALl it does is check the arms current location from the target and off of that, gives off a Torque Value.",
-     "More precisely…",
-     "If less than 0 degrees, +8 N*m upward",
-     "If at/or above 0 degrees, + 4*m, letting gravity pull it downward",
-     "It does not take into consideration angular velocity or any from or learning",
-     "Part of what makes this so simple is angle check and the limited amounts of motor torque outputs its available to do. That's part of this “simple” Controller.",
-     "Note:",
-     "With the arm at 0 Degrees, gravity creates about -6.13 N*m. For this Controller, +8 N*m upward pushes the arm upward to counteract gravity here, while the + 4N*m upward when the angle is above 0 is weaker than gravity's downward torque, so net torque brings the arm back to the target. This was my reasoning for the Controller to have these two values"
-    ]
+    "body": []
    },
    {
     "n": 14,
+    "image": "uploads/slides/P-02/14.webp",
     "title": "Side Controller 2: PID Controller",
-    "body": [
-     "Next is the PID Controller. It's a Controller that also does not use Machine Learning but rather it is always measuring how far the arm is from the target and calculates a motor torque output mathematically to try and bring itself to the target.",
-     "P: Proportional: Looks how far the arm is from the target currently.",
-     "I: Integral: Looks at how much error has built up overtime",
-     "D: Derivative: Looks how quick the error is changing, helping the Controller slow down",
-     "There is a formula that goes with how it calculates Motor Torque, Here:",
-     "Where:",
-     "e = current error (Target Angle - Current Angle)",
-     "Kp = how strong the “P” matters (Proportional part, I used 2.0)",
-     "KI = how strong the “I” matters (Integral part, I used 5.0)",
-     "KD = how strong the “D” matters (Derivative part, I used 0.2)",
-     "Motor Torque outputs limited to -8 N*m and +8 N*m"
-    ]
+    "body": []
    },
    {
     "n": 15,
+    "image": "uploads/slides/P-02/15.webp",
     "title": "Findings: Metrics Comparison",
-    "body": [
-     "Here are the Metric Results from each of the three Methods:",
-     "Q-Learning:",
-     "Had the lowest MAD: 0.196 degrees",
-     "Final Angle: 0.123 degrees",
-     "Final Angular velocity: -2.78 degrees/s",
-     "Threshold Controller:",
-     "MAD: 0.284 degrees",
-     "Final Angle: 0.204 degrees",
-     "Final Angular Velocity: -6.75 Degrees/s",
-     "PID Controller:",
-     "MAD: 0.409 degrees",
-     "Final Angle = approximately 0 degrees",
-     "Final Angular Velocity = Approximately 0 degrees/s",
-     "Settling time: 0.56s",
-     "Based off the Graph and the Metric Data…",
-     "Q-Learning had the best average accuracy, while PID had the best final stability"
-    ]
+    "body": []
    },
    {
     "n": 16,
+    "image": "uploads/slides/P-02/16.webp",
     "title": "Findings: Ablation Study",
-    "body": [
-     "Simply put, an Ablation Study tests how important one part of a Model is to that Model by removing it and keeping everything else the same. In my case, I decided to run the Model without Angular Velocity to see if having the angle alone would be enough to train the Model. Metric Comparison here:",
-     "Full Q-Learning:",
-     "Angle and Angular Velocity",
-     "MAD: 0.196 Degrees",
-     "Final Angle: 0.123 Degrees",
-     "Final Angular Velocity: -2.78 Degrees/s",
-     "Angle Only Q-Learning:",
-     "Angle Only",
-     "MAD: 0.614 Degrees",
-     "Final Angle: -2 Degrees",
-     "Final Angular Velocity: 2.96 Degrees/s",
-     "From the Metrics, we can see that removing Angular Velocity as a factor to determine Q-value ended up increasing the MAD from 0.196 Degrees to 0.614 Degrees, making the Angle Only Model About 3 times worse. This demonstrates why having Angular Velocity as a factor to determine Q-value is so important because the arm can be at the same angle but moving at completely different speeds and/or directions. Angular Velocity allows us to differentiate those situations"
-    ]
+    "body": []
    },
    {
     "n": 17,
+    "image": "uploads/slides/P-02/17.webp",
     "title": "Discussion and Conclusion",
-    "body": [
-     "Overall, the Q-Learning Model was able to Learn to try and stabilize the arm, but every Controller was good and bad in their own ways depending on what Metric we’re talking about.",
-     "For example…",
-     "Q-Learning had the lowest avg angle error with a MAD of 0.196 Degrees, showing it stayed close to the target",
-     "PID had the BEST final state stability, being basically right on the target and maintaining it at about 0 Degrees/s Angular velocity",
-     "Threshold Controller was able to keep the amr near target, but oscillated much more than the other two",
-     "Ablation Study showed that by removing Angular Velocity, it Increased the MAD from 0.196 Degrees to 0.614 Degrees",
-     "In the end, this was able to show me that the Q-Learning process was able to teach itself to keep the arm up near the target, but it did not outperform other traditional methods in every scenario.",
-     "Q-Learning had the best avg accuracy, whilst PID was better at fully settling down at the target in the end."
-    ]
+    "body": []
    },
    {
     "n": 18,
+    "image": "uploads/slides/P-02/18.webp",
     "title": "Limitations + Future Work for the Project",
-    "body": [
-     "Limitations:",
-     "Final Project was Simulation Based, so no real hardware arm used to test the Model",
-     "System is only a Single Joint Robotic Arm, which is much simpler than an actual Multi-Joint Arm",
-     "Simulation used ideal angle and angular velocity values, so nothing much to account for actual sensor noise, gyro drifting or filtering errors with the gyroscope sensor meant to be used",
-     "The Motor Torque was just Modeled directly, while using an actual physical system would have required mapping motor controller outputs onto the servo.",
-     "Future Work:",
-     "Transfer the Q-Learning Controller right onto a physical Robotic Arm",
-     "Test the System with different payload weights",
-     "Going from a Single Jointed Arm to Double Jointed Arm",
-     "Really Test all the Controllers tested in this experiment with a physical system to see the comparisons up close.",
-     "In the end, this Project served as a way to test Reinforcement Learning in physical Control Systems, with my next big step being taking this Model to physical hardware."
-    ]
+    "body": []
    },
    {
     "n": 19,
+    "image": "uploads/slides/P-02/19.webp",
     "title": "References",
-    "body": [
-     "KTH Royal Institute of Technology (2019). Reinforcement Learning for Dynamic Control of Robotic Systems.",
-     "https://kth.diva-portal.org/smash/get/diva2:1374213/FULLTEXT01.pdf",
-     "Ha, S., & Yamane, K. (2022). Reinforcement Learning for Adaptive Torque Control in Underactuated Mechanisms.",
-     "https://arxiv.org/pdf/2207.11431",
-     "Sharma, D., & Kumar, R. (2023). IMU-Based State Estimation and Control Using Discrete State Mapping.",
-     "https://ijournals.in/wp-content/uploads/2023/10/25.IJSHRE-111026-Diti.pdf"
-    ]
+    "body": []
    },
    {
     "n": 20,
+    "image": "uploads/slides/P-02/20.webp",
     "title": "THANKS!",
-    "body": [
-     "CREDITS: This presentation template was created by Slidesgo, and includes icons by Flaticon, and infographics & images by Freepik"
-    ]
+    "body": []
    }
   ]
  },
@@ -541,196 +288,93 @@ window.PAIRS_DECKS = {
   "slides": [
    {
     "n": 1,
+    "image": "uploads/slides/P-03/01.webp",
     "title": "Physics-Informed LSTM Networks for Remaining Useful Life Prediction in Lithium-Ion Batteries",
-    "body": [
-     "Specialization: Physics-Informed Neural Networks & Time-Series Forecasting | Field: Automotive / Battery Engineering",
-     "15-Minute Project Walkthrough"
-    ]
+    "body": []
    },
    {
     "n": 2,
+    "image": "uploads/slides/P-03/02.webp",
     "title": "Agenda",
-    "body": [
-     "01 Problem & Motivation",
-     "Why battery RUL prediction, and why physics-informed ML",
-     "02 Specialization & Approach",
-     "PINNs + time-series forecasting applied to EV batteries",
-     "03 Dataset",
-     "NASA PCoE batteries across three temperature conditions",
-     "04 Methodology",
-     "LSTM backbone, physics-informed loss, evaluation design",
-     "05 A Real Debugging Story",
-     "Catching and fixing a zero-gradient loss bug",
-     "06 Results & Findings",
-     "What the corrected physics-informed models actually show"
-    ]
+    "body": []
    },
    {
     "n": 3,
+    "image": "uploads/slides/P-03/03.webp",
     "title": "The Problem: When Will This Battery Fail?",
-    "body": [
-     "Background: EV adoption depends on batteries that are safe and predictable. Every charge cycle degrades a battery a little, and that degradation eventually leads to failure. The problem: Predicting Remaining Useful Life (RUL) lets manufacturers schedule maintenance, warn drivers, and design safer packs — before failure happens. The gap: Most ML approaches (LSTM, Transformers) treat this as a pure curve-fitting problem — powerful, but prone to physically implausible predictions when data is limited.",
-     "Why it's hard",
-     "Degradation is nonlinear and history-dependent",
-     "Very few full-life-cycle battery datasets exist",
-     "Black-box models can predict physically impossible degradation curves",
-     "Predictions must stay reliable near end-of-life, when it matters most"
-    ]
+    "body": []
    },
    {
     "n": 4,
+    "image": "uploads/slides/P-03/04.webp",
     "title": "Specialization & Field",
-    "body": [
-     "Specialization",
-     "Physics-Informed Neural Networks & Time-Series Forecasting",
-     "Field",
-     "Automotive / Battery Engineering",
-     "Project Idea",
-     "Embed electrochemical aging equations — SEI growth kinetics and Arrhenius temperature dependence — directly into an LSTM's loss function, so RUL predictions stay physically consistent instead of behaving as a black box."
-    ]
+    "body": []
    },
    {
     "n": 5,
+    "image": "uploads/slides/P-03/05.webp",
     "title": "Dataset: NASA PCoE Battery Data",
-    "body": [
-     "11 lithium-ion cells across three ambient-temperature groups (after removing one outlier cell)",
-     "4°C — 3 cells — B0046, B0047, B0048",
-     "24°C — 4 cells — B0005, B0006, B0007, B0018",
-     "43°C — 4 cells — B0029, B0030, B0031, B0032",
-     "Note: One 4°C battery (B0045) was excluded after EDA revealed an atypical starting capacity inconsistent with its peer cells — documented as a data-quality decision, not a silent drop.",
-     "Source: NASA Prognostics Center of Excellence (PCoE) Battery Data Set"
-    ]
+    "body": []
    },
    {
     "n": 6,
+    "image": "uploads/slides/P-03/06.webp",
     "title": "End-to-End Pipeline",
-    "body": [
-     "Data — Download & parse NASA .mat files",
-     "Preprocess — RUL labels, resampled sequences, dQ/dt",
-     "Model — LSTM backbone + physics-informed loss",
-     "Evaluate — Leave-One-Battery-Out Cross-Validation",
-     "Results — Compare baseline vs. physics variants",
-     "Evaluation split by whole battery cell — never within a single cell's timeline — to test generalization to unseen cells."
-    ]
+    "body": []
    },
    {
     "n": 7,
+    "image": "uploads/slides/P-03/07.webp",
     "title": "Model: LSTM + Physics-Informed Loss",
-    "body": [
-     "LSTM Backbone",
-     "Input: 50-step voltage / current / temperature sequence per discharge cycle Architecture: 2-layer LSTM (64 hidden units) + feedforward head Output: Predicted Remaining Useful Life (cycles) Same architecture reused for every ablation variant",
-     "Physics-Informed Loss Terms",
-     "Arrhenius temperature dependence",
-     "k(T) = A · exp(−Ea / R·T)",
-     "Penalizes predictions whose implied degradation rate doesn't scale correctly with temperature.",
-     "SEI growth kinetics",
-     "capacity loss ∝ √t",
-     "Penalizes deviation from the diffusion-limited growth law, computed on accumulated degradation across cycles.",
-     "Total Loss = Data MSE + λ₁·Arrhenius + λ₂·SEI"
-    ]
+    "body": []
    },
    {
     "n": 8,
+    "image": "uploads/slides/P-03/08.webp",
     "title": "Architecture Diagram",
-    "body": [
-     "How data flows through the model, and where the physics rules enter",
-     "Input Sequence — Voltage, Current, Temperature (50 steps/cycle)",
-     "LSTM (2 layers) — 64 hidden units, learns temporal patterns in the cycle",
-     "Feedforward Head — Final hidden state → 32 units → 1 value",
-     "Predicted RUL — Cycles remaining until end-of-life",
-     "Physics-Informed Loss (used only during training)",
-     "The model's predicted RUL is compared against the Arrhenius temperature-rate law and the SEI √t growth law. Predictions that break these physical patterns are penalized, nudging the LSTM's weights toward physically realistic degradation curves.",
-     "Dashed line = physics loss path (training only) — not used at prediction time"
-    ]
+    "body": []
    },
    {
     "n": 9,
+    "image": "uploads/slides/P-03/09.webp",
     "title": "Evaluation Design",
-    "body": [
-     "Leave-One-Battery-Out CV",
-     "Each of the 11 batteries is held out as the test set exactly once",
-     "Remaining batteries split into train / validation sets",
-     "Partitioned by whole battery cell — never within one cell's cycle history",
-     "Chosen because only 11 batteries exist — a fixed % split would waste data and hide poor generalization",
-     "Ablation: 4 Model Variants",
-     "LSTM (baseline) — Data loss only",
-     "LSTM + Arrhenius — + temperature-rate constraint",
-     "LSTM + SEI — + √t growth constraint",
-     "LSTM-PINN (full) — Both physics terms combined"
-    ]
+    "body": []
    },
    {
     "n": 10,
+    "image": "uploads/slides/P-03/10.webp",
     "title": "A Real Debugging Story",
-    "body": [
-     "Catching a zero-gradient loss term before trusting the results",
-     "What went wrong",
-     "The Arrhenius & SEI residual functions were computed entirely from ground-truth data — never from the model's own predictions.",
-     "How it was caught",
-     "A gradient-norm sanity check showed the “physics-informed” loss terms contributed zero gradient to the model's parameters.",
-     "The fix",
-     "Residuals were rewritten to depend on the model's own predicted RUL, verified with a nonzero-gradient check before retraining."
-    ]
+    "body": []
    },
    {
     "n": 11,
+    "image": "uploads/slides/P-03/11.webp",
     "title": "Results: Corrected Physics-Informed Models",
-    "body": [
-     "Mean RMSE across 11 Leave-One-Battery-Out folds (lower is better)",
-     "32.98 — LSTM (baseline)",
-     "29.96 — LSTM + SEI",
-     "26.23 — LSTM-PINN (full)",
-     "23.51 — LSTM + Arrhenius",
-     "Mean RMSE (cycles)",
-     "RMSE (cycles)",
-     "−29% RMSE reduction with the Arrhenius-informed LSTM vs. plain baseline",
-     "Physics-informed variants also showed lower fold-to-fold variance than baseline"
-    ]
+    "body": []
    },
    {
     "n": 12,
+    "image": "uploads/slides/P-03/12.webp",
     "title": "What the Results Show",
-    "body": [
-     "Physics constraints genuinely help",
-     "Every physics-informed variant beat the plain LSTM baseline once the loss bug was fixed — not just on average, but with lower variance too.",
-     "Arrhenius alone was the strongest single addition",
-     "The temperature-rate constraint gave the largest and most consistent improvement of any variant tested.",
-     "Combining both terms didn't stack additively",
-     "The full PINN beat baseline but underperformed the Arrhenius-only model — physics terms can compete with each other, not just with the data loss."
-    ]
+    "body": []
    },
    {
     "n": 13,
+    "image": "uploads/slides/P-03/13.webp",
     "title": "Limitations & Future Work",
-    "body": [
-     "Limitations",
-     "Only 11 battery cells — high fold-to-fold variance",
-     "λ weights tuned by coarse sweep, not full optimization",
-     "Physics residuals computed at batch level, adding noise",
-     "MAPE and strict α-λ accuracy proved unstable near end-of-life",
-     "Future Work",
-     "Fine-grained λ sensitivity sweep across all 11 folds",
-     "Swap LSTM backbone for a Transformer encoder",
-     "Test on additional NASA temperature groups for more data",
-     "Investigate why combined physics terms underperform individually-applied ones"
-    ]
+    "body": []
    },
    {
     "n": 14,
+    "image": "uploads/slides/P-03/14.webp",
     "title": "Conclusion",
-    "body": [
-     "Embedding real battery-aging physics into an LSTM's loss function produced measurably more accurate and more consistent Remaining Useful Life predictions than a standard black-box model — a 29% RMSE improvement from the temperature-dependence rule alone.",
-     "Physics-informed constraints are a practical, testable way to make ML predictions more trustworthy for safety-relevant engineering problems.",
-     "Verifying that a loss term actually produces gradient is essential — a plausible-looking equation can silently do nothing.",
-     "Not all physics rules combine for free — how multiple constraints interact is itself worth studying, not assuming."
-    ]
+    "body": []
    },
    {
     "n": 15,
+    "image": "uploads/slides/P-03/15.webp",
     "title": "Thank You",
-    "body": [
-     "Questions?"
-    ]
+    "body": []
    }
   ]
  },
@@ -963,279 +607,153 @@ window.PAIRS_DECKS = {
   "slides": [
    {
     "n": 1,
-    "title": "Timescale-Aware Neural ODEs for 6-DOF Aircraft Dynamics",
-    "body": [
-     "Timescale-Aware",
-     "Neural ODEs for",
-     "6-DOF Aircraft Dynamics",
-     "Learning fast and slow flight dynamics across operating regimes"
-    ]
+    "image": "uploads/slides/P-05/01.webp",
+    "title": "",
+    "body": []
    },
    {
     "n": 2,
-    "title": "The Problem",
-    "body": [
-     "Aircraft dynamics evolve at very different times",
-     "A single aircraft state contains both rapid rotational responses and much slower translational motion."
-    ]
+    "image": "uploads/slides/P-05/02.webp",
+    "title": "",
+    "body": []
    },
    {
     "n": 3,
-    "title": "Research Question",
-    "body": [
-     "Does physically separating fast and slow dynamics improve Neural ODE trajectory prediction?",
-     "Does derivative scaling alone help?",
-     "Does fast/slow partition matter?",
-     "Do flight regimes matter?",
-     "“A standard Neural ODE asks one vector field to learn both at once. I wanted to know whether explicitly respecting that structure helps.”"
-    ]
+    "image": "uploads/slides/P-05/03.webp",
+    "title": "",
+    "body": []
    },
    {
     "n": 4,
-    "title": "How a Neural ODE works?",
+    "image": "uploads/slides/P-05/04.webp",
+    "title": "",
     "body": []
    },
    {
     "n": 5,
-    "title": "Standard Neural ODE vs Multiscale Neural ODE",
-    "body": [
-     "Standard Neural ODE",
-     "Learns a continuous-time dynamics model",
-     "Predicts all state derivatives",
-     "Numerical ODE solver rolls the state forward in time",
-     "Represents all dynamics in one shared vector field.",
-     "Multiscale Neural ODE",
-     "Preserves the Neural ODE formulation",
-     "Splits derivative predictions into fast and slow branches",
-     "Both branches use the same full state and control input",
-     "Output partition is based on timescale structure",
-     "Vs",
-     "Neural ODE:",
-     "Both branches use the same full state and control input"
-    ]
+    "image": "uploads/slides/P-05/05.webp",
+    "title": "",
+    "body": []
    },
    {
     "n": 6,
-    "title": "Data Generation",
-    "body": [
-     "Datasets were generated using the publicly available JSBSim F-15 Model",
-     "Each dataset has:",
-     "1,000 trajectories",
-     "15s trajectory",
-     "120 Hz Native Sampling",
-     "5 datasets → 5,000 trajectories",
-     "Subsonic Baseline",
-     "A",
-     "High/Low Altitude",
-     "Chigh/Clow",
-     "Supersonic",
-     "B",
-     "Aggressive Maneuvers",
-     "D"
-    ]
+    "image": "uploads/slides/P-05/06.webp",
+    "title": "",
+    "body": []
    },
    {
     "n": 7,
-    "title": "Exploratory Data Analysis",
+    "image": "uploads/slides/P-05/07.webp",
+    "title": "",
     "body": []
    },
    {
     "n": 8,
-    "title": "Exploratory Data Analysis",
+    "image": "uploads/slides/P-05/08.webp",
+    "title": "",
     "body": []
    },
    {
     "n": 9,
-    "title": "Exploratory Data Analysis",
+    "image": "uploads/slides/P-05/09.webp",
+    "title": "",
     "body": []
    },
    {
     "n": 10,
-    "title": "Secondary Experiment: Multi Regime Learning",
-    "body": [
-     "From our EDA we see that there are distinct flight regimes across Mach and altitude",
-     "A Neural ODE learns on a continuous vector field",
-     "Can one shared vector field represent dynamics across these separated flight regimes?",
-     "Hypothesis:",
-     "Explicitly providing regime information may help the model specialize across operating conditions",
-     "Does explicit conditioning outperform training on diverse regimes?",
-     "All models train on the same pooled A + B + Chigh + Clow trajectories",
-     "M5C",
-     "M5",
-     "M6",
-     "No regime information given",
-     "Learned Regime Embedding",
-     "FiLM conditioning",
-     "Same training trajectories",
-     "Evaluated on A, B, Chigh , Clow , and D",
-     "D is never used for training"
-    ]
+    "image": "uploads/slides/P-05/10.webp",
+    "title": "",
+    "body": []
    },
    {
     "n": 11,
-    "title": "Primary Experiment: Timescale-Aware Architecture",
-    "body": [
-     "(Training: Dataset A only)",
-     "M1: baseline",
-     "M1w: does more capacity help?",
-     "M2: does scaling help?",
-     "M3: does multiscale branching help?",
-     "M3b: does the fast-state partition matter?",
-     "Multiscale Vector Field. The fast and slow branches receive the same state-control input but predict different subsets of the state derivatives. The outputs are scaled and reassembled into the full 12-dimensional derivative vector.",
-     "Multi-Regime Conditioning. Models are trained across datasets A, B, Chigh, Clow, with regime information supplied through either a learned embedding or FiM modulation."
-    ]
+    "image": "uploads/slides/P-05/11.webp",
+    "title": "",
+    "body": []
    },
    {
     "n": 12,
-    "title": "Numerical Solvers: Turning Derivatives into Trajectory",
-    "body": [
-     "A Neural ODE only gives:",
-     "01",
-     "But that only gives instantaneous slope. A numerical solver repeatedly use those slopes to estimate:",
-     "02",
-     "Euler",
-     "RK4",
-     "Implicit",
-     "Dopri5",
-     "Uses one slope at the start of the step",
-     "Combines 4 slope estimates across the step",
-     "Compare 5th/4th order estimates and adapt h",
-     "Future state appears in the equation. Each step solved iteratively"
-    ]
+    "image": "uploads/slides/P-05/12.webp",
+    "title": "",
+    "body": []
    },
    {
     "n": 13,
-    "title": "Training Protocol",
-    "body": [
-     "01",
-     "Split By Trajectory",
-     "70% Train",
-     "15% Validation",
-     "15% Test",
-     "02",
-     "Training Window",
-     "360 raw samples at 120 Hz",
-     "2 random windows",
-     "Supervise every 4th timestep",
-     "03",
-     "Optimize",
-     "Adam learning rate: 10-3",
-     "Batch Size: 32",
-     "04",
-     "Select Model",
-     "Best validation checkpoint retained",
-     "Core: 10 seeds",
-     "Multi-regime: 5 seeds",
-     "Trained on short windows",
-     "Final performance measured using full 15s rollouts."
-    ]
+    "image": "uploads/slides/P-05/13.webp",
+    "title": "",
+    "body": []
    },
    {
     "n": 14,
-    "title": "Evaluation Metrics",
-    "body": [
-     "04",
-     "Per-state RMSE",
-     "RMSEn, RMSEe, … ,RMSEwb",
-     "Computes error for each state",
-     "Show which states drive improvements or failures",
-     "02",
-     "Slow group RMSE",
-     "n,e,h,ϕ,θ,ψ,ub,vb,wb",
-     "Remaining 9 states",
-     "Position, altitude and translational dynamics",
-     "01",
-     "Fast Group RMSE",
-     "p,q,r",
-     "Body angular rates",
-     "Measures the rapid rotational dynamics",
-     "03",
-     "Aggregate RMSE",
-     "All 12 states",
-     "One overall trajectory error value",
-     "Main comparison metric"
-    ]
+    "image": "uploads/slides/P-05/14.webp",
+    "title": "",
+    "body": []
    },
    {
     "n": 15,
-    "title": "Finding 1: Rates-only multiscale was the strongest core architecture",
-    "body": [
-     "M3b had the lowest mean aggregate RMSE on both A and D",
-     "Increasing model capacity didn’t improve accuracy"
-    ]
+    "image": "uploads/slides/P-05/15.webp",
+    "title": "",
+    "body": []
    },
    {
     "n": 16,
+    "image": "uploads/slides/P-05/16.webp",
     "title": "",
     "body": []
    },
    {
     "n": 17,
-    "title": "Finding 2: The Fast State Partition is an Improvement",
-    "body": [
-     "Restricting the fast branch to body rates strongly improved attitude prediction but introduced an altitude tradeoff.",
-     "Same parameter count; only fast state partition changes."
-    ]
+    "image": "uploads/slides/P-05/17.webp",
+    "title": "",
+    "body": []
    },
    {
     "n": 18,
-    "title": "Finding 3: Multi-Regime Training Greatly Expanded Environmental Coverage",
-    "body": [
-     "Environmental Shift:",
-     "B: A-only Models ~ 0.23 RMSE while Multi-Regime ~ 0.044",
-     "Chigh : A-only models ~ 0.87 - 0.94 while Multi-regime ~ 0.047 - 0.052",
-     "D remains worse for multi regime models: 0.232 - 0.266 vs M3B 0.165",
-     "Exposure to broader environment solved the B/C extrapolation problem but didn’t improve unseen maneuver generalization"
-    ]
+    "image": "uploads/slides/P-05/18.webp",
+    "title": "",
+    "body": []
    },
    {
     "n": 19,
-    "title": "Finding 4: Explicit Regime Conditioning added little",
-    "body": [
-     "Results:",
-     "Embedding (M5) has small mixed changes across regimes",
-     "FiLM (M6) lowers D error by 11.7% but worsened A/B/C by about 5-6%",
-     "Conditioning did not consistently outperform plain pooled training."
-    ]
+    "image": "uploads/slides/P-05/19.webp",
+    "title": "",
+    "body": []
    },
    {
     "n": 20,
+    "image": "uploads/slides/P-05/20.webp",
     "title": "",
     "body": []
    },
    {
     "n": 21,
-    "title": "Limitations & Future Directions",
-    "body": [
-     "Limitations",
-     "&",
-     "Future Directions",
-     "Singe Simulated Aircraft",
-     "Results are limited to a F-15 and may not generalize to other aircraft",
-     "01",
-     "Limited Maneuver",
-     "Datasets D tests held-out aggressive maneuvers but only a subset of possible flight behaviors and disturbances",
-     "03",
-     "Architecture tested separately",
-     "Rates only multiscale model and multi-regime models were not combined.",
-     "05",
-     "Hybrid multiscale + Multi regime model",
-     "Tests whether rates only branching retains its benefit across different operating regimes",
-     "02",
-     "Spectral/Wavelet Analysis",
-     "Use FFT and wavelet transform to quantity which state contain fast frequency content and when those dynamics appear",
-     "04",
-     "Broader and Adaptive Validation",
-     "Extend to more maneuvers, aircraft, disturbances, and possibly real flight data. Learn regime/timescale routing instead of fixing it manually",
-     "06"
-    ]
+    "image": "uploads/slides/P-05/21.webp",
+    "title": "",
+    "body": []
    },
    {
     "n": 22,
+    "image": "uploads/slides/P-05/22.webp",
     "title": "",
-    "body": [
-     "THE END"
-    ]
+    "body": []
+   },
+   {
+    "n": 23,
+    "image": "uploads/slides/P-05/23.webp",
+    "title": "",
+    "body": []
+   },
+   {
+    "n": 24,
+    "image": "uploads/slides/P-05/24.webp",
+    "title": "",
+    "body": []
+   },
+   {
+    "n": 25,
+    "image": "uploads/slides/P-05/25.webp",
+    "title": "",
+    "body": []
    }
   ]
  },
@@ -1245,177 +763,87 @@ window.PAIRS_DECKS = {
   "slides": [
    {
     "n": 1,
+    "image": "uploads/slides/P-06/01.webp",
     "title": "Can an Unsupervised Model Tell Flight Anomalies Apart?",
-    "body": [
-     "PAIRS",
-     "Can an Unsupervised Model",
-     "Tell Flight Anomalies Apart?",
-     "Extending unsupervised VAE-based flight anomaly detection from one",
-     "known anomaly to three — without any label help",
-     "Areeb Ahmed"
-    ]
+    "body": []
    },
    {
     "n": 2,
+    "image": "uploads/slides/P-06/02.webp",
     "title": "Primary Question:",
-    "body": [
-     "Every flight generates streams of sensor data — airspeed, altitude, flap position — that safety systems rely on to catch problems before they become dangerous.",
-     "Why it matters?",
-     "Real anomalies are rare and expensive to label by hand. A method that works without ever seeing a labeled failure would generalize to failure types nobody's tagged yet.",
-     "QUESTION…",
-     "Can a model trained on zero anomaly labels detect — and tell apart — multiple distinct types of flight anomalies, without the label help existing multi-class methods have used?"
-    ]
+    "body": []
    },
    {
     "n": 3,
+    "image": "uploads/slides/P-06/03.webp",
     "title": "THE DATASET",
-    "body": [
-     "Raw Data",
-     "NASA DASHlink Curated 4-Class Anomaly Detection Data Set — 99,837 real flights, 160-second windows on final approach, 20 sensor channels each.",
-     "Split 70 / 15 / 15 (train / val / test) on normal flights only — every anomalous flight is held out entirely until testing.",
-     "Raw flight",
-     "sensors",
-     "→",
-     "Normalize on",
-     "normal flights only",
-     "→",
-     "Train VAE",
-     "(normal only)",
-     "→",
-     "Score every",
-     "flight",
-     "→",
-     "Compare against",
-     "baselines",
-     "One pipeline, with only the modeling step switched out for each of the runs."
-    ]
+    "body": []
    },
    {
     "n": 4,
+    "image": "uploads/slides/P-06/04.webp",
     "title": "Class Imbalance",
-    "body": [
-     "Before building anything, the number of flights in each class was counted.",
-     "The rarest anomaly type (954 flights) is about 94× less common than nominal (89,663) — exactly why every result in this project is reported per class, not just pooled together."
-    ]
+    "body": []
    },
    {
     "n": 5,
+    "image": "uploads/slides/P-06/05.webp",
     "title": "The Strategy: Learn Normal, Notice What Isn't",
-    "body": [
-     "Most anomaly detectors need labeled failure examples. Instead, we show the model thousands of normal flights — nothing else.",
-     "Normal flight",
-     "→",
-     "encode",
-     "→",
-     "decode",
-     "→",
-     "Reconstructs closely — no flag",
-     "New flight",
-     "→",
-     "encode",
-     "→",
-     "decode",
-     "→",
-     "Fails to reconstruct — flagged",
-     "A Variational Autoencoder (VAE) learns the shape of “normal” well enough that anything unfamiliar reconstructs badly — that reconstruction gap is the anomaly signal, no labels required."
-    ]
+    "body": []
    },
    {
     "n": 6,
+    "image": "uploads/slides/P-06/06.webp",
     "title": "Ensuring Fairness",
-    "body": [
-     "7",
-     "model variants compared head-to-head, under one identical data split and threshold procedure",
-     "3",
-     "real anomaly types tested against — Speed High, Path High, Flaps Late Setting",
-     "0",
-     "anomaly labels the model ever saw during training"
-    ]
+    "body": []
    },
    {
     "n": 7,
+    "image": "uploads/slides/P-06/07.webp",
     "title": "Two Design Questions We Tested",
-    "body": [
-     "Beyond just building a working VAE, two specific design choices were tested directly — not just assumed.",
-     "Grouped vs. flat encoder",
-     "Does splitting sensors into subsystem groups — path/navigation, attitude/control, speed/propulsion — help, or does it lose cross-subsystem signal a single flat encoder would catch?",
-     "Variational vs. not (β = 0 ablation)",
-     "Does the probabilistic regularization term actually earn its keep, or does a plain autoencoder do just as well without it?"
-    ]
+    "body": []
    },
    {
     "n": 8,
+    "image": "uploads/slides/P-06/08.webp",
     "title": "Results:",
-    "body": [
-     "Reconstruction-probability scoring produced the single largest jump — 8 to 13 points on ROC-AUC and PR-AUC — far more than grouping or tuning β ever did alone."
-    ]
+    "body": []
    },
    {
     "n": 9,
+    "image": "uploads/slides/P-06/09.webp",
     "title": "The β Ablation",
-    "body": [
-     "Removing the variational term entirely (β=0) should look different from keeping it — if it's doing real work.",
-     "β=0 landed almost exactly on top of an independently-built plain autoencoder — a good cross-check that, for this architecture, the variational component wasn't earning its extra complexity on its own."
-    ]
+    "body": []
    },
    {
     "n": 10,
+    "image": "uploads/slides/P-06/10.webp",
     "title": "Grouping Doesn't Help Uniformly",
-    "body": [
-     "Pooled together, grouped and flat scored almost identically. Broken down by class, the picture changes completely.",
-     "Grouping nearly doubled Flaps Late Setting detection and boosted Path High — while cutting Speed High's catch rate roughly in half."
-    ]
+    "body": []
    },
    {
     "n": 11,
+    "image": "uploads/slides/P-06/11.webp",
     "title": "Major Findings",
-    "body": [
-     "Scoring method mattered most",
-     "Reconstruction probability (not grouping, not β) drove nearly all of this project's real gains.",
-     "The variational term didn't clearly earn its keep",
-     "Removing it (β=0) matched an independent plain autoencoder almost exactly.",
-     "Architecture choices trade — they don't uniformly improve",
-     "Grouping redistributed detection power across anomaly types — invisible without per-class reporting."
-    ]
+    "body": []
    },
    {
     "n": 12,
+    "image": "uploads/slides/P-06/12.webp",
     "title": "Some Limitations",
-    "body": [
-     "Single run per model",
-     "Each config used one fixed random seed; small gaps (a point or two) could be noise, not signal.",
-     "Explanations, not proof",
-     "Why grouping trades power the way it does is a plausible read of the pattern — per-channel variances were never directly inspected.",
-     "One dataset, one context",
-     "One curated NASA dataset, one aircraft and approach profile — generalization elsewhere is untested.",
-     "A real detection-rate trade-off",
-     "The honest, leak-free threshold caught far fewer anomalies than the best-possible hindsight threshold (~22% vs. ~67%)."
-    ]
+    "body": []
    },
    {
     "n": 13,
+    "image": "uploads/slides/P-06/13.webp",
     "title": "In Conclusion..",
-    "body": [
-     "To Answer the Primary Question…",
-     "Yes, in a limited but real sense — a purely unsupervised VAE, never trained on a single label, separated multiple anomaly types with meaningfully-better-than-chance success. But most of that success came from how the anomaly score was computed, not from architecture alone, and even the best setup still missed most anomalies at a safe, non-cheating threshold.",
-     "NEXT STEPS",
-     "1",
-     "Repeat key comparisons across multiple random seeds to confirm which gaps are real",
-     "2",
-     "Directly inspect per-channel learned variance to test the proposed explanation for the grouping trade-off",
-     "3",
-     "Extend the grouped, probability-scored model with temporal structure (e.g. an LSTM or 1D-CNN encoder) to capture cross-subsystem timing directly"
-    ]
+    "body": []
    },
    {
     "n": 14,
+    "image": "uploads/slides/P-06/14.webp",
     "title": "Thank You",
-    "body": [
-     "Can an Unsupervised Model Tell Flight Anomalies Apart?",
-     "Memarzadeh, Matthews, & Avrekh (2020). Unsupervised anomaly detection in flight data using convolutional variational auto-encoder. Aerospace, 7(8), 115.",
-     "Memarzadeh, Matthews, & Templin (2022). Multiclass anomaly detection in flight data using semi-supervised explainable deep learning model. J. Aerospace Information Systems, 19(2), 83–97.",
-     "Data: NASA DASHlink Curated 4-Class Anomaly Detection Data Set — c3.ndc.nasa.gov/dashlink/resources/1018"
-    ]
+    "body": []
    }
   ]
  },
@@ -1425,116 +853,81 @@ window.PAIRS_DECKS = {
   "slides": [
    {
     "n": 1,
+    "image": "uploads/slides/P-07/01.webp",
     "title": "Predicting Electromagnetic Interference in Circuit Boards with Physics-Informed Neural Networks",
-    "body": [
-     "A Fourier-enhanced, domain-decomposed PINN for faster electromagnetic simulation",
-     "By Rishav Banik"
-    ]
+    "body": []
    },
    {
     "n": 2,
+    "image": "uploads/slides/P-07/02.webp",
     "title": "The Problem",
-    "body": [
-     "Electronics keep getting faster and denser, and at high speed signals leak and interfere, which can cause devices to fail (Cars, medical devices, phones, etc.)"
-    ]
+    "body": []
    },
    {
     "n": 3,
+    "image": "uploads/slides/P-07/03.webp",
     "title": "The Problem",
-    "body": [
-     "Engineers MUST predict EMI(Electromagnetic Interference) before building the board",
-     "The standard tool(FDTD simulation) are accurate but slow(takes hours per run)",
-     "Every design change means starting the simulation from scratch"
-    ]
+    "body": []
    },
    {
     "n": 4,
+    "image": "uploads/slides/P-07/04.webp",
     "title": "What is a PINN",
-    "body": [
-     "Normal ML: learns patterns from lots of labeled examples",
-     "Physics-Informed Neural Network (PINN): learns by obeying physics equation instead",
-     "It's trained so that its answers must satisfy Maxwell's equations (the laws of electromagnetism)"
-    ]
+    "body": []
    },
    {
     "n": 5,
+    "image": "uploads/slides/P-07/05.webp",
     "title": "Why this is hard",
-    "body": [
-     "Standard PINNs fail on this specific problem for two reasons:",
-     "High-frequency waves: networks are \"lazy\" and smooth out fast oscillations (spectral bias)",
-     "Sharp boundaries: fields change abruptly between copper and the board material"
-    ]
+    "body": []
    },
    {
     "n": 6,
+    "image": "uploads/slides/P-07/06.webp",
     "title": "Proposed Architecture",
-    "body": [
-     "Three additions to a standard PINN, each fixing one problem:",
-     "Fourier features → fixes high-frequency waves",
-     "Domain decomposition + copper as a perfect conductor → fixes sharp boundaries",
-     "Adaptive sampling → trains where the error is largest"
-    ]
+    "body": []
    },
    {
     "n": 7,
+    "image": "uploads/slides/P-07/07.webp",
     "title": "Methodology",
-    "body": [
-     "Simplified 3-layer circuit board: copper / insulator (FR-4) / copper",
-     "Ground truth: generate the \"true\" fields with FDTD simulation (MEEP)",
-     "Train the PINN, then compare its predictions to the ground truth",
-     "Controls: a plain baseline PINN, plus an ablation (turn each piece off to prove it matters)"
-    ]
+    "body": []
    },
    {
     "n": 8,
+    "image": "uploads/slides/P-07/08.webp",
     "title": "Evaluation Metrics",
-    "body": [
-     "Relative L2 error: how far predictions are from the true fields",
-     "Energy conservation: did the wave survive, or collapse to nothing?",
-     "Speed: PINN prediction time vs. full FDTD simulation"
-    ]
+    "body": []
    },
    {
     "n": 9,
+    "image": "uploads/slides/P-07/09.webp",
     "title": "Findings: The Training works",
-    "body": [
-     "All error terms drop by orders of magnitude, meaning training is stable",
-     "Energy stays near constant → the field stays \"alive\" instead of decaying to zero"
-    ]
+    "body": []
    },
    {
     "n": 10,
+    "image": "uploads/slides/P-07/10.webp",
     "title": "Findings: The Field",
-    "body": [
-     "The network correctly reproduces the starting pulse in the center of the board",
-     "The pulse then evolves into a wave over time"
-    ]
+    "body": []
    },
    {
     "n": 11,
+    "image": "uploads/slides/P-07/11.webp",
     "title": "PINN vs FDTD",
-    "body": [
-     "Compared my PINN's predicted field against FDTD (the trusted slow method)",
-     "Relative L2 error = 6.8%, the prediction closely matches ground truth",
-     "Once trained, the PINN evaluates ~1.8 million points per second"
-    ]
+    "body": []
    },
    {
     "n": 12,
+    "image": "uploads/slides/P-07/12.webp",
     "title": "Limitations & Next Steps",
-    "body": [
-     "Interface continuity is currently \"soft\" (approximate), not exact → next: hard enforcement",
-     "Copper and FR-4 are idealized → next: realistic, frequency-dependent materials"
-    ]
+    "body": []
    },
    {
     "n": 13,
+    "image": "uploads/slides/P-07/13.webp",
     "title": "Conclusion",
-    "body": [
-     "Built a combined PINN architecture that trains stably and conserves energy on a circuit-board EMI problem",
-     "Physics-informed Neural Networks could make electromagnetic simulation dramatically faster",
-     "Next: harder interface enforcement, realistic materials"
-    ]
+    "body": []
    }
   ]
  },
@@ -1544,406 +937,153 @@ window.PAIRS_DECKS = {
   "slides": [
    {
     "n": 1,
+    "image": "uploads/slides/P-08/01.webp",
     "title": "Context-Gated Stacked Ensemble for Soccer Match Prediction",
-    "body": [
-     "Context-Gated Stacked Ensemble",
-     "for Soccer Match Prediction",
-     "Foundations, architecture, methodology safeguards & code",
-     "Rehan Hashem • Ensemble Learning • Sports Analytics"
-    ]
+    "body": []
    },
    {
     "n": 2,
+    "image": "uploads/slides/P-08/02.webp",
     "title": "AGENDA",
-    "body": [
-     "Four parts",
-     "01",
-     "Foundations",
-     "Why ensembles work, and the 3 ways to build one",
-     "02",
-     "Architecture",
-     "The actual model: what it predicts, eats, and outputs",
-     "03",
-     "Safeguards",
-     "Leakage rules, splits, tuning, evaluation",
-     "04",
-     "Code & status",
-     "The real code, and where the project stands today"
-    ]
+    "body": []
    },
    {
     "n": 3,
+    "image": "uploads/slides/P-08/03.webp",
     "title": "FOUNDATIONS",
-    "body": [
-     "Bias, variance, and why grouping models helps",
-     "Bagging",
-     "Reduces variance",
-     "Averages away noise from independent samples",
-     "Boosting",
-     "Reduces bias",
-     "Each new model corrects systematic errors",
-     "Stacking",
-     "Exploits diversity",
-     "Learns which model to trust, and when"
-    ]
+    "body": []
    },
    {
     "n": 4,
+    "image": "uploads/slides/P-08/04.webp",
     "title": "Foundations",
-    "body": [
-     "01",
-     "The three ways to organize a group of models"
-    ]
+    "body": []
    },
    {
     "n": 5,
+    "image": "uploads/slides/P-08/05.webp",
     "title": "FOUNDATIONS",
-    "body": [
-     "Three ways to combine models",
-     "01",
-     "Bagging",
-     "Many independent guessers, trained in parallel, averaged together.",
-     "Random Forest",
-     "02",
-     "Boosting",
-     "One guesser, correcting its own mistakes, again and again in sequence.",
-     "CatBoost",
-     "03",
-     "Stacking",
-     "A manager model learns how much to trust each guesser — and can manage other managers.",
-     "StackingClassifier (nested)"
-    ]
+    "body": []
    },
    {
     "n": 6,
+    "image": "uploads/slides/P-08/06.webp",
     "title": "FOUNDATIONS · DIAGRAM",
-    "body": [
-     "Bagging — parallel, independent, averaged",
-     "Training data",
-     "Sample 1",
-     "bootstrap draw",
-     "Sample 2",
-     "bootstrap draw",
-     "Sample 3",
-     "bootstrap draw",
-     "Tree 1",
-     "random feature subset",
-     "Tree 2",
-     "random feature subset",
-     "Tree 3",
-     "random feature subset",
-     "Majority vote / average",
-     "combines all trees into one answer"
-    ]
+    "body": []
    },
    {
     "n": 7,
+    "image": "uploads/slides/P-08/07.webp",
     "title": "FOUNDATIONS · DIAGRAM",
-    "body": [
-     "Boosting — sequential, corrective",
-     "One student, correcting itself round after round, instead of a crowd voting.",
-     "Model 1",
-     "first, simple guess",
-     "Errors",
-     "what model 1 got wrong",
-     "Model 2",
-     "focuses on those errors",
-     "Errors",
-     "what's still wrong",
-     "Model 3",
-     "focuses on remaining errors",
-     "Final prediction",
-     "weighted sum of all models"
-    ]
+    "body": []
    },
    {
     "n": 8,
+    "image": "uploads/slides/P-08/08.webp",
     "title": "FOUNDATIONS · DIAGRAM",
-    "body": [
-     "Stacking — a manager, learned, and nestable",
-     "Random Forest",
-     "bagging",
-     "Boosted Trees",
-     "boosting",
-     "Nested mini-stack",
-     "Model A",
-     "Model B",
-     "mini meta-learner",
-     "Meta-learner",
-     "weighs all 3 opinions",
-     "Final prediction"
-    ]
+    "body": []
    },
    {
     "n": 9,
+    "image": "uploads/slides/P-08/09.webp",
     "title": "Architecture",
-    "body": [
-     "02",
-     "What the model predicts, eats, and outputs"
-    ]
+    "body": []
    },
    {
     "n": 10,
+    "image": "uploads/slides/P-08/10.webp",
     "title": "ARCHITECTURE",
-    "body": [
-     "Prediction target, inputs, and output",
-     "What's being predicted",
-     "Multiclass classification: Home Win / Draw / Away Win",
-     "Predicted strictly before kickoff",
-     "Only information available at that point in time is used",
-     "Output: a probability triple (P(Home), P(Draw), P(Away)) that sums to 1",
-     "Predicted label = argmax of that triple, for accuracy/F1",
-     "What the models eat (inputs)",
-     "Rolling team-form (last 5 matches, prior-only)",
-     "Position-grouped starting-XI attributes",
-     "Rest-day differential",
-     "Betting-odds implied probabilities",
-     "Historical XML-derived aggregates (corners, fouls, possession)",
-     "League, formation, home/away categoricals"
-    ]
+    "body": []
    },
    {
     "n": 11,
+    "image": "uploads/slides/P-08/11.webp",
     "title": "ARCHITECTURE · DATASET",
-    "body": [
-     "Kaggle European Soccer Database",
-     "25,000+",
-     "matches, 2008–2016",
-     "11",
-     "European leagues",
-     "10,000+",
-     "players",
-     "7",
-     "linked SQLite tables",
-     "10 bookmakers",
-     "odds included",
-     "10,000+",
-     "matches with XML event data"
-    ]
+    "body": []
    },
    {
     "n": 12,
+    "image": "uploads/slides/P-08/12.webp",
     "title": "ARCHITECTURE · FEATURES",
-    "body": [
-     "Full input feature list",
-     "| Feature group | Details |",
-     "| Rolling team form | Last-5-match points, goals for/against, shots on target — prior matches only |",
-     "| Starting XI attributes | Position-grouped means: GK / DEF / MID / FWD, from FIFA-derived ratings |",
-     "| Rest days | Days since each team's previous match |",
-     "| Betting odds | Implied probabilities (overround-adjusted) — an input feature, not a baseline |",
-     "| Historical XML aggregates | Rolling avg. corners / fouls / possession from prior matches only |",
-     "| Match importance | Engineered proxy: 1 / (1 + min(gap_to_europe, gap_to_relegation)) |",
-     "| Categoricals | League, formation, home/away |"
-    ]
+    "body": []
    },
    {
     "n": 13,
+    "image": "uploads/slides/P-08/13.webp",
     "title": "ARCHITECTURE · MODELS",
-    "body": [
-     "The 5-model comparison set",
-     "| # | Model | Role |",
-     "| 1 | Context-Gated Stacked Ensemble | Main contribution |",
-     "| 2 | Standard Stacked Ensemble | Primary ablation — no context-gating |",
-     "| 3 | Random Forest | Bagging baseline |",
-     "| 4 | CatBoost | Boosting baseline |",
-     "| 5 | Logistic Regression | Non-tree baseline (also the meta-learner) |",
-     "| — | Market baseline (raw odds only) | Zero-parameter reference — “beat the market?” |"
-    ]
+    "body": []
    },
    {
     "n": 14,
+    "image": "uploads/slides/P-08/14.webp",
     "title": "ARCHITECTURE · DIAGRAM",
-    "body": [
-     "The Context-Gated Stacked Ensemble",
-     "Random Forest",
-     "bagging",
-     "CatBoost",
-     "boosting",
-     "Logistic Reg.",
-     "linear model",
-     "Context",
-     "odds + rest days",
-     "Gate: softmax",
-     "weight per model",
-     "Weighted combination",
-     "sum of wi times Pi",
-     "Final prediction",
-     "P(home / draw / away)",
-     "P_final(class) = w_RF · P_RF(class) + w_CatBoost · P_CatBoost(class) + w_LogReg · P_LogReg(class)"
-    ]
+    "body": []
    },
    {
     "n": 15,
+    "image": "uploads/slides/P-08/15.webp",
     "title": "ARCHITECTURE · THE MATH",
-    "body": [
-     "How the weights are normalized, and how the final number is computed",
-     "Softmax normalization",
-     "The gate outputs one raw score per base learner",
-     "Softmax converts those scores into weights that are all positive and sum to exactly 1",
-     "This is the “attention mechanism” — softmax is precisely how its weights are normalized",
-     "Weights change per match, based only on context (odds, rest days, stakes)",
-     "Final prediction",
-     "Weighted sum of the 3 base learners' probability vectors",
-     "Computed separately for each of the 3 classes",
-     "Still sums to 1, since weights and each base distribution do",
-     "Predicted label = argmax of the resulting probability triple"
-    ]
+    "body": []
    },
    {
     "n": 16,
+    "image": "uploads/slides/P-08/16.webp",
     "title": "ARCHITECTURE · COMPARISON",
-    "body": [
-     "The primary ablation: Standard Stacked Ensemble",
-     "Context-Gated Ensemble",
-     "Same 3 base learners",
-     "A gate reads match context and outputs softmax weights",
-     "Weights change per match",
-     "Tests whether context-aware combination beats a fixed rule",
-     "Standard Stacked Ensemble (ablation)",
-     "Same 3 base learners",
-     "A single fixed logistic-regression meta-learner",
-     "Trained directly on out-of-fold base predictions",
-     "No context branch — same weights for every match"
-    ]
+    "body": []
    },
    {
     "n": 17,
+    "image": "uploads/slides/P-08/17.webp",
     "title": "Safeguards",
-    "body": [
-     "03",
-     "Leakage rules, splits, tuning & evaluation"
-    ]
+    "body": []
    },
    {
     "n": 18,
+    "image": "uploads/slides/P-08/18.webp",
     "title": "SAFEGUARDS",
-    "body": [
-     "Feature engineering safeguards",
-     "Temporal leakage rule",
-     "Every feature for a match at time T uses only data strictly before T",
-     "Applies to rolling form, XML historical aggregates, and Team_Attributes lookups",
-     "Same-match XML stats (corners, fouls, possession) are never used — not known before kickoff",
-     "Two decisions finalized this round",
-     "Match importance: engineered from a running league table, not sourced externally",
-     "Formula: 1 / (1 + min(gap_to_europe, gap_to_relegation))",
-     "Weather: dropped — not in the dataset, not worth the added scope",
-     "Odds: input feature to all 5 models, with a separate untouched market baseline kept"
-    ]
+    "body": []
    },
    {
     "n": 19,
+    "image": "uploads/slides/P-08/19.webp",
     "title": "SAFEGUARDS · PROTOCOL",
-    "body": [
-     "Train / validation / test, and tuning",
-     "Train",
-     "Seasons 2008/09 – 2013/14 (6 seasons)",
-     "Model fitting",
-     "Validation",
-     "Season 2014/15",
-     "Optuna hyperparameter tuning only",
-     "Test",
-     "Season 2015/16",
-     "Touched exactly once, at the end",
-     "Out-of-fold (OOF) stacking: base-learner predictions used to train the gate/meta-learner come from 5-fold CV within the training set — never a model's prediction on rows it trained on — which is exactly what cv=5 does in the code."
-    ]
+    "body": []
    },
    {
     "n": 20,
+    "image": "uploads/slides/P-08/20.webp",
     "title": "SAFEGUARDS · EVALUATION",
-    "body": [
-     "Evaluation protocol",
-     "Metrics",
-     "Accuracy, macro & weighted F1, log-loss",
-     "ROC-AUC (one-vs-rest, per class)",
-     "Brier score + calibration / reliability diagram",
-     "Cohen's Kappa",
-     "Robustness",
-     "10 random seeds per model — report mean ± std",
-     "Paired t-test or Wilcoxon signed-rank vs. each baseline",
-     "Bootstrap confidence intervals on the test set",
-     "Market baseline scored once, as a fixed reference line"
-    ]
+    "body": []
    },
    {
     "n": 21,
+    "image": "uploads/slides/P-08/21.webp",
     "title": "SAFEGUARDS · SCOPE",
-    "body": [
-     "Ablation & explainability (scoped, not exhaustive)",
-     "Feature-group ablation only",
-     "Remove one feature group at a time from the full model",
-     "Rolling form / XI attributes / odds / XML history / context",
-     "Shows which information category actually drives the prediction",
-     "k-selection, meta-learner-swap, and per-base-learner ablations were dropped as separate research questions",
-     "Explainability, scoped",
-     "Random Forest: Gini importance vs. permutation importance, compared",
-     "SHAP computed only for the two stacked ensembles",
-     "Context-Gated vs. Standard Stack SHAP summaries compared directly",
-     "Not every model is explained — scoped to what the core claim needs"
-    ]
+    "body": []
    },
    {
     "n": 22,
+    "image": "uploads/slides/P-08/22.webp",
     "title": "Code & Status",
-    "body": [
-     "04",
-     "The real code, and where things stand"
-    ]
+    "body": []
    },
    {
     "n": 23,
+    "image": "uploads/slides/P-08/23.webp",
     "title": "CODE",
-    "body": [
-     "The nested StackingClassifier",
-     "from sklearn.ensemble import StackingClassifier, RandomForestClassifier",
-     "from sklearn.linear_model import LogisticRegression",
-     "from sklearn.neighbors import KNeighborsClassifier",
-     "mini_stack = StackingClassifier(",
-     "estimators=[(\"rf2\", RandomForestClassifier(random_state=1)),",
-     "(\"cb2\", CatBoostClassifier(iterations=200,",
-     "cat_features=cat_features, verbose=False))],",
-     "final_estimator=LogisticRegression()",
-     ")",
-     "big_stack = StackingClassifier(",
-     "estimators=[",
-     "(\"rf\", RandomForestClassifier(n_estimators=200, random_state=42)),",
-     "(\"knn\", KNeighborsClassifier(n_neighbors=15)),",
-     "(\"nested\", mini_stack), # <- a whole stack, used as one base learner",
-     "],",
-     "final_estimator=LogisticRegression(),",
-     "cv=5 # out-of-fold, prevents leakage",
-     ")",
-     "big_stack.fit(X_train, y_train)",
-     "print(big_stack.score(X_test, y_test))"
-    ]
+    "body": []
    },
    {
     "n": 24,
+    "image": "uploads/slides/P-08/24.webp",
     "title": "CODE · ROADMAP",
-    "body": [
-     "Build order & current status",
-     "1",
-     "Decision Tree → baseline understanding, no ensembling yet",
-     "2",
-     "Random Forest (bagging) → log accuracy, F1, feature importance",
-     "3",
-     "CatBoost (boosting) → compare against Random Forest",
-     "4",
-     "Standard Stacked Ensemble → out-of-fold, logistic-regression meta-learner",
-     "5",
-     "Context-Gated Ensemble (novel contribution) → ablate against the flat stack",
-     "Current status: 0% of runs executed. Methodology is fully locked — prediction target, features, architecture, splits, tuning, and evaluation protocol are all finalized and reviewed."
-    ]
+    "body": []
    },
    {
     "n": 25,
+    "image": "uploads/slides/P-08/25.webp",
     "title": "",
-    "body": [
-     "Bagging averages independent guesses to cancel noise.",
-     "Boosting chains corrections to fix bias.",
-     "Stacking trains a model to learn how to combine other models —",
-     "and this project's gate lets that combination change with context,",
-     "normalized by softmax, match by match."
-    ]
+    "body": []
    }
   ]
  },
@@ -1953,230 +1093,111 @@ window.PAIRS_DECKS = {
   "slides": [
    {
     "n": 1,
+    "image": "uploads/slides/P-09/01.webp",
     "title": "Can AI catch an Eye Disease from a Photo?",
-    "body": [
-     "Jahidur Rahat & Aditta Roy"
-    ]
+    "body": []
    },
    {
     "n": 2,
+    "image": "uploads/slides/P-09/02.webp",
     "title": "So... What Even Is This Disease?",
-    "body": [
-     "It comes from diabetes",
-     "Diabetic Rethinopy damages the tiny blood vessels in the retina which is the layer at the back of the eye that senses light.",
-     "A leading cause of blindness",
-     "It's one of the leading causes of vision loss worldwide and is probably the easiest to prevent.",
-     "Checking for it takes forever",
-     "Catching it early is treatable, but grading photos by hand takes time, costs money, and isn't always consistent from doctor to doctor."
-    ]
+    "body": []
    },
    {
     "n": 3,
+    "image": "uploads/slides/P-09/03.webp",
     "title": "Here's the Problem",
-    "body": [
-     "Millions need regular screening",
-     "People with diabetes need their eyes checked regularly to catch this early.",
-     "Not enough specialists",
-     "There aren't enough ophthalmologists to screen everyone, especially in poor areas.",
-     "Manual grading is subjective",
-     "Reading these images by hand takes time, and results can vary from one doctor to the next. Humans make silly errors while my AI model can detect anomalies in someones eye in seconds. AI still does make errors but my model is used to help the opthamologists, not replace them.",
-     "Could a computer learn to spot disease in a retinal photo on its own?"
-    ]
+    "body": []
    },
    {
     "n": 4,
+    "image": "uploads/slides/P-09/04.webp",
     "title": "What We Made",
-    "body": [
-     "Goal",
-     "Train a deep learning model that can flag diabetic retinopathy from a retinal photo.",
-     "Approach: transfer learning",
-     "We start with a model that's already learned from millions of images, then teach it our specific task.",
-     "This phase",
-     "Right now, it just gives a yes or no: healthy, or showing signs of disease.",
-     "Bigger goal (in progress)",
-     "Eventually, grading severity on a 0–4 scale instead of a simple yes or no."
-    ]
+    "body": []
    },
    {
     "n": 5,
+    "image": "uploads/slides/P-09/05.webp",
     "title": "Quick Vocab Check",
-    "body": [
-     "CNN (short for Convolutional Neural Network) — a computer program built to find patterns in images.",
-     "Transfer learning — reusing a model that already learned from millions of other pictures, instead of starting from zero.",
-     "Backbone — the part of the model that does most of the “looking” and pulls out patterns from a photo.",
-     "Epoch — one full pass through all the training photos.",
-     "Dropout — randomly turning off parts of the model while training so it doesn't rely too much on one detail.",
-     "Loss — a number that shows how wrong the model's guesses are. Lower is better.",
-     "Overfitting — when a model memorizes the training photos instead of learning the real pattern, so it does worse on new photos."
-    ]
+    "body": []
    },
    {
     "n": 6,
+    "image": "uploads/slides/P-09/06.webp",
     "title": "Where We Got Our Photos",
-    "body": [
-     "Source",
-     "A public Kaggle dataset with the same APTOS 2019 photos — we switched to this version since the actual competition needed an invite we didn't have.",
-     "Fundus photographs",
-     "Retinal images captured during eye exams.",
-     "Clinically labeled",
-     "Each image graded 0–4 by ophthalmologists.",
-     "0–4",
-     "how severe the disease is",
-     "224×224",
-     "how big each photo is",
-     "For this phase, we grouped labels 1–4 into one “diseased” class, turning it into a healthy-vs-diseased task."
-    ]
+    "body": []
    },
    {
     "n": 7,
+    "image": "uploads/slides/P-09/07.webp",
     "title": "Peeking at the Data",
-    "body": [
-     "The dataset starts out imbalanced by severity, but once we group 1–4 into “diseased,” the binary split is nearly even — which is part of why class weighting worked so well later."
-    ]
+    "body": []
    },
    {
     "n": 8,
+    "image": "uploads/slides/P-09/08.webp",
     "title": "Prepping the Photos",
-    "body": [
-     "Resize",
-     "Every image gets resized to 224×224 pixels — the input size our model expects.",
-     "Normalize",
-     "Colors are normalized to match ImageNet statistics, so the pretrained model can apply what it already knows.",
-     "Stratified split",
-     "We split 80% for training and 20% for validation, keeping the same healthy/diseased ratio in both."
-    ]
+    "body": []
    },
    {
     "n": 9,
+    "image": "uploads/slides/P-09/09.webp",
     "title": "Faking More Photos (Kind Of)",
-    "body": [
-     "Random flips",
-     "Random horizontal flips give us mirror-image variety.",
-     "Random rotation",
-     "Images get randomly rotated up to 15°.",
-     "Color jitter",
-     "Random changes to brightness and contrast.",
-     "The point is to create more variety so the model learns to generalize instead of memorize. We only apply this to training images — validation images stay untouched."
-    ]
+    "body": []
    },
    {
     "n": 10,
+    "image": "uploads/slides/P-09/10.webp",
     "title": "Inside the Model",
-    "body": [
-     "Retinal image",
-     "224×224 fundus photo",
-     "Preprocessing",
-     "Resize, augment, normalize",
-     "ResNet-18 backbone",
-     "Pretrained on ImageNet, frozen",
-     "Classifier head",
-     "FC 512→128→2, dropout",
-     "Prediction",
-     "Healthy or diseased",
-     "Key details",
-     "Backbone: ResNet-18, pretrained on ImageNet",
-     "The convolutional layers stay frozen and act as a fixed feature extractor.",
-     "Custom head: Linear(512→128) → ReLU → Dropout(0.3) → Linear(128→2)",
-     "Only the new classifier head actually gets trained."
-    ]
+    "body": []
    },
    {
     "n": 11,
+    "image": "uploads/slides/P-09/11.webp",
     "title": "Fixing an Unfair Split",
-    "body": [
-     "Healthy images dominate the dataset",
-     "Class weighting makes mistakes on the diseased (minority) class cost more during training.",
-     "That pushes the model to actually learn what diseased eyes look like, instead of just defaulting to “healthy.”",
-     "This is a direct fix for the imbalance we saw back in the data exploration step."
-    ]
+    "body": []
    },
    {
     "n": 12,
+    "image": "uploads/slides/P-09/12.webp",
     "title": "Teaching It",
-    "body": [
-     "Adam",
-     "Optimizer",
-     "0.001",
-     "Learning rate",
-     "10",
-     "Epochs",
-     "32",
-     "Batch size",
-     "Loss function",
-     "Weighted cross-entropy loss, using the class weights from the previous step.",
-     "Hardware",
-     "Trained on a GPU through Google Colab."
-    ]
+    "body": []
    },
    {
     "n": 13,
+    "image": "uploads/slides/P-09/13.webp",
     "title": "Did It Even Learn?",
-    "body": [
-     "What it shows",
-     "Loss drops quickly in the first epoch as the classifier head starts learning.",
-     "There's a spike at epoch 4, where validation loss jumps to about 0.23 — likely just one unstable batch, but worth pointing out.",
-     "From epoch 7 on, training and validation loss settle close together around 0.15, a good sign the model is fitting well rather than overfitting."
-    ]
+    "body": []
    },
    {
     "n": 14,
+    "image": "uploads/slides/P-09/14.webp",
     "title": "Okay, But How Good Is It?",
-    "body": [
-     "~95%",
-     "our best result",
-     "~51%",
-     "just guessing every time",
-     "Accuracy jumps to about 94% after just epoch 1 — the frozen backbone's features are already doing a lot of the work.",
-     "It dips to about 92% at epoch 4 (matching that loss spike), then recovers and levels off around 95% by epoch 8.",
-     "Beating the ~51% naive baseline by around 44 points tells us the model is actually learning disease patterns, not just taking advantage of class imbalance."
-    ]
+    "body": []
    },
    {
     "n": 15,
+    "image": "uploads/slides/P-09/15.webp",
     "title": "Where It Messed Up",
-    "body": [
-     "23",
-     "false negatives — missed disease (6.2% of diseased cases)",
-     "15",
-     "false positives — false alarms (4.2% of healthy cases)",
-     "Our model made more false negatives (23) than false positives (15). In a screening context, that's the more expensive mistake — a missed disease case means a patient doesn't get referred for follow-up care."
-    ]
+    "body": []
    },
    {
     "n": 16,
+    "image": "uploads/slides/P-09/16.webp",
     "title": "The Good and the Bad",
-    "body": [
-     "What worked",
-     "Transfer learning got us to ~95% accuracy without having to train a huge model from scratch.",
-     "Class weighting helped deal with the imbalance problem.",
-     "Beat the ~51% naive baseline by a wide margin.",
-     "Limitations",
-     "The binary framing loses severity detail.",
-     "A frozen backbone limits how deeply the model can specialize to retinal images.",
-     "These results come from just one train/validation split.",
-     "We had more false negatives than false positives — the costlier mistake for a screening tool."
-    ]
+    "body": []
    },
    {
     "n": 17,
+    "image": "uploads/slides/P-09/17.webp",
     "title": "What's Next",
-    "body": [
-     "Our transfer-learning CNN reached about 95% accuracy separating healthy from diseased retinal images.",
-     "Severity staging",
-     "Extending to full 5-stage grading (0–4), using Quadratic Weighted Kappa as the evaluation metric.",
-     "Model comparison",
-     "Adding Ben Graham preprocessing and comparing against MobileNetV2 and a custom CNN.",
-     "Explainability",
-     "Adding Grad-CAM so clinicians can see which parts of the image drove each prediction.",
-     "Our long-term goal is an assistive screening tool for clinicians, especially in under-resourced areas."
-    ]
+    "body": []
    },
    {
     "n": 18,
+    "image": "uploads/slides/P-09/18.webp",
     "title": "Thank you! Questions?",
-    "body": [
-     "Jahidur Rahat & Aditta Roy"
-    ]
+    "body": []
    }
   ]
  },
@@ -2405,331 +1426,123 @@ window.PAIRS_DECKS = {
   "slides": [
    {
     "n": 1,
+    "image": "uploads/slides/P-11/01.webp",
     "title": "GNN-Based TikTok Engagement Prediction Using GraphSAGE and LightGBM",
-    "body": [
-     "What a graph model does, and does not, learn about TikTok popularity",
-     "PAIRS Machine Learning Research"
-    ]
+    "body": []
    },
    {
     "n": 2,
+    "image": "uploads/slides/P-11/02.webp",
     "title": "What I'll Cover",
-    "body": [
-     "01",
-     "The problem",
-     "Why predicting viral videos is hard",
-     "02",
-     "The target",
-     "What exactly I am predicting",
-     "03",
-     "The approach",
-     "Turning TikTok into a graph, not a spreadsheet",
-     "04",
-     "The experiment",
-     "Setup, sizes, and how I kept the test fair",
-     "05",
-     "What I found",
-     "Results, cold-start behavior, ablations, significance",
-     "06",
-     "The diagnosis",
-     "Why every model failed the same way"
-    ]
+    "body": []
    },
    {
     "n": 3,
+    "image": "uploads/slides/P-11/03.webp",
     "title": "The Question, and What I Found",
-    "body": [
-     "TikTok’s algorithm decides every day which videos reach millions and which disappear.",
-     "My research question: Can I predict how popular a video becomes using only how videos connect through shared creators, sounds, and hashtags?",
-     "Three findings I will defend today",
-     "01",
-     "I got closer, but not better.",
-     "My graph models guessed closer to the real like counts than a simple baseline did. Yet the simple baseline was still better at working out which videos would do best.",
-     "02",
-     "I found out why.",
-     "My models play it safe. They guess close to average for almost every video, and that one habit explains every result I got.",
-     "03",
-     "The data could not answer it.",
-     "Every video in my sample already had over 530,000 likes. That is hits against bigger hits, not viral against not viral."
-    ]
+    "body": []
    },
    {
     "n": 4,
+    "image": "uploads/slides/P-11/04.webp",
     "title": "What Exactly Am I Predicting?",
-    "body": [
-     "Not views. Every model predicts one number per video: the natural log of (1 + likes). A plain like count on a log scale, not a baseline-adjusted score. The creator’s past average enters separately, as an input feature.",
-     "The target",
-     "Take a video’s like count, add 1, take the natural log. The +1 keeps zero-like videos valid.",
-     "Why a log scale",
-     "The biggest video has about 40 times the likes of the smallest. Without the log, a few mega viral videos would dominate training.",
-     "Reading the error",
-     "MAE is the average miss in log units. An MAE of 0.43 means a typical guess is off by roughly 1.5 times."
-    ]
+    "body": []
    },
    {
     "n": 5,
+    "image": "uploads/slides/P-11/05.webp",
     "title": "The Idea: Treat Videos as a Network",
-    "body": [
-     "Most models look at a video in isolation: its caption, sound, and stats. A GNN instead treats videos, creators, sounds, and hashtags as one connected network.",
-     "A Graph Neural Network (GNN) lets connected things share information. So each video gets described not just by its own stats, but by the videos around it.",
-     "Video A",
-     "Video B",
-     "Video C",
-     "Creator",
-     "#hashtag",
-     "Sound"
-    ]
+    "body": []
    },
    {
     "n": 6,
+    "image": "uploads/slides/P-11/06.webp",
     "title": "How the Graph Was Built",
-    "body": [
-     "Four node types. Videos connect outward to the hashtags, sounds, and creators they use.",
-     "VIDEO",
-     "34,960 nodes",
-     "160,082 links",
-     "HASHTAG",
-     "7,291 nodes",
-     "3,633 links",
-     "SOUND",
-     "401 nodes",
-     "5,240 links",
-     "CREATOR",
-     "553 nodes",
-     "4 node types, 43,205 nodes and 337,910 directed connections in total",
-     "The rules I used",
-     "Videos never link directly.",
-     "Two videos sharing a hashtag sit two steps apart, joined through that hashtag node.",
-     "Rare things are dropped.",
-     "A hashtag, sound, or creator is kept only if it appears at least 5 times.",
-     "Every link runs both ways.",
-     "Each connection is mirrored, giving 6 relation types, so information can travel out and back.",
-     "Videos carry 13 features.",
-     "Caption length, duration, hashtag count, sound popularity, and the creator’s past average, among others."
-    ]
+    "body": []
    },
    {
     "n": 7,
+    "image": "uploads/slides/P-11/07.webp",
     "title": "From Raw Data to a Prediction",
-    "body": [
-     "Raw metadata",
-     "Video, creator, hashtag and sound fields from TikTok-10M",
-     "→",
-     "Build the graph",
-     "Videos linked to their creators, sounds, and hashtags",
-     "→",
-     "Graph model",
-     "GraphSAGE or GCN learns from the neighborhood structure",
-     "→",
-     "Compare to baseline",
-     "LightGBM trained on the same features, but flat, with no graph",
-     "→",
-     "Prediction",
-     "A predicted log like count for each video",
-     "One pipeline, with only the modeling step swapped, graph versus non-graph, to isolate what the graph structure actually adds.",
-     "Data: The-data-company/TikTok-10M on Hugging Face Datasets. I streamed 35,000 rows, removed 40 duplicate video IDs, and split the remaining 34,960 videos by posting time into 70% train, 15% validation, 15% test. Splitting by time, not at random, means every model predicts the future from the past."
-    ]
+    "body": []
    },
    {
     "n": 8,
+    "image": "uploads/slides/P-11/08.webp",
     "title": "The Experiment by the Numbers",
-    "body": [
-     "The whole study on one slide.",
-     "The data",
-     "35,000",
-     "rows streamed from TikTok-10M",
-     "34,960",
-     "unique videos after removing 40 duplicate IDs",
-     "70 / 15 / 15",
-     "train, validation, test split, ordered by time",
-     "The graph",
-     "43,205",
-     "nodes across 4 types",
-     "337,910",
-     "directed connections",
-     "6",
-     "relation types, each link mirrored both ways",
-     "The models",
-     "~345,000",
-     "parameters in each graph model",
-     "64 / 2 / 32",
-     "hidden units, graph layers, embedding size",
-     "500",
-     "trees in the LightGBM baseline",
-     "The training",
-     "100",
-     "epochs per run, keeping the best validation checkpoint",
-     "5",
-     "random seeds per model, so no result is one lucky run",
-     "3",
-     "seeds per ablation configuration",
-     "Parameter count derived from the architecture. About 264,000 of the roughly 345,000 weights sit in the embedding tables, so most of the model is memory for specific entities rather than general reasoning."
-    ]
+    "body": []
    },
    {
     "n": 9,
+    "image": "uploads/slides/P-11/09.webp",
     "title": "Why This Is Hard: The Ingredients Are New",
-    "body": [
-     "It is not the video that is new, it is the ingredients.",
-     "Every test video is one my model has never seen, so that part is always true. What matters is whether its parts are familiar. During training my model builds a profile for each hashtag, sound, and creator, so a video assembled from known ones is far easier to judge than a video using a hashtag that never appeared.",
-     "Almost every test video, 5,002 of 5,250, uses at least one hashtag or sound the model never trained on. Those are the cold ones. Only 248 are warm, meaning every ingredient is familiar. Cold-start performance therefore matters more here than average performance."
-    ]
+    "body": []
    },
    {
     "n": 10,
+    "image": "uploads/slides/P-11/10.webp",
     "title": "How I Tested It Fairly",
-    "body": [
-     "Training one model and calling it done is misleading, because the result might just be luck.",
-     "5",
-     "independent runs per model, each with a different random seed, to confirm the results are consistent",
-     "3",
-     "approaches compared head to head: a simple baseline (LightGBM), GraphSAGE, and GCN",
-     "1",
-     "held-out time period: the newest 15% of videos, locked away during training and opened only for the final test",
-     "Inside a single run",
-     "Each graph model trained 100 epochs with Adam at a learning rate of 0.01, plus weight decay to discourage overfitting.",
-     "I kept the checkpoint that scored best on validation, not whatever the last epoch happened to produce.",
-     "The test split stays untouched until the end. I split by posting date rather than at random, so every model is always predicting forward in time, from older videos to newer ones, and nothing leaks backward."
-    ]
+    "body": []
    },
    {
     "n": 11,
+    "image": "uploads/slides/P-11/11.webp",
     "title": "Result 1: How Close Were the Numbers?",
-    "body": [
-     "Mean Absolute Error (MAE) is the average size of the miss, in log units. Lower is better.",
-     "Reading the chart: the LightGBM baseline missed by 0.4345. HeteroGCN cut that to 0.4158, HeteroGraphSAGE to 0.4100. Lower is better, so the graph models won this round.",
-     "In likes, a typical miss shrinks from about 1.54 times off to about 1.51 times off. Real, measurable, and small. The error bars show spread across the 5 seeds: the baseline sits clearly apart, while GraphSAGE and GCN nearly touch."
-    ]
+    "body": []
    },
    {
     "n": 12,
+    "image": "uploads/slides/P-11/12.webp",
     "title": "Result 2: Did It Rank the Right Videos?",
-    "body": [
-     "Kendall’s tau asks a different question: did the model put the videos in the right order? Higher is better, 1.0 is perfect.",
-     "What ranking means: sort all 5,250 test videos by what the model predicted, then sort them by the likes they really got, and check whether the two orders match. Show the model two random videos and ask which one did better: a tau of 0.038 means it answers correctly about 52% of the time, against 50% for a coin flip.",
-     "Reading the chart: the order flips. The baseline scored 0.0381, HeteroGraphSAGE 0.0261, HeteroGCN 0.0243, so the simple model ranked better than either graph model. R² was negative for every model too (baseline -0.032, GraphSAGE -0.082, GCN -0.094), which means doing worse than always guessing the average."
-    ]
+    "body": []
    },
    {
     "n": 13,
+    "image": "uploads/slides/P-11/13.webp",
     "title": "Why Every Model Failed the Same Way",
-    "body": [
-     "One measurement explains all three results. Here is my test set drawn twice: what actually happened on top, and what my model predicted for those same videos on the bottom.",
-     "Reading the chart: real videos run from about half a million likes up to 22 million. My model almost never guesses outside 0.74M to 1.01M, so it covers only 30% of the real spread.",
-     "It is a weather forecaster who says 62 degrees every single day. That one habit explains all three results:",
-     "Graph models won on MAE → playing it safe keeps the average error small.",
-     "R² was negative → playing it safe explains none of the variation.",
-     "Ranking was near zero → a huge video and a small one get almost the same prediction."
-    ]
+    "body": []
    },
    {
     "n": 14,
+    "image": "uploads/slides/P-11/14.webp",
     "title": "Cold-Start vs. Warm Videos",
-    "body": [
-     "Cold-start videos = at least one hashtag or sound the model never saw. Warm videos = everything already familiar.",
-     "Reading the chart: Every model ranked cold-start videos better than warm ones, the opposite of what I expected. The graph models fell below zero on warm videos, so their ordering there was worse than random.",
-     "I tested that caveat instead of just stating it. With only 248 warm videos against 5,002 cold ones, I bootstrapped the warm slice with 2,000 resamples. The 95% interval for warm ranking runs from -0.076 to +0.080, which contains zero. Honestly, I cannot tell how the models rank warm videos at all."
-    ]
+    "body": []
    },
    {
     "n": 15,
+    "image": "uploads/slides/P-11/15.webp",
     "title": "What Actually Mattered? (Ablation Study)",
-    "body": [
-     "I took my best model, HeteroGraphSAGE, and rebuilt it three times with one piece removed each time. GCN was not ablated. Each version ran on 3 seeds (42, 7, 123). Bars show test MAE.",
-     "Lower is better here. Removing the skip connection, a shortcut that sends a video’s own features straight to the output, actually helped (0.4050 versus 0.4084 for the full model). A part I added on purpose was holding the model back.",
-     "Removing the embeddings, the lookup tables storing a learned profile for each hashtag, sound, and creator, barely moved the score (0.4106), even though they hold 264,000 of the model’s weights.",
-     "Only one cut clearly hurt: two graph layers down to one (0.4247). Two layers let a video reach a shared hashtag and then the other videos using it. One layer stops at the hashtag, and that second step is where the useful signal lives.",
-     "Note: the full model is 0.4084 on 3 seeds here, versus 0.4100 on 5 seeds in the main results."
-    ]
+    "body": []
    },
    {
     "n": 16,
+    "image": "uploads/slides/P-11/16.webp",
     "title": "Is the Difference Real, or Just Luck?",
-    "body": [
-     "A gap of 0.024 is small enough to worry about, so I ran every model on the same 5 random seeds and compared them run by run with a paired t-test.",
-     "Paired means seed 42 against seed 42, seed 7 against seed 7, and so on. Think of two runners racing five times: if the same one wins every single race, you believe they are genuinely faster. The p value is the chance of seeing a gap this consistent if there were really no difference between the models.",
-     "What I measured",
-     "Which pair",
-     "t statistic",
-     "p value",
-     "Verdict",
-     "Error (MAE)",
-     "Baseline vs. GraphSAGE",
-     "t = 11.93",
-     "p < 0.001",
-     "Significant",
-     "Error (MAE)",
-     "Baseline vs. GCN",
-     "t = 16.92",
-     "p < 0.001",
-     "Significant",
-     "Ranking (tau)",
-     "Baseline vs. GraphSAGE",
-     "t = 5.55",
-     "p = 0.005",
-     "Significant",
-     "Ranking (tau)",
-     "Baseline vs. GCN",
-     "t = 5.80",
-     "p = 0.004",
-     "Significant",
-     "So the gaps are real, but real is not the same as useful. A genuine 0.024 improvement still leaves a model that cannot put the right videos on top, and the baseline still ranks better. Consistency across seeds makes the finding trustworthy, not good news."
-    ]
+    "body": []
    },
    {
     "n": 17,
+    "image": "uploads/slides/P-11/17.webp",
     "title": "What This Project Contributes",
-    "body": [
-     "Error and ranking can disagree",
-     "Graph structure won on MAE across 5 seeds and still lost on ranking. Judged on error alone, this would have looked like progress.",
-     "Shrinkage explains everything",
-     "My predictions covered 30% of the real spread. That one measurement accounts for the error win, the negative R², and the flat ranking.",
-     "Most of the model was dead weight",
-     "Cutting the 264,000 embedding weights barely moved the error, and the skip connection I added hurt it. Capacity went where the signal was not.",
-     "The sample limits the claim",
-     "When every video already has 530,000+ likes, the task is hits versus bigger hits. That data cannot support virality claims."
-    ]
+    "body": []
    },
    {
     "n": 18,
+    "image": "uploads/slides/P-11/18.webp",
     "title": "Limitations to Keep in Mind",
-    "body": [
-     "A narrow slice of TikTok",
-     "Every video already had at least 530,000 likes, so the models were splitting hairs among hits. Much of why R² stayed negative.",
-     "Broken timestamps",
-     "Every training row shared the same hour, weekday, and month, so the time features carried no information and LightGBM ignored them.",
-     "Static snapshot",
-     "Metadata captures one moment, not how a video actually spreads in the hours after posting.",
-     "Observational, not causal",
-     "I predicted engagement. But I cannot explain why the algorithm boosts any particular video.",
-     "Compute limits",
-     "Larger graphs, longer runs, and more seeds were out of reach at this scale."
-    ]
+    "body": []
    },
    {
     "n": 19,
+    "image": "uploads/slides/P-11/19.webp",
     "title": "Conclusion & What Others Should Do With It",
-    "body": [
-     "Answering the research question:",
-     "Graph structure did reduce error against a simple baseline, and the gain held across 5 seeds. It did not improve what a recommender actually needs, which is putting the right videos on top, because all three models hedge toward the average instead of committing.",
-     "Three rules for predicting popularity",
-     "1. Never report error alone. Put a ranking metric beside it, because a model can improve one while ruining the other.",
-     "2. Compare your prediction spread to the real spread. Far below 1 means the model is hedging and the error score is flattering you.",
-     "3. Audit the sample first. If the smallest video already has half a million likes, you are studying hits, not virality.",
-     "Where I take it next",
-     "1. Sample the full like range, not only hits, so there is real variation to explain",
-     "2. Attack the shrinkage directly with a ranking loss or a variance penalty instead of plain MAE",
-     "3. Add creator-tier features to separate raw popularity from genuine graph effects",
-     "4. Try attention-based models such as GAT, which weigh neighbors unevenly instead of equally"
-    ]
+    "body": []
    },
    {
     "n": 20,
+    "image": "uploads/slides/P-11/20.webp",
     "title": "Thank You",
-    "body": [
-     "Can We Predict What Goes Viral? A Graph-Based Look at TikTok Recommendations",
-     "Data source: The-data-company/TikTok-10M, Hugging Face Datasets (35,000-row sample, streamed). huggingface.co/datasets/The-data-company/TikTok-10M"
-    ]
+    "body": []
    }
   ]
  },
@@ -2739,172 +1552,93 @@ window.PAIRS_DECKS = {
   "slides": [
    {
     "n": 1,
+    "image": "uploads/slides/P-12/01.webp",
     "title": "Physics-Informed Neural Networks for 2D Steady-State Flow Past a Cylinder",
-    "body": [
-     "PAIRS PROGRAM",
-     "Applied Field: Mechanical Engineering | ML Specialization: Physics-Informed Neural Networks (PINNs)",
-     "TEAM",
-     "Muhayminul Haque"
-    ]
+    "body": []
    },
    {
     "n": 2,
+    "image": "uploads/slides/P-12/02.webp",
     "title": "INTRODUCTION Why Teach a Neural Network Physics?",
-    "body": [
-     "1 Traditional CFD is expensive",
-     "High-fidelity Navier–Stokes solvers (OpenFOAM, ANSYS Fluent) need fine meshes and long solve times for every new geometry, Reynolds number, or boundary condition.",
-     "2 PINNs offer a mesh-free alternative",
-     "A Physics-Informed Neural Network (Raissi, Perdikaris & Karniadakis, 2019) embeds the governing PDE directly into the loss function, so the network learns a continuous solution from very little labeled data.",
-     "3 A natural fit for fluid mechanics",
-     "2D incompressible Navier–Stokes is a well-studied, smooth boundary-value problem — exactly the setting PINNs were designed for.",
-     "At Re ≈ 20–40, the wake behind a cylinder is smooth and steady — no vortex shedding, no boundary singularities. That makes it a much friendlier first PINN project than the classic lid-driven cavity, whose sharp corner discontinuities can destabilize the PDE residual loss."
-    ]
+    "body": []
    },
    {
     "n": 3,
+    "image": "uploads/slides/P-12/03.webp",
     "title": "INTRODUCTION The Problem, and What We're Testing",
-    "body": [
-     "THE PROBLEM",
-     "Solve steady, incompressible 2D Navier–Stokes flow past a cylinder using only the PDE and boundary conditions as supervision — not a labeled CFD dataset.",
-     "Two hidden traps make this harder than it looks:",
-     "• Pressure gauge freedom — incompressible NS only constrains pressure gradients, so the network can add any constant offset to p without penalty.",
-     "• Loss imbalance — thousands of interior PDE points can drown out the handful of boundary points, so walls and inlets get under-fit.",
-     "WHAT WE'RE ANALYZING",
-     "This project doesn't just train one PINN — it isolates which design choices actually matter, via three controlled ablations:",
-     "1. PDE loss vs. none — does the physics term change the solution?",
-     "2. Pressure anchor vs. none — does the gauge freedom really cause drift?",
-     "3. Weighted vs. unweighted loss — does up-weighting boundary terms speed up convergence?"
-    ]
+    "body": []
    },
    {
     "n": 4,
+    "image": "uploads/slides/P-12/04.webp",
     "title": "METHODOLOGY Governing Physics and the PINN Loss",
-    "body": [
-     "Steady, incompressible 2D Navier–Stokes",
-     "u·∂u/∂x + v·∂u/∂y = −∂p/∂x + ν(∂²u/∂x² + ∂²u/∂y²)",
-     "u·∂v/∂x + v·∂v/∂y = −∂p/∂y + ν(∂²v/∂x² + ∂²v/∂y²)",
-     "∂u/∂x + ∂v/∂y = 0 (continuity)",
-     "Re = U∞D/ν ≈ 40, kept below the ~47 vortex-shedding threshold so the flow stays steady.",
-     "Composite loss function",
-     "L_total = λ_BC · L_boundary + λ_PDE · L_phys",
-     "λ_BC set 10–100× higher than λ_PDE early in training, since a handful of boundary points would otherwise be drowned out by thousands of interior collocation points.",
-     "FIX: THE FLOATING PRESSURE PROBLEM",
-     "Incompressible Navier–Stokes only constrains pressure gradients, not the absolute value — so the network could add any constant to the whole pressure field and the PDE loss would never notice.",
-     "Fix: a single Dirichlet condition, p = 0 at one reference point near the outlet, added as an extra boundary-loss term. This removes the extra degree of freedom.",
-     "Network: 2 → 8×(20–40, tanh) → 3, Xavier init, Adam optimizer (L-BFGS refinement planned)."
-    ]
+    "body": []
    },
    {
     "n": 5,
+    "image": "uploads/slides/P-12/05.webp",
     "title": "METHODOLOGY PINN Architecture & Training Loop",
     "body": []
    },
    {
     "n": 6,
+    "image": "uploads/slides/P-12/06.webp",
     "title": "METHODOLOGY Experimental Design",
-    "body": [
-     "Domain x/D ∈ [−5, 15], y/D ∈ [−5, 5], cylinder radius 0.5D centered at origin",
-     "Boundary conditions Inlet: u = U∞, v = 0 • Far-field top/bottom: u = U∞, v = 0 • Cylinder wall: no-slip (u = v = 0) • Outlet: left open, anchored only by the single pressure point",
-     "Collocation points ≈1,500 interior points via rejection-sampled uniform sampling (LHS in the full methodology), excluding the cylinder interior; resampled every 500 iterations",
-     "Optimizer Adam, learning rate 1e-3, 2,000 iterations per configuration (L-BFGS refinement scoped as future work — see Discussion)",
-     "Compute CPU-only JAX implementation — PyTorch's CUDA-bundled build could not be installed in the sandbox's limited disk space; JAX gives equivalent grad/hessian autodiff for the second-order PDE residual",
-     "Ablations run (A) full model (B) no PDE loss (C) no pressure anchor (D) unweighted loss — the 3 core ablations from the methodology, each trained from the same initialization for a fair comparison"
-    ]
+    "body": []
    },
    {
     "n": 7,
+    "image": "uploads/slides/P-12/07.webp",
     "title": "FINDINGS Training Converges — But Plateaus Above Zero",
-    "body": [
-     "READING THE CURVE",
-     "• Boundary loss drops ~5 orders of magnitude — walls, inlet, and far-field are satisfied almost exactly.",
-     "• PDE residual loss plateaus around 6×10⁻³ instead of continuing to fall.",
-     "• The periodic spikes are the scheduled resampling of collocation points every 500 iterations — the network briefly sees new points it hasn't fit yet."
-    ]
+    "body": []
    },
    {
     "n": 8,
+    "image": "uploads/slides/P-12/08.webp",
     "title": "FINDINGS Predicted Velocity Field",
-    "body": [
-     "The network learns the qualitative signature of cylinder wake flow: flow slows and diverts around the cylinder, then gradually re-accelerates downstream. At this training budget the closed recirculation bubble expected at Re ≈ 40 is not yet sharply resolved — a known limitation discussed on the last slide."
-    ]
+    "body": []
    },
    {
     "n": 9,
+    "image": "uploads/slides/P-12/09.webp",
     "title": "FINDINGS Predicted Pressure Field",
-    "body": [
-     "The pressure anchor (×) pins the scale correctly — the field near the outlet sits at ≈ 0, exactly as required. The expected high-pressure stagnation point at the cylinder's front face is not yet sharply resolved, consistent with the PDE residual plateau on the convergence slide — more Adam iterations plus an L-BFGS refinement pass are the natural next step."
-    ]
+    "body": []
    },
    {
     "n": 10,
+    "image": "uploads/slides/P-12/10.webp",
     "title": "FINDINGS — ABLATION 1 OF 3 The Pressure Anchor Fix Actually Works",
-    "body": [
-     "RESULT",
-     "With anchor: p stays pinned at ≈ 0.00",
-     "Without anchor: p drifts steadily to ≈ −0.18, and never stabilizes — exactly the floating-gauge failure the methodology predicted."
-    ]
+    "body": []
    },
    {
     "n": 11,
+    "image": "uploads/slides/P-12/11.webp",
     "title": "FINDINGS — ABLATION 2 OF 3 Weighting the Boundary Loss Pays Off",
-    "body": [
-     "RESULT",
-     "λ_BC = 50: final raw boundary loss ≈ 1×10⁻⁵",
-     "λ_BC = 1: final raw boundary loss ≈ 4.7×10⁻⁴ — about 47× worse, and it plateaus early instead of continuing to improve."
-    ]
+    "body": []
    },
    {
     "n": 12,
+    "image": "uploads/slides/P-12/12.webp",
     "title": "FINDINGS — ABLATION 3 OF 3 Does the Physics Term Matter Here?",
-    "body": [
-     "HONEST READING",
-     "Removing the PDE loss raises the (tracked, not optimized) residual from 6.15×10⁻³ to 7.45×10⁻³ — a real but modest gap.",
-     "The velocity fields with and without the physics term look visually similar at this Re and training budget, because a smooth tanh network already interpolates smoothly between the boundary conditions.",
-     "This is a useful negative-ish result: the physics loss is doing real (if modest) work here, and its value should grow on harder problems — sparser boundary data, higher Re, or inverse/extrapolation tasks."
-    ]
+    "body": []
    },
    {
     "n": 13,
+    "image": "uploads/slides/P-12/13.webp",
     "title": "DISCUSSION & CONCLUSIONS What We Learned",
-    "body": [
-     "1 The core PINN recipe works",
-     "A single loss function combining PDE residual and boundary conditions is enough to learn a qualitatively correct wake flow with no labeled CFD data.",
-     "2 The two \"gotcha\" fixes are real, not theoretical",
-     "Both the pressure-anchor and loss-weighting ablations produced clear, measurable differences exactly matching the failure modes the methodology anticipated.",
-     "3 Convergence quality is training-budget limited",
-     "2,000 Adam-only iterations get the boundary conditions almost exactly right, but the interior PDE residual (and therefore fine flow structure like the stagnation point) needs more optimization."
-    ]
+    "body": []
    },
    {
     "n": 14,
+    "image": "uploads/slides/P-12/14.webp",
     "title": "LIMITATIONS & FUTURE WORK Where This Goes Next",
-    "body": [
-     "Finish the optimizer",
-     "Add the planned L-BFGS refinement pass after Adam to push the PDE residual (currently plateaued ~6×10⁻³) further down, and recover a sharper stagnation point and recirculation bubble.",
-     "Validate against real CFD",
-     "Compare against the Raissi et al. (2019) cylinder-wake dataset or a self-generated scikit-fem/FEniCS solution, and report relative L² error, RMSE/MAE, and R² per the full evaluation plan.",
-     "Run the stretch ablations",
-     "Labeled-data amount, collocation density, and network depth/width — scoped out of this pass to keep the three core ablations rigorous and well-documented.",
-     "Close the mass-conservation gap",
-     "A contour-integral check around the cylinder shows a real net-flux imbalance at this training budget — a direct, physically meaningful target for the extra optimization above."
-    ]
+    "body": []
    },
    {
     "n": 15,
+    "image": "uploads/slides/P-12/15.webp",
     "title": "APPENDIX Code & Key References",
-    "body": [
-     "CODE",
-     "Attached separately (pinn_cylinder_code.zip):",
-     "• pinn_cylinder.py — network, PDE residual, BC loss, pressure anchor, Adam loop",
-     "• run_experiments.py — trains full model + 3 ablations",
-     "• make_plots.py / make_architecture_diagram.py — all figures in this deck",
-     "Implemented in JAX rather than PyTorch: PyTorch's default Linux wheel bundles multi-GB CUDA dependencies that would not fit in this project's disk budget. JAX provides equivalent grad/hessian autodiff for the PDE residual on CPU.",
-     "KEY REFERENCES",
-     "Raissi, Perdikaris & Karniadakis (2019). Physics-informed neural networks. J. Comp. Physics, 378.",
-     "Wang, Teng & Perdikaris (2021). Understanding and mitigating gradient flow pathologies in PINNs. SIAM J. Sci. Comput., 43(5).",
-     "Cai, Mao, Wang, Yin & Karniadakis (2022). PINNs for fluid mechanics: A review. Acta Mechanica Sinica.",
-     "Jin, Cai, Li & Karniadakis (2021). NSFnets. J. Comp. Physics, 426."
-    ]
+    "body": []
    }
   ]
  }
