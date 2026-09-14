@@ -42,6 +42,25 @@ The design prototype ran on an internal editor runtime (`<sc-if>`, `<sc-for>`,
 bundle). None of that ships, so the build converts the markup and logic to run
 against `js/dc-runtime.js`, `js/image-slot.js` and `css/site.css` instead.
 
+## Slide images
+
+The slideshow shows each deck's text by default. To show the **real slides**
+instead, render the source decks to images:
+
+1. Share the Drive folder holding the decks as **Anyone with the link → Viewer**:
+   <https://drive.google.com/drive/folders/1L_wC6d70zFuG8VAIq9j6E1BeBQ4GFfWY>
+2. Run the **Render deck slides** workflow
+   (`.github/workflows/render-slides.yml`). It installs LibreOffice, downloads
+   each deck, converts it and rasterises every page to
+   `uploads/slides/P-XX/NN.webp`, then commits the result.
+
+`tools/build-content.py` picks those images up automatically and the viewer
+switches from text slides to image slides. Nothing else needs changing.
+
+The render has to run on a GitHub runner rather than locally in an agent
+session: Google Drive is unreachable from that sandbox, and its Drive
+connector caps downloads at 10 MB.
+
 ## Content
 
 Mentors, students, projects and awards are real, final content and live in the
