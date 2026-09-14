@@ -30,6 +30,7 @@ METHODOLOGY_OWNERS = {
 PLACEHOLDER = re.compile(r"^\s*\[\s*(insert|tbd|todo|note to self)\b", re.I)
 
 dropped = []
+rendered = []
 
 
 def clean(lines, where):
@@ -63,13 +64,36 @@ for path in sorted(DECKS.glob("*.json")):
             "sections": sections,
         }
     elif re.fullmatch(r"P-\d{2}", stem):
-        slides = []
+        text_slides = []
         for slide in data.get("slides", []):
-            slides.append({
+            text_slides.append({
                 "n": slide.get("n"),
                 "title": slide.get("title", ""),
                 "body": [line for line in slide.get("body", []) if line and line.strip()],
             })
+
+        # Rendered images of the real deck win over the text rendering. They
+        # are authoritative on slide COUNT too (they come from the deck
+        # itself, while text boundaries were inferred), so the deck is rebuilt
+        # from the images rather than zipped against the text — a count
+        # mismatch would otherwise caption slides with the wrong text.
+        images = sorted((ROOT / "uploads" / "slides" / stem).glob("*.webp"))
+        if images:
+            aligned = len(images) == len(text_slides)
+            slides = []
+            for i, image in enumerate(images):
+                slide = {
+                    "n": i + 1,
+                    "image": f"uploads/slides/{stem}/{image.name}",
+                    "title": text_slides[i]["title"] if aligned else "",
+                    "body": [],
+                }
+                slides.append(slide)
+            rendered.append(f"{stem}: {len(images)} slide images"
+                            + ("" if aligned else " (text not aligned, images only)"))
+        else:
+            slides = text_slides
+
         decks[stem] = {
             "source": data.get("source", ""),
             "title": data.get("title", ""),
@@ -88,6 +112,8 @@ OUT.write_text(
 )
 
 print(f"decks: {len(decks)} ({sum(len(d['slides']) for d in decks.values())} slides)")
+for line in rendered:
+    print("  image slides ->", line)
 print(f"methodologies: {len(methodologies)} -> {sorted(methodologies)}")
 if dropped:
     print("dropped author placeholders:")
