@@ -44,22 +44,33 @@ against `js/dc-runtime.js`, `js/image-slot.js` and `css/site.css` instead.
 
 ## Slide images
 
-The slideshow shows each deck's text by default. To show the **real slides**
-instead, render the source decks to images:
+Ten of the twelve projects show their deck's real slides, rendered from the
+source files to `uploads/slides/P-XX/NN.webp`. `tools/build-content.py` picks
+those up automatically and the viewer switches from text slides to image
+slides; a project with no images falls back to rendering its deck's text.
+
+**P-04 and P-10 are the two without images.** Both are ~10.2 MB, and the Drive
+connector drops its session partway through a download that size rather than
+refusing cleanly — `get_file_metadata` on the same file answers instantly, so
+it is the payload, not access. Either route below fills them in.
+
+### Rendering from the Drive connector (how the other ten were done)
+
+An agent session with the Google Drive connector can pull decks under roughly
+10 MB directly. Oversized tool results are spilled to a JSON file rather than
+returned inline, so the deck's bytes never have to pass through a context
+window — read `content` out of that file, base64-decode it, and hand the
+result to `tools/render_slides.py`'s `to_pdf()` and `rasterise()`.
+
+### Rendering on a GitHub runner (no size limit)
 
 1. Share the Drive folder holding the decks as **Anyone with the link → Viewer**:
    <https://drive.google.com/drive/folders/1L_wC6d70zFuG8VAIq9j6E1BeBQ4GFfWY>
-2. Run the **Render deck slides** workflow
+2. Re-run the **Render deck slides** workflow
    (`.github/workflows/render-slides.yml`). It installs LibreOffice, downloads
-   each deck, converts it and rasterises every page to
-   `uploads/slides/P-XX/NN.webp`, then commits the result.
-
-`tools/build-content.py` picks those images up automatically and the viewer
-switches from text slides to image slides. Nothing else needs changing.
-
-The render has to run on a GitHub runner rather than locally in an agent
-session: Google Drive is unreachable from that sandbox, and its Drive
-connector caps downloads at 10 MB.
+   each deck anonymously, converts it and rasterises every page, then commits
+   the result. While the folder is private it exits clean, having rendered
+   nothing, and says so.
 
 ## Content
 
