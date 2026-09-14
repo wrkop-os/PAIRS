@@ -48,6 +48,12 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # uploads/slides does not exist until something renders, and
+          # `git add` on a missing pathspec is a fatal error (exit 128).
+          if [ ! -d uploads/slides ]; then
+            echo "no slide images were rendered — nothing to commit"
+            exit 0
+          fi
           git add uploads/slides js/decks.js
           if git diff --cached --quiet; then
             echo "no changes to commit"
