@@ -1,0 +1,119 @@
+{
+  "source": "Predicting Electromagnetic Interference in Circuit Boards with Physics-Informed Neural Networks.pptx",
+  "title": "Predicting Electromagnetic Interference in Circuit Boards with Physics-Informed Neural Networks",
+  "slides": [
+    {
+      "n": 1,
+      "title": "Predicting Electromagnetic Interference in Circuit Boards with Physics-Informed Neural Networks",
+      "body": [
+        "A Fourier-enhanced, domain-decomposed PINN for faster electromagnetic simulation",
+        "By Rishav Banik"
+      ]
+    },
+    {
+      "n": 2,
+      "title": "The Problem",
+      "body": [
+        "Electronics keep getting faster and denser, and at high speed signals leak and interfere, which can cause devices to fail (Cars, medical devices, phones, etc.)"
+      ]
+    },
+    {
+      "n": 3,
+      "title": "The Problem",
+      "body": [
+        "Engineers MUST predict EMI(Electromagnetic Interference) before building the board",
+        "The standard tool(FDTD simulation) are accurate but slow(takes hours per run)",
+        "Every design change means starting the simulation from scratch"
+      ]
+    },
+    {
+      "n": 4,
+      "title": "What is a PINN",
+      "body": [
+        "Normal ML: learns patterns from lots of labeled examples",
+        "Physics-Informed Neural Network (PINN): learns by obeying physics equation instead",
+        "It's trained so that its answers must satisfy Maxwell's equations (the laws of electromagnetism)"
+      ]
+    },
+    {
+      "n": 5,
+      "title": "Why this is hard",
+      "body": [
+        "Standard PINNs fail on this specific problem for two reasons:",
+        "High-frequency waves: networks are \"lazy\" and smooth out fast oscillations (spectral bias)",
+        "Sharp boundaries: fields change abruptly between copper and the board material"
+      ]
+    },
+    {
+      "n": 6,
+      "title": "Proposed Architecture",
+      "body": [
+        "Three additions to a standard PINN, each fixing one problem:",
+        "Fourier features → fixes high-frequency waves",
+        "Domain decomposition + copper as a perfect conductor → fixes sharp boundaries",
+        "Adaptive sampling → trains where the error is largest"
+      ]
+    },
+    {
+      "n": 7,
+      "title": "Methodology",
+      "body": [
+        "Simplified 3-layer circuit board: copper / insulator (FR-4) / copper",
+        "Ground truth: generate the \"true\" fields with FDTD simulation (MEEP)",
+        "Train the PINN, then compare its predictions to the ground truth",
+        "Controls: a plain baseline PINN, plus an ablation (turn each piece off to prove it matters)"
+      ]
+    },
+    {
+      "n": 8,
+      "title": "Evaluation Metrics",
+      "body": [
+        "Relative L2 error: how far predictions are from the true fields",
+        "Energy conservation: did the wave survive, or collapse to nothing?",
+        "Speed: PINN prediction time vs. full FDTD simulation"
+      ]
+    },
+    {
+      "n": 9,
+      "title": "Findings: The Training works",
+      "body": [
+        "All error terms drop by orders of magnitude, meaning training is stable",
+        "Energy stays near constant → the field stays \"alive\" instead of decaying to zero"
+      ]
+    },
+    {
+      "n": 10,
+      "title": "Findings: The Field",
+      "body": [
+        "The network correctly reproduces the starting pulse in the center of the board",
+        "The pulse then evolves into a wave over time"
+      ]
+    },
+    {
+      "n": 11,
+      "title": "PINN vs FDTD",
+      "body": [
+        "Compared my PINN's predicted field against FDTD (the trusted slow method)",
+        "Relative L2 error = 6.8%, the prediction closely matches ground truth",
+        "Once trained, the PINN evaluates ~1.8 million points per second"
+      ]
+    },
+    {
+      "n": 12,
+      "title": "Limitations & Next Steps",
+      "body": [
+        "Interface continuity is currently \"soft\" (approximate), not exact → next: hard enforcement",
+        "Copper and FR-4 are idealized → next: realistic, frequency-dependent materials"
+      ]
+    },
+    {
+      "n": 13,
+      "title": "Conclusion",
+      "body": [
+        "Built a combined PINN architecture that trains stably and conserves energy on a circuit-board EMI problem",
+        "Physics-informed Neural Networks could make electromagnetic simulation dramatically faster",
+        "Next: harder interface enforcement, realistic materials"
+      ]
+    }
+  ]
+}

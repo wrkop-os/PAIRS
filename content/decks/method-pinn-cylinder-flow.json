@@ -1,0 +1,162 @@
+{
+  "source": "PINN_Cylinder_Flow_Methodology (1).pdf",
+  "title": "Methodology: Physics-Informed Neural Network for 2D Steady-State Flow Past a Cylinder",
+  "authors": "",
+  "sections": [
+    {
+      "heading": "",
+      "paragraphs": [
+        "PAIRS Program Applied Field: Mechanical Engineering ML Specialization: Physics-Informed Neural Networks (PINNs)",
+        "Revised Draft"
+      ]
+    },
+    {
+      "heading": "1 Chosen Algorithms/Architectures",
+      "paragraphs": [
+        "Model: A fully-connected feedforward Physics-Informed Neural Network, following Raissi, Perdikaris & Karniadakis (2019). Input: 2 neurons (x, y). Hidden layers: 8 layers, 20-40 neurons each, tanh activation (chosen for smooth, well-behaved higher-order derivatives, which matters since the PDE residual requires second derivatives via automatic differentiation). Output: 3 neurons (u, v, p). Weight initialization: Xavier/Glorot. Optimizer: Adam, followed by L-BFGS for final convergence refinement.",
+        "Problem choice - flow past a cylinder, not lid-driven cavity: I deliberately chose flow past a cylinder over the lid-driven cavity problem. The cavity problem has a well-known pathology: the top two corners are geometric/boundary discontinuities where the wall velocity jumps instantaneously from 0 to the lid velocity. Because PINNs rely on automatic differentiation to compute smooth derivatives everywhere, this kind of true discontinuity causes the PDE residual loss to spike or become ill-defined near the corners, which can destabilize training. Flow past a cylinder has smooth boundaries and a smooth solution field everywhere (no true singularities at the Reynolds numbers I'm targeting), which makes it a much more appropriate first PINN project. I am consciously scoping the cavity problem out as a \"future work\" extension rather than attempting it now - handling boundary singularities properly (e.g., via localized loss weighting, corner-region point clustering, or excluding a small radius around the singular point) is a legitimate but separate research problem that would require its own methodology.",
+        "Governing physics (steady, incompressible, 2D Navier-Stokes):",
+        "u ∂u/∂x + v ∂u/∂y = −∂p/∂x + ν (∂²u/∂x² + ∂²u/∂y²)   (1)",
+        "u ∂v/∂x + v ∂v/∂y = −∂p/∂y + ν (∂²v/∂x² + ∂²v/∂y²)   (2)",
+        "∂u/∂x + ∂v/∂y = 0 (continuity)   (3)",
+        "Target Reynolds number: Re ≈ 20-40, kept below the ~47 threshold where periodic vortex shedding begins, so the flow stays steady.",
+        "Pressure anchoring (correction from earlier draft): Because incompressible Navier-Stokes only constrains pressure gradients, not absolute pressure, the system as written is under-determined - the network could add any constant offset to the entire predicted pressure field without violating any physics equation, and the PDE loss would never penalize it. To fix this, I will add a single-point Dirichlet condition anchoring the pressure scale: p = 0 at one fixed reference point, typically at the outlet (x_out, y_out), enforced as an additional term in the boundary loss. This removes the extra degree of freedom and ensures the network converges to a unique, physically meaningful pressure field rather than an arbitrarily shifted one.",
+        "Loss function and weighting (revised):",
+        "L_total = L_data + λ_BC · L_boundary + λ_PDE · L_phys   (4)",
+        "Early in training, the physics/PDE residual loss (computed at thousands of interior collocation points) tends to dominate the boundary condition loss (computed at relatively few boundary points), which can cause the network to prioritize satisfying the PDE in the bulk fluid while underfitting the wall/inlet/outlet conditions - including the new pressure-anchor point. To address this, I will not use unweighted (λ = 1) loss terms. Instead I will:",
+        "• Start with λ_BC set higher than λ_PDE (e.g., λ_BC = 10-100×, tuned empirically) so boundary conditions are enforced strongly from the start, and",
+        "• Test a simple adaptive weighting scheme - such as periodically rescaling each loss term's weight based on the ratio of gradient magnitudes across loss terms (following Wang, Teng & Perdikaris, 2021) - so no single term dominates training throughout, not just at initialization.",
+        "I will treat \"fixed high λ_BC\" as my baseline weighting strategy and \"adaptive weighting\" as an improvement I test and compare, rather than assuming one is correct in advance.",
+        "Why this is the right theoretical fit: Flow past a cylinder is a well-posed, smooth boundary value problem with known governing equations - exactly the setting PINNs were designed for. Embedding the PDE and boundary/pressure-anchor constraints directly into the loss lets the network learn a continuous, mesh-free solution from far less labeled data than a purely data-driven model would need."
+      ]
+    },
+    {
+      "heading": "2 Data: Type, Source, and Size",
+      "paragraphs": [
+        "Primary data source (revised order of preference): Given that OpenFOAM is notoriously difficult to configure inside Google Colab (dependency issues, no native support, frequent need for Docker/manual builds), I am reordering my data plan by ease of implementation:",
+        "1. First choice: Use Raissi et al.'s (2019) pre-computed, published cylinder wake dataset directly (https://github.com/maziarraissi/PINNs, cylinder nektar wake.mat) - real, high-fidelity spectral-element CFD data, already validated and widely cited, with zero setup risk. Note this dataset is technically the unsteady, vortex-shedding regime (Re ≈ 100); I will either (a) extract a representative time-slice as a steady approximation, or (b) adjust project scope slightly to include time as an input if I want to keep the true unsteady physics - I will decide this early and document the choice clearly, rather than mixing the two.",
+        "2. Second choice, if I want full control over Reynolds number/geometry: Generate my own steady-state ground truth using a pure-Python solver such as scikit-fem or FEniCS, both of which install cleanly in Colab without the dependency headaches of OpenFOAM.",
+        "3. Fallback attempt only: Try OpenFOAM if time allows and the above two options prove insufficient - I will time-box this attempt (e.g., a few hours) rather than let it become a bottleneck.",
+        "Size: Whichever source I use, I expect a spatial mesh of roughly 5,000-20,000 points, each with (x, y, u, v, p) - a table of ~5,000-20,000 rows × 5 columns. As before, only a small fraction (1-5%, a few hundred points) will be used as labeled data for L_data; the rest serve as unlabeled collocation points for the PDE residual loss.",
+        "EDA: Before training, I will visualize velocity/pressure contours and streamlines to confirm the flow field looks physically correct (recirculation zone behind the cylinder, no-slip at the wall), verify the flow is steady (or explicitly document that I'm using a time-slice of unsteady data, per above), and - if generating my own data - run a mesh-independence check to confirm the ground truth doesn't change meaningfully under further mesh refinement."
+      ]
+    },
+    {
+      "heading": "3 Preprocessing Steps",
+      "paragraphs": [
+        "• Non-dimensionalization: scale (x, y) by cylinder diameter D, (u, v) by free-stream velocity U∞, and pressure by ρU∞², keeping all network inputs/outputs on comparable numeric scales.",
+        "• Collocation point sampling: Latin Hypercube Sampling (LHS) across the 2D domain for interior physics points.",
+        "• Boundary point sampling: separate sampling along the cylinder surface, inlet, outlet, and far-field boundaries, since each carries a distinct condition - plus the single pressure-anchor point at the outlet described above.",
+        "• No missing-value handling, resizing, or tokenization is needed, since this is continuous simulated/simulated-benchmark data, not images or text."
+      ]
+    },
+    {
+      "heading": "4 Feature Engineering / Selection",
+      "paragraphs": [
+        "Inputs remain simply (x, y) - the minimal, physically correct representation for this problem. The main transformation is non-dimensionalization. I may test adding a \"distance-from-cylinder\" auxiliary input as part of a later ablation, to see if it helps the network resolve the boundary layer near the wall faster, but this is not part of the base model."
+      ]
+    },
+    {
+      "heading": "5 Data Partitioning",
+      "paragraphs": [
+        "• Labeled points: 70% train / 15% validation / 15% test.",
+        "• Collocation points: unlabeled, resampled fresh at intervals during training rather than split, since they carry no \"answer\" to overfit to.",
+        "• Held-out spatial region: a portion of the domain (e.g., far wake) withheld entirely from training/collocation sampling, used only at the end to test generalization/extrapolation."
+      ]
+    },
+    {
+      "heading": "6 Class Imbalance",
+      "paragraphs": [
+        "Not applicable - this is a continuous regression/PDE-solving problem, not classification."
+      ]
+    },
+    {
+      "heading": "7 Hardware/Compute",
+      "paragraphs": [
+        "Google Colab with a free-tier GPU (T4) for PINN training. Ground-truth generation (if not using the pre-computed Raissi dataset) will use scikit-fem/FEniCS, both light enough to run in Colab or locally."
+      ]
+    },
+    {
+      "heading": "8 Software/Hardware Issues & Mitigations",
+      "paragraphs": [
+        "• Floating/undetermined pressure scale: resolved by the single-point pressure anchor described in Section 1 - without this, the model has infinitely many equally \"correct\" pressure solutions and won't converge meaningfully.",
+        "• Loss term imbalance (PDE loss dominating boundary loss early in training): resolved by starting with a higher λ_BC and testing adaptive loss weighting (Section 1), rather than using unweighted loss terms as in the original draft.",
+        "• Vanishing/exploding gradients from second-order derivatives: mitigated by moderate network depth and tanh activations.",
+        "• OpenFOAM setup difficulty in Colab: deprioritized per the revised data plan in Section 2 - I will only attempt OpenFOAM as a time-boxed fallback, defaulting instead to the pre-computed dataset or scikit-fem/FEniCS.",
+        "• Free-tier Colab session limits: mitigated with periodic model checkpointing so training can resume rather than restart."
+      ]
+    },
+    {
+      "heading": "9 Evaluation Metrics",
+      "paragraphs": [
+        "• Relative L2 error (standard PINN benchmark metric) for u, v, p separately.",
+        "• RMSE and MAE in physical units, for interpretability.",
+        "• R² to assess variance explained.",
+        "• PDE residual magnitude - domain-specific metric measuring physical consistency independent of comparison to ground truth.",
+        "• Mass-conservation check - ∮ (u·n) dS ≈ 0 across a closed contour, a physically meaningful sanity check specific to incompressible flow.",
+        "• Pressure-field stability check (new): since pressure scale is now anchored, I will explicitly verify the predicted pressure field doesn't drift or exhibit an unphysical constant offset relative to ground truth - a direct check that the anchoring fix worked as intended.",
+        "• Qualitative streamline/contour comparison plots against ground truth."
+      ]
+    },
+    {
+      "heading": "10 Baseline Model",
+      "paragraphs": [
+        "Baseline 1: Identical-architecture NN trained only on L_data (no physics loss term), isolating the physics term's contribution.",
+        "Baseline 2: Published Raissi et al. (2019) PINN results, used as an external sanity-check reference for error magnitude."
+      ]
+    },
+    {
+      "heading": "11 Comparisons",
+      "paragraphs": [
+        "• CFD/benchmark ground truth (the reference all models are measured against).",
+        "• A data-driven NN trained on substantially more labeled data, to illustrate the labeled-data efficiency trade-off the physics loss provides.",
+        "• (Stretch goal) Gaussian Process Regression as a non-neural-network point of comparison."
+      ]
+    },
+    {
+      "heading": "12 Ablation Study (Revised/Scoped Down)",
+      "paragraphs": [
+        "My original ablation list (6 configurations) was too large to run rigorously with multiple seeds each in the available time. I'm scoping this down into a core set I will definitely run, plus a stretch set I'll attempt only if time allows:",
+        "Core ablations (priority order):",
+        "1. No PDE loss (data + boundary only) vs. full model - the most fundamental test of what the physics constraint contributes.",
+        "2. No pressure anchor point vs. with anchor - directly demonstrates the floating-pressure problem described in Section 1 and justifies why the anchor is necessary.",
+        "3. Fixed/unweighted loss (λ = 1 for all terms) vs. weighted/adaptive loss - directly tests whether the loss-weighting fix in Section 1 meaningfully improves convergence and boundary-condition satisfaction.",
+        "Stretch ablations (time permitting):",
+        "4. Varying labeled data amount (e.g., 10 vs. 100 vs. 1,000 points).",
+        "5. Varying collocation point density.",
+        "6. Network depth/width or activation function variation.",
+        "I will run the core three with multiple random seeds each (to report mean ± standard deviation) before considering any stretch ablations, since a smaller number of well-run, well-documented comparisons is more valuable than a larger number of rushed ones."
+      ]
+    },
+    {
+      "heading": "13 Main Evaluation Study Design",
+      "paragraphs": [
+        "Independent variables: presence/absence of PDE loss, presence/absence of the pressure-anchor condition, loss weighting strategy (unweighted vs. fixed-weighted vs. adaptive), and (if reached) labeled data amount, collocation density, and architecture choices.",
+        "Dependent variables: relative L2 error, RMSE, MAE, R² (u, v, p), PDE residual magnitude, mass-conservation error, and pressure-field offset/stability.",
+        "Control group: the plain data-driven NN baseline (no physics loss).",
+        "Experimental groups: each core ablation configuration in Section 12.",
+        "Confounding factors controlled for:",
+        "• Random seed/initialization: multiple runs per configuration (mean ± SD reported).",
+        "• Optimizer/learning rate schedule: held constant unless it's the variable being tested.",
+        "• Ground-truth accuracy: mesh-independence check (if self-generating data) so ground-truth error isn't mistaken for model error.",
+        "• Collocation sampling randomness: seed fixed when comparing configurations not explicitly testing sampling itself.",
+        "• Reynolds number: held fixed across all core comparisons.",
+        "Revised based on feedback regarding singularity handling, pressure gauge freedom, loss-term balancing, ablation study feasibility, and CFD tooling risk. This version is designed to be more implementable within a Colab/student-project timeframe while remaining rigorous and comparable to established PINN literature (Raissi et al., 2019; Wang et al., 2021)."
+      ]
+    },
+    {
+      "heading": "References",
+      "paragraphs": [
+        "• Cai, S., Mao, Z., Wang, Z., Yin, M., & Karniadakis, G. E. (2022). Physics-informed neural networks (PINNs) for fluid mechanics: A review. Acta Mechanica Sinica. https://doi.org/10.1007/s10409-021-01148-1",
+        "• Jin, X., Cai, S., Li, H., & Karniadakis, G. E. (2021). NSFnets (Navier-Stokes flow nets): Physics-informed neural networks for the incompressible Navier-Stokes equations. Journal of Computational Physics, 426, 109951. https://doi.org/10.1016/j.jcp.2020.109951",
+        "• Karniadakis, G. E., Kevrekidis, I. G., Lu, L., Perdikaris, P., Wang, S., & Yang, L. (2021). Physics-informed machine learning. Nature Reviews Physics, 3(6), 422-440. https://doi.org/10.1038/s42254-021-00314-5",
+        "• Kingma, D. P., & Ba, J. (2015). Adam: A method for stochastic optimization. arXiv. https://arxiv.org/abs/1412.6980",
+        "• Paszke, A., Gross, S., Massa, F., Lerer, A., Bradbury, J., Chanan, G., Killeen, T., Lin, Z., Gimelshein, N., Antiga, L., Desmaison, A., Köpf, A., Yang, E., DeVito, Z., Raison, M., Tejani, A., Chilamkurthy, S., Steiner, B., Fang, L., ... Chintala, S. (2019). PyTorch: An imperative style, high-performance deep learning library. arXiv. https://arxiv.org/abs/1912.01703",
+        "• Raissi, M., Perdikaris, P., & Karniadakis, G. E. (2019). Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations. Journal of Computational Physics, 378, 686-707. https://doi.org/10.1016/j.jcp.2018.10.045",
+        "• Raissi, M., Yazdani, A., & Karniadakis, G. E. (2020). Hidden fluid mechanics: Learning velocity and pressure fields from flow visualizations. Science, 367(6481), 1026-1030. https://doi.org/10.1126/science.aaw4741",
+        "• Wang, S., Teng, Y., & Perdikaris, P. (2021). Understanding and mitigating gradient flow pathologies in physics-informed neural networks. SIAM Journal on Scientific Computing, 43(5), A3055-A3081. https://doi.org/10.1137/20M1318043",
+        "• Raissi, M. (2019). PINNs [Cylinder wake dataset]. GitHub. https://github.com/maziarraissi/PINNs"
+      ]
+    }
+  ]
+}

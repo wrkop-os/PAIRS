@@ -1,2 +1,9 @@
 _test.html
 _three_test/
+
+# Python bytecode
+__pycache__/
+*.pyc
+
+# Slide render scratch
+.slide-build/

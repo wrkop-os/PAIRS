@@ -1,0 +1,180 @@
+{
+  "source": "Areeb PAIRS Slideshow.pptx",
+  "title": "Can an Unsupervised Model Tell Flight Anomalies Apart?",
+  "slides": [
+    {
+      "n": 1,
+      "title": "Can an Unsupervised Model Tell Flight Anomalies Apart?",
+      "body": [
+        "PAIRS",
+        "Can an Unsupervised Model",
+        "Tell Flight Anomalies Apart?",
+        "Extending unsupervised VAE-based flight anomaly detection from one",
+        "known anomaly to three — without any label help",
+        "Areeb Ahmed"
+      ]
+    },
+    {
+      "n": 2,
+      "title": "Primary Question:",
+      "body": [
+        "Every flight generates streams of sensor data — airspeed, altitude, flap position — that safety systems rely on to catch problems before they become dangerous.",
+        "Why it matters?",
+        "Real anomalies are rare and expensive to label by hand. A method that works without ever seeing a labeled failure would generalize to failure types nobody's tagged yet.",
+        "QUESTION…",
+        "Can a model trained on zero anomaly labels detect — and tell apart — multiple distinct types of flight anomalies, without the label help existing multi-class methods have used?"
+      ]
+    },
+    {
+      "n": 3,
+      "title": "THE DATASET",
+      "body": [
+        "Raw Data",
+        "NASA DASHlink Curated 4-Class Anomaly Detection Data Set — 99,837 real flights, 160-second windows on final approach, 20 sensor channels each.",
+        "Split 70 / 15 / 15 (train / val / test) on normal flights only — every anomalous flight is held out entirely until testing.",
+        "Raw flight",
+        "sensors",
+        "→",
+        "Normalize on",
+        "normal flights only",
+        "→",
+        "Train VAE",
+        "(normal only)",
+        "→",
+        "Score every",
+        "flight",
+        "→",
+        "Compare against",
+        "baselines",
+        "One pipeline, with only the modeling step switched out for each of the runs."
+      ]
+    },
+    {
+      "n": 4,
+      "title": "Class Imbalance",
+      "body": [
+        "Before building anything, the number of flights in each class was counted.",
+        "The rarest anomaly type (954 flights) is about 94× less common than nominal (89,663) — exactly why every result in this project is reported per class, not just pooled together."
+      ]
+    },
+    {
+      "n": 5,
+      "title": "The Strategy: Learn Normal, Notice What Isn't",
+      "body": [
+        "Most anomaly detectors need labeled failure examples. Instead, we show the model thousands of normal flights — nothing else.",
+        "Normal flight",
+        "→",
+        "encode",
+        "→",
+        "decode",
+        "→",
+        "Reconstructs closely — no flag",
+        "New flight",
+        "→",
+        "encode",
+        "→",
+        "decode",
+        "→",
+        "Fails to reconstruct — flagged",
+        "A Variational Autoencoder (VAE) learns the shape of “normal” well enough that anything unfamiliar reconstructs badly — that reconstruction gap is the anomaly signal, no labels required."
+      ]
+    },
+    {
+      "n": 6,
+      "title": "Ensuring Fairness",
+      "body": [
+        "7",
+        "model variants compared head-to-head, under one identical data split and threshold procedure",
+        "3",
+        "real anomaly types tested against — Speed High, Path High, Flaps Late Setting",
+        "0",
+        "anomaly labels the model ever saw during training"
+      ]
+    },
+    {
+      "n": 7,
+      "title": "Two Design Questions We Tested",
+      "body": [
+        "Beyond just building a working VAE, two specific design choices were tested directly — not just assumed.",
+        "Grouped vs. flat encoder",
+        "Does splitting sensors into subsystem groups — path/navigation, attitude/control, speed/propulsion — help, or does it lose cross-subsystem signal a single flat encoder would catch?",
+        "Variational vs. not (β = 0 ablation)",
+        "Does the probabilistic regularization term actually earn its keep, or does a plain autoencoder do just as well without it?"
+      ]
+    },
+    {
+      "n": 8,
+      "title": "Results:",
+      "body": [
+        "Reconstruction-probability scoring produced the single largest jump — 8 to 13 points on ROC-AUC and PR-AUC — far more than grouping or tuning β ever did alone."
+      ]
+    },
+    {
+      "n": 9,
+      "title": "The β Ablation",
+      "body": [
+        "Removing the variational term entirely (β=0) should look different from keeping it — if it's doing real work.",
+        "β=0 landed almost exactly on top of an independently-built plain autoencoder — a good cross-check that, for this architecture, the variational component wasn't earning its extra complexity on its own."
+      ]
+    },
+    {
+      "n": 10,
+      "title": "Grouping Doesn't Help Uniformly",
+      "body": [
+        "Pooled together, grouped and flat scored almost identically. Broken down by class, the picture changes completely.",
+        "Grouping nearly doubled Flaps Late Setting detection and boosted Path High — while cutting Speed High's catch rate roughly in half."
+      ]
+    },
+    {
+      "n": 11,
+      "title": "Major Findings",
+      "body": [
+        "Scoring method mattered most",
+        "Reconstruction probability (not grouping, not β) drove nearly all of this project's real gains.",
+        "The variational term didn't clearly earn its keep",
+        "Removing it (β=0) matched an independent plain autoencoder almost exactly.",
+        "Architecture choices trade — they don't uniformly improve",
+        "Grouping redistributed detection power across anomaly types — invisible without per-class reporting."
+      ]
+    },
+    {
+      "n": 12,
+      "title": "Some Limitations",
+      "body": [
+        "Single run per model",
+        "Each config used one fixed random seed; small gaps (a point or two) could be noise, not signal.",
+        "Explanations, not proof",
+        "Why grouping trades power the way it does is a plausible read of the pattern — per-channel variances were never directly inspected.",
+        "One dataset, one context",
+        "One curated NASA dataset, one aircraft and approach profile — generalization elsewhere is untested.",
+        "A real detection-rate trade-off",
+        "The honest, leak-free threshold caught far fewer anomalies than the best-possible hindsight threshold (~22% vs. ~67%)."
+      ]
+    },
+    {
+      "n": 13,
+      "title": "In Conclusion..",
+      "body": [
+        "To Answer the Primary Question…",
+        "Yes, in a limited but real sense — a purely unsupervised VAE, never trained on a single label, separated multiple anomaly types with meaningfully-better-than-chance success. But most of that success came from how the anomaly score was computed, not from architecture alone, and even the best setup still missed most anomalies at a safe, non-cheating threshold.",
+        "NEXT STEPS",
+        "1",
+        "Repeat key comparisons across multiple random seeds to confirm which gaps are real",
+        "2",
+        "Directly inspect per-channel learned variance to test the proposed explanation for the grouping trade-off",
+        "3",
+        "Extend the grouped, probability-scored model with temporal structure (e.g. an LSTM or 1D-CNN encoder) to capture cross-subsystem timing directly"
+      ]
+    },
+    {
+      "n": 14,
+      "title": "Thank You",
+      "body": [
+        "Can an Unsupervised Model Tell Flight Anomalies Apart?",
+        "Memarzadeh, Matthews, & Avrekh (2020). Unsupervised anomaly detection in flight data using convolutional variational auto-encoder. Aerospace, 7(8), 115.",
+        "Memarzadeh, Matthews, & Templin (2022). Multiclass anomaly detection in flight data using semi-supervised explainable deep learning model. J. Aerospace Information Systems, 19(2), 83–97.",
+        "Data: NASA DASHlink Curated 4-Class Anomaly Detection Data Set — c3.ndc.nasa.gov/dashlink/resources/1018"
+      ]
+    }
+  ]
+}
