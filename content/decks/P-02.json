@@ -1,0 +1,278 @@
+{
+  "source": "Ml slides.pptx",
+  "title": "Reinforcement Learning for Robotic Arm Stabilization: How good will it be?",
+  "slides": [
+    {
+      "n": 1,
+      "title": "Reinforcement Learning for Robotic Arm Stabilization: How good will it be?",
+      "body": [
+        "Comparing Q-Learning, Threshold Controller, and PID"
+      ]
+    },
+    {
+      "n": 2,
+      "title": "Background/Context for this Project",
+      "body": [
+        "Initially, this project was meant to be a project to use Machine Learning and cross it with Electronics to optimize builds and make systems learn on their own, seeing if it would work well.",
+        "Of Course, this is very broad, so I decided to implement Machine Learning into this one specific scenario: seeing if Machine Learning would be able to stabilize a Robotic Arm when a weight is added onto it.",
+        "Using Machine Learning in Fields like this would help out the world of hardware tremendously as incorporating ML/AI to these physical systems can allow them to adapt on their own. The use of ML in physical systems are seen already everywhere today such as Independent Robots and autonomous cars. My specific case here isn't one that hasn't been done before, but to bring about ML into the world of Hardware in general is something that I find so awesome."
+      ]
+    },
+    {
+      "n": 3,
+      "title": "Project Goal…",
+      "body": [
+        "With my specific scenario of incorporating Machine Learning to Robotic Arms, it proposes the question: “How can Machine Learning and robotic arms be integrated? ” To answer this, I decided to incorporate ML so that it is able to stabilize a Robotic Arm when a weight is put onto it.",
+        "To do this, the field of Machine Learning I’d be using is Reinforcement Learning, which essentially is where the Model trains itself, and does NOT use outside data. This is best for my project because I want to incorporate this soon into a physical system, and that outside data probably won't be useful for my specific parts I'll be using for the arm. Arm strengths and sizes for example can vary greatly, and it's best if the Model gets used to the Arm that it has. With this Project are three Goals:",
+        "Training the Q-Learning controller to choose a motor torque output based off the arms current angle and angular velocity",
+        "Compare this Model Im creating against a Threshold Controller (Fixed Controller so if arm at this angle, “do this”, etc) and a PID controller",
+        "Determining which out of the 3 methods are able to get the arm closest to its desired target."
+      ]
+    },
+    {
+      "n": 4,
+      "title": "How the Robotic Arm Simulation Works",
+      "body": [
+        "First, some constants for the Arm have to be established:",
+        "This is a SINGLE Joint Robotic Arm and it is holding a weight of 1kg.",
+        "The Arm’s mass is 0.5kg",
+        "The Arm’s length is 0.5m",
+        "The Target position the Model has to aim for is 0 Degrees.",
+        "Forces acting on this Arm:",
+        "Gravity is pulling the arm down",
+        "The motor in the Arm is Counteracting gravity by applying torque",
+        "“Damping” is just an added friction inside the arm that slows the arm’s motion and to prevent endless movement up and down (Without this, think of the joint moving as literally smooth butter no really friction in the joint)",
+        "The Arm’s inertia that determines how difficult it will be to change the arms rotational motion",
+        "Simulation:",
+        "The sim represents the physical robotic arm using physics",
+        "Every 0.01 seconds, the controller chooses a motor torque to output to try and stabilize the arm based on its current position is",
+        "Motor Torque is combined with gravity and damping to get the net torque",
+        "The Net Torque determines the arms angular acceleration, which then changes its angular velocity",
+        "The updated angular velocity changes the arm’s angle, and this process is repeated continuously."
+      ]
+    },
+    {
+      "n": 5,
+      "title": "How “Q-Learning” Works + How I used it",
+      "body": [
+        "For my project, I decided to use Q-Learning, which is a Reinforcement Learning Algorithm that teaches the Model how to make decisions on its own based on exploration and reward feedback. Based off an action that it does in a state that it’s in, it gives that action a rating and stores it inside what's called a “Q-table”, which is a grid where the number of rows is the possible states and columns being the possible actions it can take. Initially, all the spaces start with 0 and as the Model is Learning, it fills up this grid, giving every action a rating at a certain state.",
+        "The main aspect of the Q-Learning process is deciding on a rating for the action it took at a specific state. This is called the Q-Value. It has a formula, here:",
+        "Explained on the next slide…"
+      ]
+    },
+    {
+      "n": 6,
+      "title": "How “Q-Learning” Works + How I used it (pt.2)",
+      "body": [
+        "As you can see, there are many variables here but the concept for it is pretty easy. To simplify this equation, I rewrote it like this:",
+        "new_q is the updated q-value for an action the Model is determining",
+        "old_q is what the model currently believes the q-value is for the action it took",
+        "Alpha is the learning rate on a scale of 0-1, which is how much it changes its old q-value, which then is added to the old value to update its ranking (Looking at where its placed in the equation makes it a little easier to understand)",
+        "Reward is the feedback the Model got after it took the action.",
+        "Gamma is how much we value the future outcome on a scale of 0-1.",
+        "Better-q the best q-value in the next state."
+      ]
+    },
+    {
+      "n": 7,
+      "title": "How “Q-Learning” Works + How I used it (pt.3)",
+      "body": [
+        "As I said in the last Slide, Q-Learning works with a grid of all its possible states and actions with a rating for each.",
+        "State and Action:",
+        "In my case, there are 75 rows and 9 columns, where 75 is because of multiplying my 15 possible angle categories and 5 velocity categories, making 75 possible states. There are 9 columns since there are 9 possible motor torque outputs (−8, −6, −4, −2, 0, +2, +4, +6, +8 N·m ).",
+        "Reward:",
+        "To calculate the reward for an action it took, it uses this formula:",
+        "Simply put, angle is the position error while velocity is the motion measure, so together they tell us what good stabilization is, which is what is used here to determine the reward.",
+        "Exploration:",
+        "During the Q-Learning process, the Model has a 20% chance of choosing a random action. The other 80% of the time, it chooses the action with the highest Q-value. This is to let the Model get a chance to explore new actions rather than what its learned so far, to maybe figure out if there is a better action to take"
+      ]
+    },
+    {
+      "n": 8,
+      "title": "How “Q-Learning” Works + How I used it (pt.4)",
+      "body": [
+        "Training",
+        "Episode Based Evaluation was used for this Project, with a total episode amount of 5000. Per episode, the Model takes up to 300 simulation steps, with each step representing 0.01 seconds. After every action, the Q-Table is updated.",
+        "Here's a Flowchart to sum it all up:",
+        "Angle",
+        "Angular Velocity",
+        "State",
+        "Torque Action",
+        "Arm Moves",
+        "Reward",
+        "Q-Table",
+        "Q-Table Update",
+        "Repeat"
+      ]
+    },
+    {
+      "n": 9,
+      "title": "Experimental Design and Comparison",
+      "body": [
+        "Once the Q-Learning Algorithm has done its job, we have the results for how well the Model has done in attempts to balance the arm. Along with this Model, I’ve also created a Threshold Controller as well as a PID Controller.",
+        "Comparing the Controllers:",
+        "One Aspect of this Project again is to really test Q-Learning to see how it does against the other methods of stabilizing a robotic arm listed above, which is what I will go over later.",
+        "Ablation Study:",
+        "Removing Angular Velocity from the Q-Learning State to test whether or not Velocity is actually useful for stabilizing the arm",
+        "Evaluation Metrics:",
+        "MAD (Mean Absolute Deviation): average distance from the target (0 degrees)",
+        "Settling Time: how long it takes the arm to become stable near the target",
+        "Episode Survival: how long the Q-Learning agent keeps the arm within the allowed range",
+        "Note: All methods used the same constants initially mentioned on Slide 5"
+      ]
+    },
+    {
+      "n": 10,
+      "title": "Findings: Training Results",
+      "body": [
+        "After training the Model for about 5000 episodes, I created a graph to display how it performed throughout its process. Two main learning metrics I tracked on the graphs were Episode Survival, which is how long the arm remained within the allowed range, and Average Reward, which is how well the Model was able to keep the arm close to 0 degrees.",
+        "Here are two Graphs that display the Episode Survival and Average Reward Per Episode:"
+      ]
+    },
+    {
+      "n": 11,
+      "title": "Findings: Training Results (pt. 2)",
+      "body": [
+        "Episode Survival:",
+        "From the Graph, the Model had more of an upward trend in terms of surviving for longer periods of time as it trained, which shows that it was indeed learning better actions overtime.",
+        "Directly from my terminal, the First 10 episodes averaged 23.3 steps survived, while the last 10 steps where 62.6 steps survived.",
+        "Average Reward:",
+        "Average reward as shown on the graph became less negative throughout the training, as you can see a more upward trend towards 0 on the y axis in the beginning than there are at the end, which shows better stabilization.",
+        "First 10 episodes averaged about -18.24, compared with about -12.07 for the final 10 episodes."
+      ]
+    },
+    {
+      "n": 12,
+      "title": "Findings: Controller Comparison",
+      "body": [
+        "After training the Q-Learning Model, I compared its final results to the Threshold Controller as well as the PID Controller using the exact same physics sim conditions, which allowed me to compare all three methods fairly and how they each behave while trying to reach the target angle of 0 degrees. The Graph that is able to show the differences in their stabilization is here:",
+        "As you can see…",
+        "Q-Learning Stayed close to 0 degrees throughout the 3 second test but still had small Oscillations at the end",
+        "The Threshold Controller stayed near 0 but oscillated much more",
+        "The PID Controller initially moved farther] From the target, but went into a smooth maintained transition toward the target angle and was the most stable at the end"
+      ]
+    },
+    {
+      "n": 13,
+      "title": "Side Controller 1: Threshold Controller",
+      "body": [
+        "In the previous slide, I showed you the results for the three Controllers, but haven't explained Threshold and PID yet. This Slide will focus on the Threshold Controller.",
+        "The Threshold Controller is a super simple Controller where the rules are written into the code. ALl it does is check the arms current location from the target and off of that, gives off a Torque Value.",
+        "More precisely…",
+        "If less than 0 degrees, +8 N*m upward",
+        "If at/or above 0 degrees, + 4*m, letting gravity pull it downward",
+        "It does not take into consideration angular velocity or any from or learning",
+        "Part of what makes this so simple is angle check and the limited amounts of motor torque outputs its available to do. That's part of this “simple” Controller.",
+        "Note:",
+        "With the arm at 0 Degrees, gravity creates about -6.13 N*m. For this Controller, +8 N*m upward pushes the arm upward to counteract gravity here, while the + 4N*m upward when the angle is above 0 is weaker than gravity's downward torque, so net torque brings the arm back to the target. This was my reasoning for the Controller to have these two values"
+      ]
+    },
+    {
+      "n": 14,
+      "title": "Side Controller 2: PID Controller",
+      "body": [
+        "Next is the PID Controller. It's a Controller that also does not use Machine Learning but rather it is always measuring how far the arm is from the target and calculates a motor torque output mathematically to try and bring itself to the target.",
+        "P: Proportional: Looks how far the arm is from the target currently.",
+        "I: Integral: Looks at how much error has built up overtime",
+        "D: Derivative: Looks how quick the error is changing, helping the Controller slow down",
+        "There is a formula that goes with how it calculates Motor Torque, Here:",
+        "Where:",
+        "e = current error (Target Angle - Current Angle)",
+        "Kp = how strong the “P” matters (Proportional part, I used 2.0)",
+        "KI = how strong the “I” matters (Integral part, I used 5.0)",
+        "KD = how strong the “D” matters (Derivative part, I used 0.2)",
+        "Motor Torque outputs limited to -8 N*m and +8 N*m"
+      ]
+    },
+    {
+      "n": 15,
+      "title": "Findings: Metrics Comparison",
+      "body": [
+        "Here are the Metric Results from each of the three Methods:",
+        "Q-Learning:",
+        "Had the lowest MAD: 0.196 degrees",
+        "Final Angle: 0.123 degrees",
+        "Final Angular velocity: -2.78 degrees/s",
+        "Threshold Controller:",
+        "MAD: 0.284 degrees",
+        "Final Angle: 0.204 degrees",
+        "Final Angular Velocity: -6.75 Degrees/s",
+        "PID Controller:",
+        "MAD: 0.409 degrees",
+        "Final Angle = approximately 0 degrees",
+        "Final Angular Velocity = Approximately 0 degrees/s",
+        "Settling time: 0.56s",
+        "Based off the Graph and the Metric Data…",
+        "Q-Learning had the best average accuracy, while PID had the best final stability"
+      ]
+    },
+    {
+      "n": 16,
+      "title": "Findings: Ablation Study",
+      "body": [
+        "Simply put, an Ablation Study tests how important one part of a Model is to that Model by removing it and keeping everything else the same. In my case, I decided to run the Model without Angular Velocity to see if having the angle alone would be enough to train the Model. Metric Comparison here:",
+        "Full Q-Learning:",
+        "Angle and Angular Velocity",
+        "MAD: 0.196 Degrees",
+        "Final Angle: 0.123 Degrees",
+        "Final Angular Velocity: -2.78 Degrees/s",
+        "Angle Only Q-Learning:",
+        "Angle Only",
+        "MAD: 0.614 Degrees",
+        "Final Angle: -2 Degrees",
+        "Final Angular Velocity: 2.96 Degrees/s",
+        "From the Metrics, we can see that removing Angular Velocity as a factor to determine Q-value ended up increasing the MAD from 0.196 Degrees to 0.614 Degrees, making the Angle Only Model About 3 times worse. This demonstrates why having Angular Velocity as a factor to determine Q-value is so important because the arm can be at the same angle but moving at completely different speeds and/or directions. Angular Velocity allows us to differentiate those situations"
+      ]
+    },
+    {
+      "n": 17,
+      "title": "Discussion and Conclusion",
+      "body": [
+        "Overall, the Q-Learning Model was able to Learn to try and stabilize the arm, but every Controller was good and bad in their own ways depending on what Metric we’re talking about.",
+        "For example…",
+        "Q-Learning had the lowest avg angle error with a MAD of 0.196 Degrees, showing it stayed close to the target",
+        "PID had the BEST final state stability, being basically right on the target and maintaining it at about 0 Degrees/s Angular velocity",
+        "Threshold Controller was able to keep the amr near target, but oscillated much more than the other two",
+        "Ablation Study showed that by removing Angular Velocity, it Increased the MAD from 0.196 Degrees to 0.614 Degrees",
+        "In the end, this was able to show me that the Q-Learning process was able to teach itself to keep the arm up near the target, but it did not outperform other traditional methods in every scenario.",
+        "Q-Learning had the best avg accuracy, whilst PID was better at fully settling down at the target in the end."
+      ]
+    },
+    {
+      "n": 18,
+      "title": "Limitations + Future Work for the Project",
+      "body": [
+        "Limitations:",
+        "Final Project was Simulation Based, so no real hardware arm used to test the Model",
+        "System is only a Single Joint Robotic Arm, which is much simpler than an actual Multi-Joint Arm",
+        "Simulation used ideal angle and angular velocity values, so nothing much to account for actual sensor noise, gyro drifting or filtering errors with the gyroscope sensor meant to be used",
+        "The Motor Torque was just Modeled directly, while using an actual physical system would have required mapping motor controller outputs onto the servo.",
+        "Future Work:",
+        "Transfer the Q-Learning Controller right onto a physical Robotic Arm",
+        "Test the System with different payload weights",
+        "Going from a Single Jointed Arm to Double Jointed Arm",
+        "Really Test all the Controllers tested in this experiment with a physical system to see the comparisons up close.",
+        "In the end, this Project served as a way to test Reinforcement Learning in physical Control Systems, with my next big step being taking this Model to physical hardware."
+      ]
+    },
+    {
+      "n": 19,
+      "title": "References",
+      "body": [
+        "KTH Royal Institute of Technology (2019). Reinforcement Learning for Dynamic Control of Robotic Systems.",
+        "https://kth.diva-portal.org/smash/get/diva2:1374213/FULLTEXT01.pdf",
+        "Ha, S., & Yamane, K. (2022). Reinforcement Learning for Adaptive Torque Control in Underactuated Mechanisms.",
+        "https://arxiv.org/pdf/2207.11431",
+        "Sharma, D., & Kumar, R. (2023). IMU-Based State Estimation and Control Using Discrete State Mapping.",
+        "https://ijournals.in/wp-content/uploads/2023/10/25.IJSHRE-111026-Diti.pdf"
+      ]
+    },
+    {
+      "n": 20,
+      "title": "THANKS!",
+      "body": [
+        "CREDITS: This presentation template was created by Slidesgo, and includes icons by Flaticon, and infographics & images by Freepik"
+      ]
+    }
+  ]
+}

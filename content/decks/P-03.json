@@ -1,0 +1,199 @@
+{
+  "source": "battery_rul_presentation (1).pptx",
+  "title": "Physics-Informed LSTM Networks for Remaining Useful Life Prediction in Lithium-Ion Batteries",
+  "slides": [
+    {
+      "n": 1,
+      "title": "Physics-Informed LSTM Networks for Remaining Useful Life Prediction in Lithium-Ion Batteries",
+      "body": [
+        "Specialization: Physics-Informed Neural Networks & Time-Series Forecasting | Field: Automotive / Battery Engineering",
+        "15-Minute Project Walkthrough"
+      ]
+    },
+    {
+      "n": 2,
+      "title": "Agenda",
+      "body": [
+        "01 Problem & Motivation",
+        "Why battery RUL prediction, and why physics-informed ML",
+        "02 Specialization & Approach",
+        "PINNs + time-series forecasting applied to EV batteries",
+        "03 Dataset",
+        "NASA PCoE batteries across three temperature conditions",
+        "04 Methodology",
+        "LSTM backbone, physics-informed loss, evaluation design",
+        "05 A Real Debugging Story",
+        "Catching and fixing a zero-gradient loss bug",
+        "06 Results & Findings",
+        "What the corrected physics-informed models actually show"
+      ]
+    },
+    {
+      "n": 3,
+      "title": "The Problem: When Will This Battery Fail?",
+      "body": [
+        "Background: EV adoption depends on batteries that are safe and predictable. Every charge cycle degrades a battery a little, and that degradation eventually leads to failure. The problem: Predicting Remaining Useful Life (RUL) lets manufacturers schedule maintenance, warn drivers, and design safer packs — before failure happens. The gap: Most ML approaches (LSTM, Transformers) treat this as a pure curve-fitting problem — powerful, but prone to physically implausible predictions when data is limited.",
+        "Why it's hard",
+        "Degradation is nonlinear and history-dependent",
+        "Very few full-life-cycle battery datasets exist",
+        "Black-box models can predict physically impossible degradation curves",
+        "Predictions must stay reliable near end-of-life, when it matters most"
+      ]
+    },
+    {
+      "n": 4,
+      "title": "Specialization & Field",
+      "body": [
+        "Specialization",
+        "Physics-Informed Neural Networks & Time-Series Forecasting",
+        "Field",
+        "Automotive / Battery Engineering",
+        "Project Idea",
+        "Embed electrochemical aging equations — SEI growth kinetics and Arrhenius temperature dependence — directly into an LSTM's loss function, so RUL predictions stay physically consistent instead of behaving as a black box."
+      ]
+    },
+    {
+      "n": 5,
+      "title": "Dataset: NASA PCoE Battery Data",
+      "body": [
+        "11 lithium-ion cells across three ambient-temperature groups (after removing one outlier cell)",
+        "4°C — 3 cells — B0046, B0047, B0048",
+        "24°C — 4 cells — B0005, B0006, B0007, B0018",
+        "43°C — 4 cells — B0029, B0030, B0031, B0032",
+        "Note: One 4°C battery (B0045) was excluded after EDA revealed an atypical starting capacity inconsistent with its peer cells — documented as a data-quality decision, not a silent drop.",
+        "Source: NASA Prognostics Center of Excellence (PCoE) Battery Data Set"
+      ]
+    },
+    {
+      "n": 6,
+      "title": "End-to-End Pipeline",
+      "body": [
+        "Data — Download & parse NASA .mat files",
+        "Preprocess — RUL labels, resampled sequences, dQ/dt",
+        "Model — LSTM backbone + physics-informed loss",
+        "Evaluate — Leave-One-Battery-Out Cross-Validation",
+        "Results — Compare baseline vs. physics variants",
+        "Evaluation split by whole battery cell — never within a single cell's timeline — to test generalization to unseen cells."
+      ]
+    },
+    {
+      "n": 7,
+      "title": "Model: LSTM + Physics-Informed Loss",
+      "body": [
+        "LSTM Backbone",
+        "Input: 50-step voltage / current / temperature sequence per discharge cycle Architecture: 2-layer LSTM (64 hidden units) + feedforward head Output: Predicted Remaining Useful Life (cycles) Same architecture reused for every ablation variant",
+        "Physics-Informed Loss Terms",
+        "Arrhenius temperature dependence",
+        "k(T) = A · exp(−Ea / R·T)",
+        "Penalizes predictions whose implied degradation rate doesn't scale correctly with temperature.",
+        "SEI growth kinetics",
+        "capacity loss ∝ √t",
+        "Penalizes deviation from the diffusion-limited growth law, computed on accumulated degradation across cycles.",
+        "Total Loss = Data MSE + λ₁·Arrhenius + λ₂·SEI"
+      ]
+    },
+    {
+      "n": 8,
+      "title": "Architecture Diagram",
+      "body": [
+        "How data flows through the model, and where the physics rules enter",
+        "Input Sequence — Voltage, Current, Temperature (50 steps/cycle)",
+        "LSTM (2 layers) — 64 hidden units, learns temporal patterns in the cycle",
+        "Feedforward Head — Final hidden state → 32 units → 1 value",
+        "Predicted RUL — Cycles remaining until end-of-life",
+        "Physics-Informed Loss (used only during training)",
+        "The model's predicted RUL is compared against the Arrhenius temperature-rate law and the SEI √t growth law. Predictions that break these physical patterns are penalized, nudging the LSTM's weights toward physically realistic degradation curves.",
+        "Dashed line = physics loss path (training only) — not used at prediction time"
+      ]
+    },
+    {
+      "n": 9,
+      "title": "Evaluation Design",
+      "body": [
+        "Leave-One-Battery-Out CV",
+        "Each of the 11 batteries is held out as the test set exactly once",
+        "Remaining batteries split into train / validation sets",
+        "Partitioned by whole battery cell — never within one cell's cycle history",
+        "Chosen because only 11 batteries exist — a fixed % split would waste data and hide poor generalization",
+        "Ablation: 4 Model Variants",
+        "LSTM (baseline) — Data loss only",
+        "LSTM + Arrhenius — + temperature-rate constraint",
+        "LSTM + SEI — + √t growth constraint",
+        "LSTM-PINN (full) — Both physics terms combined"
+      ]
+    },
+    {
+      "n": 10,
+      "title": "A Real Debugging Story",
+      "body": [
+        "Catching a zero-gradient loss term before trusting the results",
+        "What went wrong",
+        "The Arrhenius & SEI residual functions were computed entirely from ground-truth data — never from the model's own predictions.",
+        "How it was caught",
+        "A gradient-norm sanity check showed the “physics-informed” loss terms contributed zero gradient to the model's parameters.",
+        "The fix",
+        "Residuals were rewritten to depend on the model's own predicted RUL, verified with a nonzero-gradient check before retraining."
+      ]
+    },
+    {
+      "n": 11,
+      "title": "Results: Corrected Physics-Informed Models",
+      "body": [
+        "Mean RMSE across 11 Leave-One-Battery-Out folds (lower is better)",
+        "32.98 — LSTM (baseline)",
+        "29.96 — LSTM + SEI",
+        "26.23 — LSTM-PINN (full)",
+        "23.51 — LSTM + Arrhenius",
+        "Mean RMSE (cycles)",
+        "RMSE (cycles)",
+        "−29% RMSE reduction with the Arrhenius-informed LSTM vs. plain baseline",
+        "Physics-informed variants also showed lower fold-to-fold variance than baseline"
+      ]
+    },
+    {
+      "n": 12,
+      "title": "What the Results Show",
+      "body": [
+        "Physics constraints genuinely help",
+        "Every physics-informed variant beat the plain LSTM baseline once the loss bug was fixed — not just on average, but with lower variance too.",
+        "Arrhenius alone was the strongest single addition",
+        "The temperature-rate constraint gave the largest and most consistent improvement of any variant tested.",
+        "Combining both terms didn't stack additively",
+        "The full PINN beat baseline but underperformed the Arrhenius-only model — physics terms can compete with each other, not just with the data loss."
+      ]
+    },
+    {
+      "n": 13,
+      "title": "Limitations & Future Work",
+      "body": [
+        "Limitations",
+        "Only 11 battery cells — high fold-to-fold variance",
+        "λ weights tuned by coarse sweep, not full optimization",
+        "Physics residuals computed at batch level, adding noise",
+        "MAPE and strict α-λ accuracy proved unstable near end-of-life",
+        "Future Work",
+        "Fine-grained λ sensitivity sweep across all 11 folds",
+        "Swap LSTM backbone for a Transformer encoder",
+        "Test on additional NASA temperature groups for more data",
+        "Investigate why combined physics terms underperform individually-applied ones"
+      ]
+    },
+    {
+      "n": 14,
+      "title": "Conclusion",
+      "body": [
+        "Embedding real battery-aging physics into an LSTM's loss function produced measurably more accurate and more consistent Remaining Useful Life predictions than a standard black-box model — a 29% RMSE improvement from the temperature-dependence rule alone.",
+        "Physics-informed constraints are a practical, testable way to make ML predictions more trustworthy for safety-relevant engineering problems.",
+        "Verifying that a loss term actually produces gradient is essential — a plausible-looking equation can silently do nothing.",
+        "Not all physics rules combine for free — how multiple constraints interact is itself worth studying, not assuming."
+      ]
+    },
+    {
+      "n": 15,
+      "title": "Thank You",
+      "body": [
+        "Questions?"
+      ]
+    }
+  ]
+}

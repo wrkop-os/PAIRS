@@ -1,0 +1,233 @@
+{
+  "source": "PAIRS.pptx",
+  "title": "Can AI catch an Eye Disease from a Photo?",
+  "slides": [
+    {
+      "n": 1,
+      "title": "Can AI catch an Eye Disease from a Photo?",
+      "body": [
+        "Jahidur Rahat & Aditta Roy"
+      ]
+    },
+    {
+      "n": 2,
+      "title": "So... What Even Is This Disease?",
+      "body": [
+        "It comes from diabetes",
+        "Diabetic Rethinopy damages the tiny blood vessels in the retina which is the layer at the back of the eye that senses light.",
+        "A leading cause of blindness",
+        "It's one of the leading causes of vision loss worldwide and is probably the easiest to prevent.",
+        "Checking for it takes forever",
+        "Catching it early is treatable, but grading photos by hand takes time, costs money, and isn't always consistent from doctor to doctor."
+      ]
+    },
+    {
+      "n": 3,
+      "title": "Here's the Problem",
+      "body": [
+        "Millions need regular screening",
+        "People with diabetes need their eyes checked regularly to catch this early.",
+        "Not enough specialists",
+        "There aren't enough ophthalmologists to screen everyone, especially in poor areas.",
+        "Manual grading is subjective",
+        "Reading these images by hand takes time, and results can vary from one doctor to the next. Humans make silly errors while my AI model can detect anomalies in someones eye in seconds. AI still does make errors but my model is used to help the opthamologists, not replace them.",
+        "Could a computer learn to spot disease in a retinal photo on its own?"
+      ]
+    },
+    {
+      "n": 4,
+      "title": "What We Made",
+      "body": [
+        "Goal",
+        "Train a deep learning model that can flag diabetic retinopathy from a retinal photo.",
+        "Approach: transfer learning",
+        "We start with a model that's already learned from millions of images, then teach it our specific task.",
+        "This phase",
+        "Right now, it just gives a yes or no: healthy, or showing signs of disease.",
+        "Bigger goal (in progress)",
+        "Eventually, grading severity on a 0–4 scale instead of a simple yes or no."
+      ]
+    },
+    {
+      "n": 5,
+      "title": "Quick Vocab Check",
+      "body": [
+        "CNN (short for Convolutional Neural Network) — a computer program built to find patterns in images.",
+        "Transfer learning — reusing a model that already learned from millions of other pictures, instead of starting from zero.",
+        "Backbone — the part of the model that does most of the “looking” and pulls out patterns from a photo.",
+        "Epoch — one full pass through all the training photos.",
+        "Dropout — randomly turning off parts of the model while training so it doesn't rely too much on one detail.",
+        "Loss — a number that shows how wrong the model's guesses are. Lower is better.",
+        "Overfitting — when a model memorizes the training photos instead of learning the real pattern, so it does worse on new photos."
+      ]
+    },
+    {
+      "n": 6,
+      "title": "Where We Got Our Photos",
+      "body": [
+        "Source",
+        "A public Kaggle dataset with the same APTOS 2019 photos — we switched to this version since the actual competition needed an invite we didn't have.",
+        "Fundus photographs",
+        "Retinal images captured during eye exams.",
+        "Clinically labeled",
+        "Each image graded 0–4 by ophthalmologists.",
+        "0–4",
+        "how severe the disease is",
+        "224×224",
+        "how big each photo is",
+        "For this phase, we grouped labels 1–4 into one “diseased” class, turning it into a healthy-vs-diseased task."
+      ]
+    },
+    {
+      "n": 7,
+      "title": "Peeking at the Data",
+      "body": [
+        "The dataset starts out imbalanced by severity, but once we group 1–4 into “diseased,” the binary split is nearly even — which is part of why class weighting worked so well later."
+      ]
+    },
+    {
+      "n": 8,
+      "title": "Prepping the Photos",
+      "body": [
+        "Resize",
+        "Every image gets resized to 224×224 pixels — the input size our model expects.",
+        "Normalize",
+        "Colors are normalized to match ImageNet statistics, so the pretrained model can apply what it already knows.",
+        "Stratified split",
+        "We split 80% for training and 20% for validation, keeping the same healthy/diseased ratio in both."
+      ]
+    },
+    {
+      "n": 9,
+      "title": "Faking More Photos (Kind Of)",
+      "body": [
+        "Random flips",
+        "Random horizontal flips give us mirror-image variety.",
+        "Random rotation",
+        "Images get randomly rotated up to 15°.",
+        "Color jitter",
+        "Random changes to brightness and contrast.",
+        "The point is to create more variety so the model learns to generalize instead of memorize. We only apply this to training images — validation images stay untouched."
+      ]
+    },
+    {
+      "n": 10,
+      "title": "Inside the Model",
+      "body": [
+        "Retinal image",
+        "224×224 fundus photo",
+        "Preprocessing",
+        "Resize, augment, normalize",
+        "ResNet-18 backbone",
+        "Pretrained on ImageNet, frozen",
+        "Classifier head",
+        "FC 512→128→2, dropout",
+        "Prediction",
+        "Healthy or diseased",
+        "Key details",
+        "Backbone: ResNet-18, pretrained on ImageNet",
+        "The convolutional layers stay frozen and act as a fixed feature extractor.",
+        "Custom head: Linear(512→128) → ReLU → Dropout(0.3) → Linear(128→2)",
+        "Only the new classifier head actually gets trained."
+      ]
+    },
+    {
+      "n": 11,
+      "title": "Fixing an Unfair Split",
+      "body": [
+        "Healthy images dominate the dataset",
+        "Class weighting makes mistakes on the diseased (minority) class cost more during training.",
+        "That pushes the model to actually learn what diseased eyes look like, instead of just defaulting to “healthy.”",
+        "This is a direct fix for the imbalance we saw back in the data exploration step."
+      ]
+    },
+    {
+      "n": 12,
+      "title": "Teaching It",
+      "body": [
+        "Adam",
+        "Optimizer",
+        "0.001",
+        "Learning rate",
+        "10",
+        "Epochs",
+        "32",
+        "Batch size",
+        "Loss function",
+        "Weighted cross-entropy loss, using the class weights from the previous step.",
+        "Hardware",
+        "Trained on a GPU through Google Colab."
+      ]
+    },
+    {
+      "n": 13,
+      "title": "Did It Even Learn?",
+      "body": [
+        "What it shows",
+        "Loss drops quickly in the first epoch as the classifier head starts learning.",
+        "There's a spike at epoch 4, where validation loss jumps to about 0.23 — likely just one unstable batch, but worth pointing out.",
+        "From epoch 7 on, training and validation loss settle close together around 0.15, a good sign the model is fitting well rather than overfitting."
+      ]
+    },
+    {
+      "n": 14,
+      "title": "Okay, But How Good Is It?",
+      "body": [
+        "~95%",
+        "our best result",
+        "~51%",
+        "just guessing every time",
+        "Accuracy jumps to about 94% after just epoch 1 — the frozen backbone's features are already doing a lot of the work.",
+        "It dips to about 92% at epoch 4 (matching that loss spike), then recovers and levels off around 95% by epoch 8.",
+        "Beating the ~51% naive baseline by around 44 points tells us the model is actually learning disease patterns, not just taking advantage of class imbalance."
+      ]
+    },
+    {
+      "n": 15,
+      "title": "Where It Messed Up",
+      "body": [
+        "23",
+        "false negatives — missed disease (6.2% of diseased cases)",
+        "15",
+        "false positives — false alarms (4.2% of healthy cases)",
+        "Our model made more false negatives (23) than false positives (15). In a screening context, that's the more expensive mistake — a missed disease case means a patient doesn't get referred for follow-up care."
+      ]
+    },
+    {
+      "n": 16,
+      "title": "The Good and the Bad",
+      "body": [
+        "What worked",
+        "Transfer learning got us to ~95% accuracy without having to train a huge model from scratch.",
+        "Class weighting helped deal with the imbalance problem.",
+        "Beat the ~51% naive baseline by a wide margin.",
+        "Limitations",
+        "The binary framing loses severity detail.",
+        "A frozen backbone limits how deeply the model can specialize to retinal images.",
+        "These results come from just one train/validation split.",
+        "We had more false negatives than false positives — the costlier mistake for a screening tool."
+      ]
+    },
+    {
+      "n": 17,
+      "title": "What's Next",
+      "body": [
+        "Our transfer-learning CNN reached about 95% accuracy separating healthy from diseased retinal images.",
+        "Severity staging",
+        "Extending to full 5-stage grading (0–4), using Quadratic Weighted Kappa as the evaluation metric.",
+        "Model comparison",
+        "Adding Ben Graham preprocessing and comparing against MobileNetV2 and a custom CNN.",
+        "Explainability",
+        "Adding Grad-CAM so clinicians can see which parts of the image drove each prediction.",
+        "Our long-term goal is an assistive screening tool for clinicians, especially in under-resourced areas."
+      ]
+    },
+    {
+      "n": 18,
+      "title": "Thank you! Questions?",
+      "body": [
+        "Jahidur Rahat & Aditta Roy"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,223 @@
+{
+  "source": "Physics-Informed Machine Learning for Multi-Chemistry Battery Voltage Prediction.pptx",
+  "title": "Physics-Informed Machine Learning for Multi-Chemistry Battery Voltage Prediction",
+  "slides": [
+    {
+      "n": 1,
+      "title": "Physics-Informed Machine Learning for Multi-Chemistry Battery Voltage Prediction",
+      "body": [
+        "PAIRS Summer Research Progress Presentation · Methodology, Research Design & Expected Next Steps"
+      ]
+    },
+    {
+      "n": 2,
+      "title": "Research Motivation",
+      "body": [
+        "EV Performance & Safety",
+        "Accurate battery voltage prediction is vital for electric vehicle performance, safety, and extending battery life.",
+        "Multi-Chemistry Challenges",
+        "Current models struggle with the complexities of diverse battery chemistries (LFP, NCA, NMC, etc.).",
+        "Physics-Informed ML",
+        "Physics-informed Machine Learning can bridge empirical data with electrochemical principles for better models.",
+        "Generalizable Framework",
+        "Our goal is to develop a flexible prediction framework that works across various battery chemistries."
+      ]
+    },
+    {
+      "n": 3,
+      "title": "The Problem – Why This Matters",
+      "body": [
+        "Critical State Variable",
+        "Accurate battery voltage is essential for precise State-of-Charge (SOC) and State-of-Health (SOH) estimations.",
+        "Safety & Performance Risks",
+        "Misestimation leads to significant safety hazards, unreliable range prediction, and premature battery aging.",
+        "Limited Scalability",
+        "Existing models are often chemistry-specific, limiting their applicability and generalizability across diverse battery types.",
+        "Demand for Generalization",
+        "There's a critical need for models that can generalize across chemistries and offer greater interpretability."
+      ]
+    },
+    {
+      "n": 4,
+      "title": "Literature Gap – What's Missing",
+      "body": [
+        "Single-Chemistry Focus",
+        "Most battery ML research focuses exclusively on single-chemistry systems, limiting broader applicability (Yao et al., 2021; Ng et al., 2022).",
+        "PINNs Underexplored",
+        "While physics-informed neural networks (PINNs) are emerging, their application to multi-chemistry battery prediction remains largely unexplored.",
+        "Limited Transfer Learning",
+        "There is minimal work on effectively applying transfer learning methodologies across diverse battery chemistries.",
+        "Key Opportunity",
+        "A significant opportunity exists to combine physics constraints with machine learning to enhance generalization and reduce data requirements."
+      ]
+    },
+    {
+      "n": 5,
+      "title": "Research Question",
+      "body": [
+        "Can physics-informed machine learning models predict battery voltage across multiple chemistries with improved generalization and interpretability?",
+        "Sub-questions:",
+        "How do physics constraints improve model performance on synthetic and real data?",
+        "What features and architectures best capture multi-chemistry behavior?",
+        "How well do models transfer across chemistries with limited target-chemistry data?"
+      ]
+    },
+    {
+      "n": 6,
+      "title": "Physics Foundation – Electrochemistry Basics",
+      "body": [
+        "1 Nernst Equation & Kinetics",
+        "Battery voltage is fundamentally governed by the Nernst equation and electrochemical kinetics.",
+        "2 Key Influencing Factors",
+        "Important parameters include Open-Circuit Voltage (OCV), overpotential, internal resistance, temperature, and State-of-Charge (SOC).",
+        "3 Physics-Informed Integration",
+        "Physics-informed ML embeds these electrochemical relationships directly into the model as constraints or loss terms.",
+        "4 Enhanced Generalization",
+        "This approach allows models to learn from both data and physical laws, significantly improving generalization across different battery chemistries."
+      ]
+    },
+    {
+      "n": 7,
+      "title": "Methodology Overview",
+      "body": [
+        "Stage 1: Baseline ML Models",
+        "Random Forest, Gradient Boosting, Neural Networks",
+        "Applied to synthetic and real battery data for initial performance benchmarks.",
+        "Stage 2: Physics-Informed Variants",
+        "Embed electrochemical constraints directly into model loss functions.",
+        "Focus on improving generalization and interpretability.",
+        "Evaluation & Analysis",
+        "Performance Metrics: Evaluate models using Root Mean Squared Error (RMSE), Mean Absolute Error (MAE), and R² on held-out test sets.",
+        "Ablation Study: Compare physics-informed models against baseline versions to isolate the specific contribution of physics constraints.",
+        "Transfer Learning: Assess model generalization capabilities across different battery chemistries, especially with limited target-chemistry data."
+      ]
+    },
+    {
+      "n": 8,
+      "title": "Dataset Strategy",
+      "body": [
+        "Primary Data Source",
+        "Synthetic data from electrochemical simulations (PyBaMM) for controlled experimentation and initial model training.",
+        "Secondary Data Source",
+        "Real-world battery-aging data from reputable sources like NASA and the Materials Project for robust model validation.",
+        "Battery Chemistries",
+        "Focus on Lithium Iron Phosphate (LFP), Nickel Cobalt Aluminum (NCA), and Nickel Manganese Cobalt (NMC) to cover diverse applications.",
+        "Feature Set",
+        "Includes current, voltage, temperature, State-of-Charge (SOC), cycle count, and a unique chemistry identifier for each cell.",
+        "Data Split",
+        "An 80/20 train/test split, stratified by both battery chemistry and specific cycle regime to ensure balanced representation."
+      ]
+    },
+    {
+      "n": 9,
+      "title": "Feature Engineering",
+      "body": [
+        "Electrochemical Features",
+        "Fundamental properties like Open-Circuit Voltage (OCV), overpotential, and internal resistance, derived from electrochemical models.",
+        "Temporal Features",
+        "Time-dependent data including cycle count and aggregated statistics like rolling means and standard deviations of current and voltage.",
+        "Chemistry-Aware Features",
+        "Categorical encoding for specific battery chemistries (LFP, NCA, NMC) and chemistry-specific data scaling for unique properties.",
+        "Normalization",
+        "Applying StandardScaler to all features ensures a consistent scale, preventing dominance of features with larger magnitudes during model training.",
+        "Feature Importance Analysis",
+        "Post-modeling analysis to identify which engineered features contribute most significantly to voltage predictions across different battery types."
+      ]
+    },
+    {
+      "n": 10,
+      "title": "Model Architectures",
+      "body": [
+        "Baseline Models",
+        "Random Forest: Captures non-linear relationships, provides feature importance.",
+        "Gradient Boosting (XGBoost): Sequential learning, strong empirical performance.",
+        "Neural Network: Dense layers with ReLU activation, dropout for regularization.",
+        "Physics-Informed Variants",
+        "Integrate electrochemical loss terms (e.g., Nernst constraint penalty) directly into baseline model loss functions.",
+        "Hyperparameter Tuning",
+        "Utilize grid search with cross-validation on the training set to systematically optimize model performance."
+      ]
+    },
+    {
+      "n": 11,
+      "title": "Preventing Circular Logic – A Critical Methodological Control",
+      "body": [
+        "A significant risk in physics-informed machine learning is circular logic: if the physics constraints are derived from the same data used for model training, the model may overfit to synthetic patterns rather than learning generalizable physics. This would undermine the core benefit of PINNs.",
+        "Control 1: Data Separation",
+        "Ensure synthetic data generation is independent from model training data by using different random seeds and parameter ranges. This prevents the model from simply 'memorizing' the synthetic data's underlying physics.",
+        "Control 2: Real-World Validation",
+        "Routinely validate models on entirely distinct real battery data (e.g., from NASA, Materials Project). This verifies that the embedded physics constraints transfer effectively to practical, real-world scenarios.",
+        "Control 3: Ablation Study",
+        "Conduct an ablation study comparing physics-informed models against baseline versions on real data. If physics constraints genuinely improve performance on unseen real data, it confirms their generalizability, not just their fit to synthetic data.",
+        "Importance: Ensuring Generalization",
+        "Implementing these controls is essential for claiming that physics constraints improve generalization across chemistries and experimental conditions, rather than merely fitting the specific characteristics of the synthetic training data."
+      ]
+    },
+    {
+      "n": 12,
+      "title": "Evaluation Metrics & Validation Strategy",
+      "body": [
+        "Primary Metrics",
+        "Model performance will be rigorously assessed using Root Mean Squared Error (RMSE), Mean Absolute Error (MAE), and R² on unseen, held-out test sets to ensure accuracy.",
+        "Cross-Validation",
+        "A 5-fold stratified cross-validation strategy will be applied to the training data to ensure model stability and robustness across different data partitions and prevent overfitting.",
+        "Baseline Comparison",
+        "Physics-informed models will be directly compared against standard machine learning models to quantify the improvements brought by embedding physical constraints in predictive accuracy and generalization.",
+        "Chemistry-Specific Evaluation",
+        "Performance metrics will be analyzed separately for Lithium Iron Phosphate (LFP), Nickel Cobalt Aluminum (NCA), and Nickel Manganese Cobalt (NMC) chemistries to evaluate generalization capabilities across diverse battery types.",
+        "Transfer Learning Assessment",
+        "The ability of models to generalize to novel conditions will be evaluated by training on one battery chemistry (source) and testing on another (target) with limited data, highlighting transfer learning efficacy."
+      ]
+    },
+    {
+      "n": 13,
+      "title": "Expected Results – Projected Performance",
+      "body": [
+        "These are projected benchmarks based on literature and preliminary synthetic-data experiments. Actual results will be reported after model training and validation.",
+        "Baseline ML (Synthetic Data)",
+        "RMSE ~0.05–0.10 V",
+        "R² ~0.85–0.92",
+        "Physics-Informed (Synthetic Data)",
+        "Expected improvement:",
+        "RMSE ~0.03–0.07 V",
+        "R² ~0.90–0.95",
+        "Real-Data Validation",
+        "Performance drop expected (~10–20%) due to domain shift; physics constraints should mitigate this degradation.",
+        "Transfer Learning",
+        "Expect 15–25% performance degradation when transferring to new chemistry with limited data, which physics constraints aim to reduce."
+      ]
+    },
+    {
+      "n": 14,
+      "title": "Limitations & Challenges",
+      "body": [
+        "Synthetic-Data Limitations",
+        "PyBaMM simulations may not capture all real-world degradation mechanisms and nuances present in actual battery behavior.",
+        "Domain Shift",
+        "Real battery data often exhibits significant differences from synthetic data in terms of noise, aging patterns, and operating conditions, requiring robust adaptation.",
+        "Limited Real-World Data",
+        "The availability of comprehensive public battery-aging datasets is constrained, which can hinder extensive validation and model training on diverse scenarios.",
+        "Computational Cost",
+        "Training physics-informed models, especially those with complex loss functions, can be computationally expensive and time-consuming.",
+        "Generalization Uncertainty",
+        "Success on a limited set of chemistries (e.g., LFP, NCA, NMC) doesn't inherently guarantee performance on novel or unexplored battery chemistries."
+      ]
+    },
+    {
+      "n": 15,
+      "title": "Research Contribution & Significance",
+      "body": [
+        "Novel Approach",
+        "First systematic study of physics-informed ML for multi-chemistry battery voltage prediction, filling a critical gap in current research.",
+        "Methodological Rigor",
+        "Incorporates explicit controls for circular logic and robust domain-shift validation, ensuring generalizable and reliable scientific findings.",
+        "Practical Impact",
+        "Developed framework is directly applicable to optimizing battery management systems in electric vehicles and grid-scale energy storage solutions.",
+        "Broader Implications",
+        "Demonstrates a powerful paradigm for improving ML generalization through physics constraints, extending to diverse materials science applications.",
+        "Open Science",
+        "Commitment to transparency: all code and synthetic datasets will be publicly available to promote reproducibility and collaborative research."
+      ]
+    }
+  ]
+}

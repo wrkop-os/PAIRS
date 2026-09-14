@@ -1,0 +1,106 @@
+/*
+ * Mobile and tablet layout.
+ *
+ * The design file was built at a fixed 1440px width with every rule as an
+ * inline style, so these overrides are keyed on data-r hooks added to the
+ * layout containers and need !important to beat the inline declarations.
+ * Load order matters: this file comes after site.css.
+ */
+
+/* Tablet / small laptop ------------------------------------------------- */
+@media (max-width: 1100px) {
+  [data-r="stats"] { grid-template-columns: repeat(3, 1fr) !important; row-gap: 30px !important; }
+  [data-r="grid5"] { grid-template-columns: repeat(3, 1fr) !important; }
+  [data-r="grid4"] { grid-template-columns: repeat(2, 1fr) !important; }
+  [data-r="grid3"] { grid-template-columns: repeat(2, 1fr) !important; }
+  [data-r="pipeline"] { grid-template-columns: repeat(2, 1fr) !important; }
+  [data-r="grid2"] { grid-template-columns: 1fr !important; }
+  [data-r="two"] { grid-template-columns: 1fr !important; gap: 24px !important; }
+  [data-r="h1"] { font-size: 40px !important; }
+  [data-r="h2"] { font-size: 38px !important; }
+}
+
+/* Phone ----------------------------------------------------------------- */
+@media (max-width: 720px) {
+  /* Header: logo row on top, tabs on a scrollable strip underneath. */
+  [data-r="header"] {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+    padding: 12px 18px !important;
+  }
+  [data-r="logo"] { height: 32px !important; }
+  [data-r="logo-name"] { max-width: none !important; font-size: 9px !important; }
+  [data-r="nav"] {
+    gap: 13px !important;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  [data-r="nav"]::-webkit-scrollbar { display: none; }
+  [data-r="nav"] .tabbtn { font-size: 13px !important; letter-spacing: .08em !important; }
+  [data-r="dates"] { display: none !important; }
+
+  /* Hero: let the content set the height instead of a fixed 680px, and pull
+     the node graph back so it reads as texture behind the text, not over it. */
+  [data-r="hero"] { height: auto !important; min-height: 0 !important; }
+  [data-r="hero-text"] { position: relative !important; padding: 64px 18px 72px !important; }
+  #pairs-hero-canvas { opacity: .45; }
+  [data-r="hero-logo"] { height: 96px !important; margin-bottom: 20px !important; }
+  [data-r="h1"] { font-size: 30px !important; }
+  [data-r="hero-lede"] { font-size: 16px !important; }
+  [data-r="h2"] { font-size: 28px !important; }
+
+  /* Sections and grids. */
+  [data-r="section"] { padding-left: 18px !important; padding-right: 18px !important; }
+  [data-r="section-tall"] { padding: 52px 18px 72px !important; }
+  [data-r="band"] { padding: 56px 18px !important; }
+  [data-r="stats"] { grid-template-columns: repeat(2, 1fr) !important; row-gap: 26px !important; }
+  [data-r="stats"] > div { padding: 0 14px !important; }
+  [data-r="grid5"], [data-r="grid4"], [data-r="grid3"], [data-r="pipeline"] {
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+  }
+  [data-r="pipeline"] { gap: 1px !important; }
+  [data-r="lede"] { font-size: 16px !important; }
+  [data-r="meta-right"] { display: none !important; }
+
+  /* Detail modal: full-bleed sheet, image above the text. */
+  [data-r="modalwrap"] { padding: 0 !important; align-items: stretch !important; }
+  [data-r="modalpanel"] { max-width: none !important; max-height: 100vh !important; height: 100vh !important; }
+  [data-r="modalhead"] { padding: 18px 18px 0 !important; }
+  [data-r="modalbody"] { grid-template-columns: 1fr !important; gap: 22px !important; padding: 18px 18px 40px !important; }
+  [data-r="modalphoto"] { height: 220px !important; }
+  [data-r="modaltitle"] { font-size: 28px !important; }
+
+  /* Slideshow: a phone-shaped stage, controls under the thumb. */
+  [data-r="lbwrap"] { padding: 12px !important; justify-content: flex-start !important; background: #1d1f20 !important; }
+  [data-r="lbhead"] { margin-top: 10px !important; }
+  [data-r="lbstage"] { aspect-ratio: auto !important; flex: 1 1 auto !important; min-height: 0 !important; }
+  /* An image slide letterboxes inside that stage, and on a phone the stage is
+     as tall as the viewport allows — a paper-white one then reads as a huge
+     blank sheet around a small slide. Drop the sheet for image slides and let
+     them sit on the dark overlay; the text slides still want the paper. */
+  [data-r="lbstage"]:has(image-slot) { background: transparent !important; }
+  .slide { padding: 26px 22px 76px !important; }
+  .slide-foot { right: 22px !important; bottom: 56px !important; }
+  .slide-title { font-size: 23px !important; }
+  .slide-body li { font-size: 14.5px !important; }
+  .lb-nav { top: auto !important; bottom: 12px !important; transform: none !important; width: 52px !important; height: 44px !important; }
+
+  .doc-panel { max-height: 100vh !important; height: 100vh !important; padding: 20px 18px 40px !important; }
+  .doc-title { font-size: 26px !important; }
+
+  [data-r="footer"] { padding: 22px 18px 34px !important; }
+  [data-r="footer"] > div { flex-direction: column !important; gap: 8px !important; }
+}
+
+/* Touch: the hover-lift on cards has no meaning and leaves cards stuck. */
+@media (hover: none) {
+  .pcard:hover { transform: none; box-shadow: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pcard { transition: none; }
+}

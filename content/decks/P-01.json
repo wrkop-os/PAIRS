@@ -1,0 +1,257 @@
+{
+  "source": "AI Detection Ensemble Model Based on DistillBERT, Ghostbusters, and Binoculars Final Presentation.pptx",
+  "title": "AI Detection Ensemble Model Based on DistillBERT, Ghostbusters, and Binoculars",
+  "slides": [
+    {
+      "n": 1,
+      "title": "AI Detection Ensemble Model Based on DistillBERT, Ghostbusters, and Binoculars",
+      "body": [
+        "Ethan Tan, Arthur Zin, Dennis Zhuo"
+      ]
+    },
+    {
+      "n": 2,
+      "title": "Issue",
+      "body": [
+        "Ever since the advent of LLMS, AI generated content has flooded the internet. In addition, AI being used in academia has caused intense suspicion to be placed on every piece of text both students and professionals.",
+        "There are many commercially available AI detectors, but most fall short when put to real life application. Some like Turnitin are biased towards false negatives, and others are biased to false positives.",
+        "In our project, we explore whether an ensemble model containing three separate AI detection methods results in higher efficiency than individually, and whether a more simple or complex meta-classifier affects the results.",
+        "Since the release of LLM models (ChatGPT, Gemini, etc), around 10% of the total internet’s pages are AI written. Furthermore, 35% of the pages created on the internet chronologically after ChatGPT are AI generated. (Figure from Pew Research Center “How Much of the Internet Is Written With AI?”, 2026)"
+      ]
+    },
+    {
+      "n": 3,
+      "title": "Research Topic/Focus",
+      "body": [
+        "While kept under patent and proprietary, many current commercial brands focus on a single signaling system for their AI detection models. For example, ZeroGPT publicly describes that their “DeepAnalyse™ Technology” as a model more focused towards using perplexity calculations.",
+        "Our project aims to explore whether ensemble models could combine different signals of AI text generation for higher accuracy and accuracy retention in out of domain tests. In addition, we compared the effectiveness of a random forest meta-classifier like LightGBM vs. the industry standard linear regression meta-classifier.",
+        "For datasets, we wanted ones that use newer generation LLM (GPT-4o, Claude, etc.) because Binoculars, Ghostbusters, and distilBERT are relatively old and were tested on older LLM models. In addition, we wanted both short and long strings to represent real variance in inputs.",
+        "For the short strings, we used: AI Human Sentence Classification Dataset Nerdy37 from Hugging Face 80% training/10% validation/10% testing",
+        "(https://huggingface.co/datasets/Nerdy37/ai-human-text-classification)",
+        "For longer string, we used ahmadreza13’s human-vs-Ai-generated-dataset: (https://huggingface.co/datasets/ahmadreza13/human-vs-Ai-generated-dataset). This dataset is split between AI created (GPT-4o, Claude, etc) and Human (Wikipedia). 80% training/10% validation/10% testing",
+        "And to test and see if the model can work well outside of training scope, we will be using the Feedback Prize / ELLIPSE. 100% testing (https://www.kaggle.com/datasets/matthewjansen/ellipse-corpus)"
+      ]
+    },
+    {
+      "n": 4,
+      "title": "Our Project: Datasets + Preprocessing",
+      "body": [
+        "For preprocessing, we took 50k examples from both the short and long string datasets and broadly made sure to drop missing and broken texts. Along with this we added a token_count column for the ensemble meta-classifier.",
+        "We made sure to shorten the amount of words/tokens of the longer strings because distilBERT has a 512 token limit it can process. So, we truncated the text so that to only take 256 tokens from the first half and 256 past from the exact middle of the text.",
+        "Finally, we also removed artifacts from wikipedia and AI prompt answering. This meant removing dates, citations, etc from the Wikipedia sourced data and removing the intro-snippets from the AI generated text (ex. “Sure, here is…”). Along with this, we masked numbers to eliminate the large amount of lists in the AI generated responses. Although this may have other unintended effects, for our purposes it was the most efficient way of preventing overfitting.",
+        "[token] [token] [token] [token] [token] [token] [token] [token] [token] [token] [token] [token]",
+        "[SEP]",
+        "[token] [token] [token] [token] [token] [token] [token] [token] [token] [token] [token] [token]",
+        "[NUM] [NUM] [NUM] -------> [NUM] [NUM] [NUM] [NUM]",
+        "Megara (; , ) is a historic town and a municipality in West Attica, Greece.",
+        "---------------------------->",
+        "Megara is a historic town and a municipality in West Attica, Greece."
+      ]
+    },
+    {
+      "n": 5,
+      "title": "Our Project: Datasets + Preprocessing",
+      "body": [
+        "Training Dataset: This dataset had 80k examples, with a 50/50 split of short and long text. Within both the short and long texts, there was a 50/50 split between AI generated text and Human generated to prevent class imbalances.",
+        "Validation Dataset: This dataset had 10k examples, with a 50/50 split of short and long text. Within both the short and long texts, there was a 50/50 split between AI generated text and Human generated.",
+        "Training Dataset: This dataset had 10k examples, with a 50/50 split of short and long text. Within both the short and long texts, there was a 50/50 split between AI generated text and Human generated."
+      ]
+    },
+    {
+      "n": 6,
+      "title": "Our Project: Outline",
+      "body": [
+        "We are taking 3 existing AI detection models with different AI detection methods and combining their signals through 2 meta-classifiers. Then we analyzed the efficiency and accuracy of the complete ensemble model + ablations.",
+        "Binoculars: Zero-Shot Perplexity Calculations",
+        "Ghostbusters: Log Probability Features",
+        "DistilBERT: Stylometric Analysis",
+        "LightGBM: Random Forest Gradient Booster",
+        "Logistic Regression: Regression Model"
+      ]
+    },
+    {
+      "n": 7,
+      "title": "Ensemble Architecture",
+      "body": [
+        "Binoculars",
+        "Ghostbusters",
+        "DistilBERT",
+        "LightGBM",
+        "Logistic Regression",
+        "Results",
+        "Providing Zero-Shot Perplexity Calculations",
+        "Providing Stylometric Analysis",
+        "Log Probability",
+        "Results"
+      ]
+    },
+    {
+      "n": 8,
+      "title": "Binoculars:",
+      "body": [
+        "Binoculars is a AI detector created in 2024 that leverages how AI generates text to detect its presence. It takes in AI models and uses perplexity calculations to find the likelihood of an AI choosing the next word. The lower likelihood, the more likely it is to be human made. Its internal mechanisms works like this:",
+        "Observer: This is the primary analyzer of the imputed text, and outputs a perplexity score based on how “surprised” it is at the next word.",
+        "Ex. The fire ____",
+        "Raged = .86",
+        "Blazed = .12",
+        "Spread = .02",
+        "Performer: The analysis from the observer is compared to the analysis of the performer, a closely related AI model. The performer then calculates the cross perplexity which creates a baseline for how complex the text is in general. This is meant to combat the “capybara problem” where a complex prompt makes a complex text with high surprisal.",
+        "Ex. Generate a PHD level paragraph about dolphins."
+      ]
+    },
+    {
+      "n": 9,
+      "title": "Binoculars:",
+      "body": [
+        "A deeper look into the internal mechanisms:",
+        "Observer (M1)",
+        "Performer (M2)",
+        "log PPL_M₁(s) = −(1 / L) ∑ᵢ₌₁ᴸ log P_M₁(xᵢ | x₁:ᵢ₋₁)",
+        "log X-PPL_M₁,M₂(s) = −(1 / L) ∑ᵢ₌₁ᴸ ∑ᵥ∈ᵥ P_M₁(v | x₁:ᵢ₋₁) · log P_M₂(v | x₁:ᵢ₋₁)",
+        "B_M₁,M₂(s) = log PPL_M₁(s) / log X-PPL_M₁,M₂(s)",
+        "This is the step where the observer calculates the negative log likelihood of each string.",
+        "This step has the cross-perplexity calculations occurs, which essentially acts like a regulating factor to the observer.",
+        "The observer calculation to cross-perplexity ratio is used as a baseline perplexity of the model."
+      ]
+    },
+    {
+      "n": 10,
+      "title": "Ghostbusters",
+      "body": [
+        "Ghostbuster is a AI detection model made in 2024, Ghostbuster detects AI-generated text by combining log-probability features, similar to Binoculars, from several weaker language models. It is meant to detect differences/defects in the writing that could indicate AI influence. Then a linear classifier used to give a single output on how AI it determines the text to be.",
+        "The main differentiation between Ghostbusters and Binoculars is that Ghostbusters passes text through a series of weaker models and then trains a custom classifier from those combined features, while Binoculars is a zero-shot model, meaning it does not require any training data and predicts by calculating perplexity ratios to leverage the predictability of AI. Ghostbusters is also less of a black box, because it can be examined how the classifiers interpret features."
+      ]
+    },
+    {
+      "n": 11,
+      "title": "DistilBERT",
+      "body": [
+        "DistilBERT is a distilled version of a stylometric analysis tool called BERT, a natural language processing model. BERT stands for Bidirectional Encoder Representations from Transformers developed by Google AI. Basically, it looks across the entire sentence at once to understand what the word means in context.",
+        "To train, BERT masks certain words of a sentence and uses logits to determine its accuracy. Logits are scores built on the model’s predictions of the masked word vs. the actual masked word. Through these logits changing the weights and expanding the vocabulary of the model, BERT picks up on syntax, grammar, and more."
+      ]
+    },
+    {
+      "n": 12,
+      "title": "DistilBERT",
+      "body": [
+        "Logit Calculations:",
+        "y = [ 1 ] (\"sat\") [ 0 ] (\"ran\") [ 0 ] (\"cat\") [ 0 ] (\"pizza\")",
+        "Logits = [ 2.0 ] (\"sat\") [ 1.0 ] (\"ran\") [ 0.1 ] (\"cat\") [ -1.5 ] (\"pizza\")",
+        "p = [ 7.39 / 11.44 ] [ 0.646 ] (64.6%)",
+        "[ 2.72 / 11.44 ] = [ 0.238 ] (23.8%)",
+        "[ 1.11 / 11.44 ] [ 0.097 ] (9.7%)",
+        "[ 0.22 / 11.44 ] [ 0.019 ] (1.9%)",
+        "L = - ( 1 * log(0.646) + 0 * log(0.238) + 0 * log(0.097) + 0 * log(0.019))",
+        "L = - ( 1 * -0.437 )",
+        "e^(2.0) ≈ 7.39",
+        "e^(1.0) ≈ 2.72",
+        "e^(0.1) ≈ 1.11",
+        "e^(-1.5) ≈ 0.22",
+        "Sum = 7.39 + 2.72 + 1.11 + 0.22 = 11.44"
+      ]
+    },
+    {
+      "n": 13,
+      "title": "DistilBERT",
+      "body": [
+        "DistilBERT is meant to take the learning capabilities of BERT but use half of its computing resources, which makes it ideal for our limited resources. It can also easily be transformed into a AI detection model by adding a classification head.",
+        "Compared to its teacher model BERT, distilBERT only has half the layers and uses a temperature scaling method. Temperature scaling is the way that distilBERT can discern semantic relations between words while cutting down on BERT’s calculations. Basically, it transforms the fill in the answer knowledge of BERT to the knowledge of what words are close in meaning to each other."
+      ]
+    },
+    {
+      "n": 14,
+      "title": "Methodology: Binoculars",
+      "body": [
+        "A major hurdle we had to overcome is to limit the VRAM consumption of the perplexity based models to fitting the available RAM on the free tier of Google Colab. Considering how much VRAM we had access to, we could not connect Binoculars to a high parameter AI model for its perplexity calculations.",
+        "As such, we used Qwen2.5-1.5B since it is known for being a good light model. In addition, the AI parameters went through 4 bit-quantization, which also drastically reduced the VRAM requirement by limiting the weights to 4 integers. The final step to decreasing the VRAM usage was to batch the data into 8’s, allowing for 8 lines of the data to be processed at once. Save checkpoints were made every 50 batches to protect against data loss in case of Colab timeouts, and VRAM was regularly cleared during processing."
+      ]
+    },
+    {
+      "n": 15,
+      "title": "Methodology: Ghostbusters",
+      "body": [
+        "In our implementation of Ghostbusters, we adapted it to run on a single LLM. That being Qwen2.5-1.5B on 4-bit quantization, just like Binoculars, to reduce the VRAM requirement on Colab. For each text, we get the average loss per sequence, which is returned as negative for the feature score.",
+        "As for processing, we sorted text by character length and processed them in batches of 16. Save checkpoints were made every 50 batches to protect against data loss in case of Colab timeouts, and VRAM was regularly cleared during processing."
+      ]
+    },
+    {
+      "n": 16,
+      "title": "Methodology: distilBERT",
+      "body": [
+        "In our implementation of distilBERT, we fine-tuned it as a two-class classifier. Text was tokenized with distilBERT tokenizer, truncated to 256 tokens. We used 5-fold stratified cross validation in order to prevent overfitting by keeping training and prediction data separate.",
+        "We used a batch size of 64 and had half precision for efficiency. Similarly to our other models, we used checkpoints and regularly cleared VRAM."
+      ]
+    },
+    {
+      "n": 17,
+      "title": "Results",
+      "body": [
+        "Graph 1: Average Confusion Matrix Across Both Models and 10 Trials. This graph shows the average confusion matrix across both the LightGBM and Logistic Regression models over all 10 trials. The results show that both models consistently classify the large majority of samples correctly, with approximately 27,225.85 true negatives and 27,314.70 true positives. Classification errors remain relatively low, with approximately 274.15 false positives and 185.30 false negatives. This demonstrates that both models maintain strong and consistent classification performance across repeated trials while keeping the false positive rate close to the target of 1%."
+      ]
+    },
+    {
+      "n": 18,
+      "title": "Results",
+      "body": [
+        "Bino (B): binoculars",
+        "Group (G): ghostbusters",
+        "Group (D): distilBERT",
+        "Graph 2: Ablation Study: LGBM vs Logistic Regression Accuracy (95% CI). This graph compares the classification accuracy of the LGBM and Logistic Regression (LR) models across the Full Model and each ablation configuration. The error bars represent 95% confidence intervals. The Full Model achieves very high accuracy, indicating the complete feature set for both models can perform near perfectly. In ablation configurations excluding feature set D (distillBERT), accuracy appears to drop significantly, with Bino (B), Group (G), and Group (BG) underperforming groups with feature set D. This demonstrates D is the dominant feature group, seeing that its removal leads to a roughly 50% drop in accuracy, whereas D operating on its own retains nearly all of the Full Model’s performance."
+      ]
+    },
+    {
+      "n": 19,
+      "title": "Results",
+      "body": [
+        "Graph 3: Performance Drop vs Full Model: LGBM vs Logistic Regression (95% CI). This graph compares the loss in accuracy relative to the Full Model for each ablation configuration. Values close to 0% indicate that the configuration performs almost identical to the Full Model, while large values indicate predictive information has been removed. The largest performance drops occur when feature set D is absent. Seen in Bino (B) with a 44% drop, Group (G) with a 42-47% drop, and Group (BG) with a 40-43% drop. On the other hand, configurations containing D show near no reduction in performance. All of them having roughly a <0.01% drop. This shows that D contains nearly all information necessary for accurate classification, while B and G contribute little additional improvement to the model."
+      ]
+    },
+    {
+      "n": 20,
+      "title": "Results",
+      "body": [
+        "Graph 4: Averaged Ablation Study: Accuracy Across All Models (95% CI). This graph shows the average accuracy across the two modeling runs, combining the LGBM and Logistic Regression results. The error bars represent a 95% confidence intervals. The dashed horizontal line represents the average performance of the Full Model, which is 99.16% accuracy. The results show a clear split on configurations: the Low-performing configurations (Bino (B), Group (G), Group (BG)), and the High-performing configurations (Group (D), Group (BD), Group (BGD)) which perform near identical to the Full Model. This contributes to the evaluation that B and G do not produce any meaningful improvement, as feature set D is near identical to the Full Model."
+      ]
+    },
+    {
+      "n": 21,
+      "title": "Results",
+      "body": [
+        "Graph 5: Averaged Performance Drop vs. Full Model (with 95% CI). This graph shows the average reduction in accuracy relative to the Full Model across both runs. It provides the clearest overall picture of the importance of each feature configuration. On average, the largest accuracy drops were on Group (G), Bino (B), and Group (BG), while the least accuracy drops were Group (D), Group (BD), and Group (BGD). Further reinforcing how feature set D contains nearly all necessary information for accurate classification and is responsible for nearly all the predictive performance of the Full Model."
+      ]
+    },
+    {
+      "n": 22,
+      "title": "Results",
+      "body": [
+        "Graph 6: Test Accuracy Across Ensemble Configurations (ESL). This graph compares the test accuracy of the LightGBM and Logistic Regression models across the different ensemble configurations for the ESL dataset. The results show a clear split between the configurations. Bino and GHOST achieve 100% accuracy for both models, while the Full Ensemble and DistilBERT configurations perform significantly worse, with accuracy ranging from approximately 1.58% to 4.90%. This demonstrates that, for the ESL dataset, Bino and GHOST are the strongest-performing configurations in terms of test accuracy, while the Full Ensemble and DistilBERT configurations show a significant reduction in classification performance."
+      ]
+    },
+    {
+      "n": 23,
+      "title": "Discussion/Contributions",
+      "body": [
+        "The results show that in terms of our ensemble model, DistilBERT’s features were the strongest indicators of AI generation.",
+        "The ablation studies demonstrate that Ghostbuster and Binoculars, at least how we configured them, do not do well on more recent LLMs.",
+        "On standard tests, the Full Model reached about 99.16% accuracy. DistilBERT alone, or in combination with Ghostbusters and/or Binoculars, performed relatively identically to the Full Model.",
+        "The Full Ensemble and DistilBERT models were shown to have very poor accuracy on ESL writing (a known difficulty of DistilBERT).",
+        "Binoculars and Ghostbusters performed substantially better with ESL writing compared to DistilBERT and the Full Ensemble.",
+        "From this, we can conclude that DistilBERT is the main feature that the Full Model relies on, and it contains nearly all the information necessary for accurate classification. Whereas Binoculars and Ghostbusters, in this implementation, contribute very little improvement to the Full Model. However, when providing out of scope data like ESL writing, the model’s overreliance on DistilBERT poisons the efficiency seen in its accuracy rate when predicting ESL datasets.",
+        "As such, for limited ensemble AI detection models such as ours, it is important to have a method that does not need prior training in the domain. In addition, in terms of generalizing our findings to other AI detection model types, our research shows that there is no significant difference between random forest and linear regression meta-classifiers."
+      ]
+    },
+    {
+      "n": 24,
+      "title": "Limitations/Future Changes",
+      "body": [
+        "For a majority of the time, we were on the free tier of Google Colab which severely restricted our ability to process data and how much we could scale everything. This only changed until very late, when it was clear there was no way we could finish in time without more compute.",
+        "In addition, our low starting compute power limited the scope of our project to things that could run in the Colab, which left us with admittedly outdated and less efficient models to use.",
+        "Many of the commercial AI detectors are paywalled and so we could not compare their models to ours on scale.",
+        "To change this project in the future, we will use newer models that can keep up with current LLMs.",
+        "It would be interesting to test if adding options such as (Schoolwork, News, etc) and having that adjust the model’s analysis would be possible.",
+        "We will look into further if there are other ways we could get a fair and accurate comparison of our model and commercially available AI detectors.",
+        "Explore the linguistic uniqueness of both human and AI writing to find stronger patterns."
+      ]
+    }
+  ]
+}

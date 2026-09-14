@@ -1,0 +1,175 @@
+{
+  "source": "PAIRS_PINN_Cylinder_Flow.pdf",
+  "title": "Physics-Informed Neural Networks for 2D Steady-State Flow Past a Cylinder",
+  "slides": [
+    {
+      "n": 1,
+      "title": "Physics-Informed Neural Networks for 2D Steady-State Flow Past a Cylinder",
+      "body": [
+        "PAIRS PROGRAM",
+        "Applied Field: Mechanical Engineering | ML Specialization: Physics-Informed Neural Networks (PINNs)",
+        "TEAM",
+        "Muhayminul Haque"
+      ]
+    },
+    {
+      "n": 2,
+      "title": "INTRODUCTION Why Teach a Neural Network Physics?",
+      "body": [
+        "1 Traditional CFD is expensive",
+        "High-fidelity Navier–Stokes solvers (OpenFOAM, ANSYS Fluent) need fine meshes and long solve times for every new geometry, Reynolds number, or boundary condition.",
+        "2 PINNs offer a mesh-free alternative",
+        "A Physics-Informed Neural Network (Raissi, Perdikaris & Karniadakis, 2019) embeds the governing PDE directly into the loss function, so the network learns a continuous solution from very little labeled data.",
+        "3 A natural fit for fluid mechanics",
+        "2D incompressible Navier–Stokes is a well-studied, smooth boundary-value problem — exactly the setting PINNs were designed for.",
+        "At Re ≈ 20–40, the wake behind a cylinder is smooth and steady — no vortex shedding, no boundary singularities. That makes it a much friendlier first PINN project than the classic lid-driven cavity, whose sharp corner discontinuities can destabilize the PDE residual loss."
+      ]
+    },
+    {
+      "n": 3,
+      "title": "INTRODUCTION The Problem, and What We're Testing",
+      "body": [
+        "THE PROBLEM",
+        "Solve steady, incompressible 2D Navier–Stokes flow past a cylinder using only the PDE and boundary conditions as supervision — not a labeled CFD dataset.",
+        "Two hidden traps make this harder than it looks:",
+        "• Pressure gauge freedom — incompressible NS only constrains pressure gradients, so the network can add any constant offset to p without penalty.",
+        "• Loss imbalance — thousands of interior PDE points can drown out the handful of boundary points, so walls and inlets get under-fit.",
+        "WHAT WE'RE ANALYZING",
+        "This project doesn't just train one PINN — it isolates which design choices actually matter, via three controlled ablations:",
+        "1. PDE loss vs. none — does the physics term change the solution?",
+        "2. Pressure anchor vs. none — does the gauge freedom really cause drift?",
+        "3. Weighted vs. unweighted loss — does up-weighting boundary terms speed up convergence?"
+      ]
+    },
+    {
+      "n": 4,
+      "title": "METHODOLOGY Governing Physics and the PINN Loss",
+      "body": [
+        "Steady, incompressible 2D Navier–Stokes",
+        "u·∂u/∂x + v·∂u/∂y = −∂p/∂x + ν(∂²u/∂x² + ∂²u/∂y²)",
+        "u·∂v/∂x + v·∂v/∂y = −∂p/∂y + ν(∂²v/∂x² + ∂²v/∂y²)",
+        "∂u/∂x + ∂v/∂y = 0 (continuity)",
+        "Re = U∞D/ν ≈ 40, kept below the ~47 vortex-shedding threshold so the flow stays steady.",
+        "Composite loss function",
+        "L_total = λ_BC · L_boundary + λ_PDE · L_phys",
+        "λ_BC set 10–100× higher than λ_PDE early in training, since a handful of boundary points would otherwise be drowned out by thousands of interior collocation points.",
+        "FIX: THE FLOATING PRESSURE PROBLEM",
+        "Incompressible Navier–Stokes only constrains pressure gradients, not the absolute value — so the network could add any constant to the whole pressure field and the PDE loss would never notice.",
+        "Fix: a single Dirichlet condition, p = 0 at one reference point near the outlet, added as an extra boundary-loss term. This removes the extra degree of freedom.",
+        "Network: 2 → 8×(20–40, tanh) → 3, Xavier init, Adam optimizer (L-BFGS refinement planned)."
+      ]
+    },
+    {
+      "n": 5,
+      "title": "METHODOLOGY PINN Architecture & Training Loop",
+      "body": []
+    },
+    {
+      "n": 6,
+      "title": "METHODOLOGY Experimental Design",
+      "body": [
+        "Domain x/D ∈ [−5, 15], y/D ∈ [−5, 5], cylinder radius 0.5D centered at origin",
+        "Boundary conditions Inlet: u = U∞, v = 0 • Far-field top/bottom: u = U∞, v = 0 • Cylinder wall: no-slip (u = v = 0) • Outlet: left open, anchored only by the single pressure point",
+        "Collocation points ≈1,500 interior points via rejection-sampled uniform sampling (LHS in the full methodology), excluding the cylinder interior; resampled every 500 iterations",
+        "Optimizer Adam, learning rate 1e-3, 2,000 iterations per configuration (L-BFGS refinement scoped as future work — see Discussion)",
+        "Compute CPU-only JAX implementation — PyTorch's CUDA-bundled build could not be installed in the sandbox's limited disk space; JAX gives equivalent grad/hessian autodiff for the second-order PDE residual",
+        "Ablations run (A) full model (B) no PDE loss (C) no pressure anchor (D) unweighted loss — the 3 core ablations from the methodology, each trained from the same initialization for a fair comparison"
+      ]
+    },
+    {
+      "n": 7,
+      "title": "FINDINGS Training Converges — But Plateaus Above Zero",
+      "body": [
+        "READING THE CURVE",
+        "• Boundary loss drops ~5 orders of magnitude — walls, inlet, and far-field are satisfied almost exactly.",
+        "• PDE residual loss plateaus around 6×10⁻³ instead of continuing to fall.",
+        "• The periodic spikes are the scheduled resampling of collocation points every 500 iterations — the network briefly sees new points it hasn't fit yet."
+      ]
+    },
+    {
+      "n": 8,
+      "title": "FINDINGS Predicted Velocity Field",
+      "body": [
+        "The network learns the qualitative signature of cylinder wake flow: flow slows and diverts around the cylinder, then gradually re-accelerates downstream. At this training budget the closed recirculation bubble expected at Re ≈ 40 is not yet sharply resolved — a known limitation discussed on the last slide."
+      ]
+    },
+    {
+      "n": 9,
+      "title": "FINDINGS Predicted Pressure Field",
+      "body": [
+        "The pressure anchor (×) pins the scale correctly — the field near the outlet sits at ≈ 0, exactly as required. The expected high-pressure stagnation point at the cylinder's front face is not yet sharply resolved, consistent with the PDE residual plateau on the convergence slide — more Adam iterations plus an L-BFGS refinement pass are the natural next step."
+      ]
+    },
+    {
+      "n": 10,
+      "title": "FINDINGS — ABLATION 1 OF 3 The Pressure Anchor Fix Actually Works",
+      "body": [
+        "RESULT",
+        "With anchor: p stays pinned at ≈ 0.00",
+        "Without anchor: p drifts steadily to ≈ −0.18, and never stabilizes — exactly the floating-gauge failure the methodology predicted."
+      ]
+    },
+    {
+      "n": 11,
+      "title": "FINDINGS — ABLATION 2 OF 3 Weighting the Boundary Loss Pays Off",
+      "body": [
+        "RESULT",
+        "λ_BC = 50: final raw boundary loss ≈ 1×10⁻⁵",
+        "λ_BC = 1: final raw boundary loss ≈ 4.7×10⁻⁴ — about 47× worse, and it plateaus early instead of continuing to improve."
+      ]
+    },
+    {
+      "n": 12,
+      "title": "FINDINGS — ABLATION 3 OF 3 Does the Physics Term Matter Here?",
+      "body": [
+        "HONEST READING",
+        "Removing the PDE loss raises the (tracked, not optimized) residual from 6.15×10⁻³ to 7.45×10⁻³ — a real but modest gap.",
+        "The velocity fields with and without the physics term look visually similar at this Re and training budget, because a smooth tanh network already interpolates smoothly between the boundary conditions.",
+        "This is a useful negative-ish result: the physics loss is doing real (if modest) work here, and its value should grow on harder problems — sparser boundary data, higher Re, or inverse/extrapolation tasks."
+      ]
+    },
+    {
+      "n": 13,
+      "title": "DISCUSSION & CONCLUSIONS What We Learned",
+      "body": [
+        "1 The core PINN recipe works",
+        "A single loss function combining PDE residual and boundary conditions is enough to learn a qualitatively correct wake flow with no labeled CFD data.",
+        "2 The two \"gotcha\" fixes are real, not theoretical",
+        "Both the pressure-anchor and loss-weighting ablations produced clear, measurable differences exactly matching the failure modes the methodology anticipated.",
+        "3 Convergence quality is training-budget limited",
+        "2,000 Adam-only iterations get the boundary conditions almost exactly right, but the interior PDE residual (and therefore fine flow structure like the stagnation point) needs more optimization."
+      ]
+    },
+    {
+      "n": 14,
+      "title": "LIMITATIONS & FUTURE WORK Where This Goes Next",
+      "body": [
+        "Finish the optimizer",
+        "Add the planned L-BFGS refinement pass after Adam to push the PDE residual (currently plateaued ~6×10⁻³) further down, and recover a sharper stagnation point and recirculation bubble.",
+        "Validate against real CFD",
+        "Compare against the Raissi et al. (2019) cylinder-wake dataset or a self-generated scikit-fem/FEniCS solution, and report relative L² error, RMSE/MAE, and R² per the full evaluation plan.",
+        "Run the stretch ablations",
+        "Labeled-data amount, collocation density, and network depth/width — scoped out of this pass to keep the three core ablations rigorous and well-documented.",
+        "Close the mass-conservation gap",
+        "A contour-integral check around the cylinder shows a real net-flux imbalance at this training budget — a direct, physically meaningful target for the extra optimization above."
+      ]
+    },
+    {
+      "n": 15,
+      "title": "APPENDIX Code & Key References",
+      "body": [
+        "CODE",
+        "Attached separately (pinn_cylinder_code.zip):",
+        "• pinn_cylinder.py — network, PDE residual, BC loss, pressure anchor, Adam loop",
+        "• run_experiments.py — trains full model + 3 ablations",
+        "• make_plots.py / make_architecture_diagram.py — all figures in this deck",
+        "Implemented in JAX rather than PyTorch: PyTorch's default Linux wheel bundles multi-GB CUDA dependencies that would not fit in this project's disk budget. JAX provides equivalent grad/hessian autodiff for the PDE residual on CPU.",
+        "KEY REFERENCES",
+        "Raissi, Perdikaris & Karniadakis (2019). Physics-informed neural networks. J. Comp. Physics, 378.",
+        "Wang, Teng & Perdikaris (2021). Understanding and mitigating gradient flow pathologies in PINNs. SIAM J. Sci. Comput., 43(5).",
+        "Cai, Mao, Wang, Yin & Karniadakis (2022). PINNs for fluid mechanics: A review. Acta Mechanica Sinica.",
+        "Jin, Cai, Li & Karniadakis (2021). NSFnets. J. Comp. Physics, 426."
+      ]
+    }
+  ]
+}

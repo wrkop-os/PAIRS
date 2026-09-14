@@ -1,0 +1,409 @@
+{
+  "source": "Full_Project_Presentation (1).pptx",
+  "title": "Context-Gated Stacked Ensemble for Soccer Match Prediction",
+  "slides": [
+    {
+      "n": 1,
+      "title": "Context-Gated Stacked Ensemble for Soccer Match Prediction",
+      "body": [
+        "Context-Gated Stacked Ensemble",
+        "for Soccer Match Prediction",
+        "Foundations, architecture, methodology safeguards & code",
+        "Rehan Hashem • Ensemble Learning • Sports Analytics"
+      ]
+    },
+    {
+      "n": 2,
+      "title": "AGENDA",
+      "body": [
+        "Four parts",
+        "01",
+        "Foundations",
+        "Why ensembles work, and the 3 ways to build one",
+        "02",
+        "Architecture",
+        "The actual model: what it predicts, eats, and outputs",
+        "03",
+        "Safeguards",
+        "Leakage rules, splits, tuning, evaluation",
+        "04",
+        "Code & status",
+        "The real code, and where the project stands today"
+      ]
+    },
+    {
+      "n": 3,
+      "title": "FOUNDATIONS",
+      "body": [
+        "Bias, variance, and why grouping models helps",
+        "Bagging",
+        "Reduces variance",
+        "Averages away noise from independent samples",
+        "Boosting",
+        "Reduces bias",
+        "Each new model corrects systematic errors",
+        "Stacking",
+        "Exploits diversity",
+        "Learns which model to trust, and when"
+      ]
+    },
+    {
+      "n": 4,
+      "title": "Foundations",
+      "body": [
+        "01",
+        "The three ways to organize a group of models"
+      ]
+    },
+    {
+      "n": 5,
+      "title": "FOUNDATIONS",
+      "body": [
+        "Three ways to combine models",
+        "01",
+        "Bagging",
+        "Many independent guessers, trained in parallel, averaged together.",
+        "Random Forest",
+        "02",
+        "Boosting",
+        "One guesser, correcting its own mistakes, again and again in sequence.",
+        "CatBoost",
+        "03",
+        "Stacking",
+        "A manager model learns how much to trust each guesser — and can manage other managers.",
+        "StackingClassifier (nested)"
+      ]
+    },
+    {
+      "n": 6,
+      "title": "FOUNDATIONS · DIAGRAM",
+      "body": [
+        "Bagging — parallel, independent, averaged",
+        "Training data",
+        "Sample 1",
+        "bootstrap draw",
+        "Sample 2",
+        "bootstrap draw",
+        "Sample 3",
+        "bootstrap draw",
+        "Tree 1",
+        "random feature subset",
+        "Tree 2",
+        "random feature subset",
+        "Tree 3",
+        "random feature subset",
+        "Majority vote / average",
+        "combines all trees into one answer"
+      ]
+    },
+    {
+      "n": 7,
+      "title": "FOUNDATIONS · DIAGRAM",
+      "body": [
+        "Boosting — sequential, corrective",
+        "One student, correcting itself round after round, instead of a crowd voting.",
+        "Model 1",
+        "first, simple guess",
+        "Errors",
+        "what model 1 got wrong",
+        "Model 2",
+        "focuses on those errors",
+        "Errors",
+        "what's still wrong",
+        "Model 3",
+        "focuses on remaining errors",
+        "Final prediction",
+        "weighted sum of all models"
+      ]
+    },
+    {
+      "n": 8,
+      "title": "FOUNDATIONS · DIAGRAM",
+      "body": [
+        "Stacking — a manager, learned, and nestable",
+        "Random Forest",
+        "bagging",
+        "Boosted Trees",
+        "boosting",
+        "Nested mini-stack",
+        "Model A",
+        "Model B",
+        "mini meta-learner",
+        "Meta-learner",
+        "weighs all 3 opinions",
+        "Final prediction"
+      ]
+    },
+    {
+      "n": 9,
+      "title": "Architecture",
+      "body": [
+        "02",
+        "What the model predicts, eats, and outputs"
+      ]
+    },
+    {
+      "n": 10,
+      "title": "ARCHITECTURE",
+      "body": [
+        "Prediction target, inputs, and output",
+        "What's being predicted",
+        "Multiclass classification: Home Win / Draw / Away Win",
+        "Predicted strictly before kickoff",
+        "Only information available at that point in time is used",
+        "Output: a probability triple (P(Home), P(Draw), P(Away)) that sums to 1",
+        "Predicted label = argmax of that triple, for accuracy/F1",
+        "What the models eat (inputs)",
+        "Rolling team-form (last 5 matches, prior-only)",
+        "Position-grouped starting-XI attributes",
+        "Rest-day differential",
+        "Betting-odds implied probabilities",
+        "Historical XML-derived aggregates (corners, fouls, possession)",
+        "League, formation, home/away categoricals"
+      ]
+    },
+    {
+      "n": 11,
+      "title": "ARCHITECTURE · DATASET",
+      "body": [
+        "Kaggle European Soccer Database",
+        "25,000+",
+        "matches, 2008–2016",
+        "11",
+        "European leagues",
+        "10,000+",
+        "players",
+        "7",
+        "linked SQLite tables",
+        "10 bookmakers",
+        "odds included",
+        "10,000+",
+        "matches with XML event data"
+      ]
+    },
+    {
+      "n": 12,
+      "title": "ARCHITECTURE · FEATURES",
+      "body": [
+        "Full input feature list",
+        "| Feature group | Details |",
+        "| Rolling team form | Last-5-match points, goals for/against, shots on target — prior matches only |",
+        "| Starting XI attributes | Position-grouped means: GK / DEF / MID / FWD, from FIFA-derived ratings |",
+        "| Rest days | Days since each team's previous match |",
+        "| Betting odds | Implied probabilities (overround-adjusted) — an input feature, not a baseline |",
+        "| Historical XML aggregates | Rolling avg. corners / fouls / possession from prior matches only |",
+        "| Match importance | Engineered proxy: 1 / (1 + min(gap_to_europe, gap_to_relegation)) |",
+        "| Categoricals | League, formation, home/away |"
+      ]
+    },
+    {
+      "n": 13,
+      "title": "ARCHITECTURE · MODELS",
+      "body": [
+        "The 5-model comparison set",
+        "| # | Model | Role |",
+        "| 1 | Context-Gated Stacked Ensemble | Main contribution |",
+        "| 2 | Standard Stacked Ensemble | Primary ablation — no context-gating |",
+        "| 3 | Random Forest | Bagging baseline |",
+        "| 4 | CatBoost | Boosting baseline |",
+        "| 5 | Logistic Regression | Non-tree baseline (also the meta-learner) |",
+        "| — | Market baseline (raw odds only) | Zero-parameter reference — “beat the market?” |"
+      ]
+    },
+    {
+      "n": 14,
+      "title": "ARCHITECTURE · DIAGRAM",
+      "body": [
+        "The Context-Gated Stacked Ensemble",
+        "Random Forest",
+        "bagging",
+        "CatBoost",
+        "boosting",
+        "Logistic Reg.",
+        "linear model",
+        "Context",
+        "odds + rest days",
+        "Gate: softmax",
+        "weight per model",
+        "Weighted combination",
+        "sum of wi times Pi",
+        "Final prediction",
+        "P(home / draw / away)",
+        "P_final(class) = w_RF · P_RF(class) + w_CatBoost · P_CatBoost(class) + w_LogReg · P_LogReg(class)"
+      ]
+    },
+    {
+      "n": 15,
+      "title": "ARCHITECTURE · THE MATH",
+      "body": [
+        "How the weights are normalized, and how the final number is computed",
+        "Softmax normalization",
+        "The gate outputs one raw score per base learner",
+        "Softmax converts those scores into weights that are all positive and sum to exactly 1",
+        "This is the “attention mechanism” — softmax is precisely how its weights are normalized",
+        "Weights change per match, based only on context (odds, rest days, stakes)",
+        "Final prediction",
+        "Weighted sum of the 3 base learners' probability vectors",
+        "Computed separately for each of the 3 classes",
+        "Still sums to 1, since weights and each base distribution do",
+        "Predicted label = argmax of the resulting probability triple"
+      ]
+    },
+    {
+      "n": 16,
+      "title": "ARCHITECTURE · COMPARISON",
+      "body": [
+        "The primary ablation: Standard Stacked Ensemble",
+        "Context-Gated Ensemble",
+        "Same 3 base learners",
+        "A gate reads match context and outputs softmax weights",
+        "Weights change per match",
+        "Tests whether context-aware combination beats a fixed rule",
+        "Standard Stacked Ensemble (ablation)",
+        "Same 3 base learners",
+        "A single fixed logistic-regression meta-learner",
+        "Trained directly on out-of-fold base predictions",
+        "No context branch — same weights for every match"
+      ]
+    },
+    {
+      "n": 17,
+      "title": "Safeguards",
+      "body": [
+        "03",
+        "Leakage rules, splits, tuning & evaluation"
+      ]
+    },
+    {
+      "n": 18,
+      "title": "SAFEGUARDS",
+      "body": [
+        "Feature engineering safeguards",
+        "Temporal leakage rule",
+        "Every feature for a match at time T uses only data strictly before T",
+        "Applies to rolling form, XML historical aggregates, and Team_Attributes lookups",
+        "Same-match XML stats (corners, fouls, possession) are never used — not known before kickoff",
+        "Two decisions finalized this round",
+        "Match importance: engineered from a running league table, not sourced externally",
+        "Formula: 1 / (1 + min(gap_to_europe, gap_to_relegation))",
+        "Weather: dropped — not in the dataset, not worth the added scope",
+        "Odds: input feature to all 5 models, with a separate untouched market baseline kept"
+      ]
+    },
+    {
+      "n": 19,
+      "title": "SAFEGUARDS · PROTOCOL",
+      "body": [
+        "Train / validation / test, and tuning",
+        "Train",
+        "Seasons 2008/09 – 2013/14 (6 seasons)",
+        "Model fitting",
+        "Validation",
+        "Season 2014/15",
+        "Optuna hyperparameter tuning only",
+        "Test",
+        "Season 2015/16",
+        "Touched exactly once, at the end",
+        "Out-of-fold (OOF) stacking: base-learner predictions used to train the gate/meta-learner come from 5-fold CV within the training set — never a model's prediction on rows it trained on — which is exactly what cv=5 does in the code."
+      ]
+    },
+    {
+      "n": 20,
+      "title": "SAFEGUARDS · EVALUATION",
+      "body": [
+        "Evaluation protocol",
+        "Metrics",
+        "Accuracy, macro & weighted F1, log-loss",
+        "ROC-AUC (one-vs-rest, per class)",
+        "Brier score + calibration / reliability diagram",
+        "Cohen's Kappa",
+        "Robustness",
+        "10 random seeds per model — report mean ± std",
+        "Paired t-test or Wilcoxon signed-rank vs. each baseline",
+        "Bootstrap confidence intervals on the test set",
+        "Market baseline scored once, as a fixed reference line"
+      ]
+    },
+    {
+      "n": 21,
+      "title": "SAFEGUARDS · SCOPE",
+      "body": [
+        "Ablation & explainability (scoped, not exhaustive)",
+        "Feature-group ablation only",
+        "Remove one feature group at a time from the full model",
+        "Rolling form / XI attributes / odds / XML history / context",
+        "Shows which information category actually drives the prediction",
+        "k-selection, meta-learner-swap, and per-base-learner ablations were dropped as separate research questions",
+        "Explainability, scoped",
+        "Random Forest: Gini importance vs. permutation importance, compared",
+        "SHAP computed only for the two stacked ensembles",
+        "Context-Gated vs. Standard Stack SHAP summaries compared directly",
+        "Not every model is explained — scoped to what the core claim needs"
+      ]
+    },
+    {
+      "n": 22,
+      "title": "Code & Status",
+      "body": [
+        "04",
+        "The real code, and where things stand"
+      ]
+    },
+    {
+      "n": 23,
+      "title": "CODE",
+      "body": [
+        "The nested StackingClassifier",
+        "from sklearn.ensemble import StackingClassifier, RandomForestClassifier",
+        "from sklearn.linear_model import LogisticRegression",
+        "from sklearn.neighbors import KNeighborsClassifier",
+        "mini_stack = StackingClassifier(",
+        "estimators=[(\"rf2\", RandomForestClassifier(random_state=1)),",
+        "(\"cb2\", CatBoostClassifier(iterations=200,",
+        "cat_features=cat_features, verbose=False))],",
+        "final_estimator=LogisticRegression()",
+        ")",
+        "big_stack = StackingClassifier(",
+        "estimators=[",
+        "(\"rf\", RandomForestClassifier(n_estimators=200, random_state=42)),",
+        "(\"knn\", KNeighborsClassifier(n_neighbors=15)),",
+        "(\"nested\", mini_stack), # <- a whole stack, used as one base learner",
+        "],",
+        "final_estimator=LogisticRegression(),",
+        "cv=5 # out-of-fold, prevents leakage",
+        ")",
+        "big_stack.fit(X_train, y_train)",
+        "print(big_stack.score(X_test, y_test))"
+      ]
+    },
+    {
+      "n": 24,
+      "title": "CODE · ROADMAP",
+      "body": [
+        "Build order & current status",
+        "1",
+        "Decision Tree → baseline understanding, no ensembling yet",
+        "2",
+        "Random Forest (bagging) → log accuracy, F1, feature importance",
+        "3",
+        "CatBoost (boosting) → compare against Random Forest",
+        "4",
+        "Standard Stacked Ensemble → out-of-fold, logistic-regression meta-learner",
+        "5",
+        "Context-Gated Ensemble (novel contribution) → ablate against the flat stack",
+        "Current status: 0% of runs executed. Methodology is fully locked — prediction target, features, architecture, splits, tuning, and evaluation protocol are all finalized and reviewed."
+      ]
+    },
+    {
+      "n": 25,
+      "title": "",
+      "body": [
+        "Bagging averages independent guesses to cancel noise.",
+        "Boosting chains corrections to fix bias.",
+        "Stacking trains a model to learn how to combine other models —",
+        "and this project's gate lets that combination change with context,",
+        "normalized by softmax, match by match."
+      ]
+    }
+  ]
+}
