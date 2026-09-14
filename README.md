@@ -44,17 +44,18 @@ against `js/dc-runtime.js`, `js/image-slot.js` and `css/site.css` instead.
 
 ## Slide images
 
-Ten of the twelve projects show their deck's real slides, rendered from the
-source files to `uploads/slides/P-XX/NN.webp`. `tools/build-content.py` picks
-those up automatically and the viewer switches from text slides to image
+All twelve projects show their deck's real slides — 222 images, rendered from
+the source files to `uploads/slides/P-XX/NN.webp`. `tools/build-content.py`
+picks those up automatically and the viewer switches from text slides to image
 slides; a project with no images falls back to rendering its deck's text.
 
-**P-04 and P-10 are the two without images.** Both are ~10.2 MB, and the Drive
-connector drops its session partway through a download that size rather than
-refusing cleanly — `get_file_metadata` on the same file answers instantly, so
-it is the payload, not access. Either route below fills them in.
+Two of the decks (P-04, P-10) are ~10.2 MB, and the Drive connector drops its
+session partway through a download that size rather than refusing cleanly —
+`get_file_metadata` on the same file answers instantly, so it is the payload,
+not access. Those two were supplied directly instead. Either route below
+re-renders any deck.
 
-### Rendering from the Drive connector (how the other ten were done)
+### Rendering from the Drive connector (how ten of them were done)
 
 An agent session with the Google Drive connector can pull decks under roughly
 10 MB directly. Oversized tool results are spilled to a JSON file rather than
@@ -86,9 +87,11 @@ how the text was extracted.
 - `uploads/Shahzeb Wali.jpg` and `uploads/Brandon Sweet.jpeg` are missing, so
   those two mentor cards show a placeholder frame. Drop the files in at those
   exact paths and they appear — no code change needed.
-- `uploads/pairs-logo-horizontal.svg` and `uploads/pairs-logo-stacked.svg` are
-  stand-ins drawn to match the palette. Replace them with the real logo files at
-  the same paths.
+- `uploads/pairs-logo-horizontal.svg` and `uploads/pairs-logo-stacked.svg` both
+  carry the real program seal. If the horizontal and stacked lockups (the seal
+  set beside or above the wordmark) are wanted instead, replace those two files
+  at the same paths — the header sizes the mark by height alone, so either
+  shape fits.
 
 ## Deploying
 
