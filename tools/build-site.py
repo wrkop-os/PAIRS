@@ -131,12 +131,13 @@ NEW_LIGHTBOX = '''  <sc-if value="{{ hasLightbox }}">
       <p class="mono" style="font-size:11px;letter-spacing:.14em;color:#f2f2f3;margin:0;max-width:72%">{{ lightbox.title }}</p>
       <button onClick="{{ closeLightboxHandler }}" class="mono" style="border:1px solid rgba(242,242,243,.4);background:transparent;color:#f2f2f3;font-size:11px;letter-spacing:.1em;padding:8px 14px;cursor:pointer">CLOSE ✕</button>
     </div>
-    <div data-r="lbstage" style="position:relative;width:100%;max-width:1100px;aspect-ratio:16/9;background:#1d2d3d" onClick="{{ stop }}">
+    <div data-r="lbstage" style="position:relative;width:100%;max-width:1100px;aspect-ratio:16/9;background:#f2f2f3" onClick="{{ stop }}">
       <sc-if value="{{ lightbox.hasImage }}">
       <image-slot id="lightbox-slide" shape="rect" fit="contain" placeholder="Slide" src="{{ lightbox.currentImage }}"></image-slot>
       </sc-if>
       <sc-if value="{{ lightbox.hasText }}">
       <article class="slide {{ lightbox.slideClass }}">
+        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
         <p class="mono slide-n">{{ lightbox.slideKicker }}</p>
         <h3 class="slide-title">{{ lightbox.slideTitle }}</h3>
         <ul class="slide-body">
@@ -144,6 +145,7 @@ NEW_LIGHTBOX = '''  <sc-if value="{{ hasLightbox }}">
             <li>{{ line }}</li>
           </sc-for>
         </ul>
+        <p class="mono slide-foot">{{ lightbox.slideFoot }}</p>
       </article>
       </sc-if>
       <button class="lb-nav lb-prev" onClick="{{ lightboxPrevHandler }}" aria-label="Previous slide">‹</button>
@@ -279,7 +281,7 @@ function projectLinks(project) {
 EPILOGUE = '''
 // ---------------------------------------------------------------- viewer ---
 Component.prototype.lightboxVals = function () {
-  const empty = { title: "", hasText: false, hasImage: false, slideKicker: "", slideTitle: "", slideBody: [], slideClass: "", currentImage: "", position: 1, total: 1 };
+  const empty = { title: "", hasText: false, hasImage: false, slideKicker: "", slideTitle: "", slideBody: [], slideClass: "", slideFoot: "", currentImage: "", position: 1, total: 1 };
   if (!this.state.lightbox) return empty;
   const { projectId, title, index } = this.state.lightbox;
   const slides = deckSlides(projectId);
@@ -291,10 +293,11 @@ Component.prototype.lightboxVals = function () {
     hasImage: !!slide.image,
     hasText: !slide.image,
     currentImage: slide.image || "",
-    slideKicker: projectId,
+    slideKicker: projectId + " · " + (DECKS[projectId] ? DECKS[projectId].slides.length : 0) + " SLIDES",
     slideTitle: slide.title || title,
     slideBody: body,
     slideClass: body.length ? "" : "slide-cover",
+    slideFoot: String(index + 1).padStart(2, "0") + " / " + String(slides.length).padStart(2, "0"),
     position: index + 1,
     total: slides.length
   };

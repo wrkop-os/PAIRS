@@ -67,32 +67,49 @@ body.is-locked { overflow: hidden; }
 
 .lb-nav {
   position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px;
-  border: 1px solid rgba(242, 242, 243, .4); background: rgba(29, 31, 32, .55);
-  color: #f2f2f3; cursor: pointer; font-size: 20px; line-height: 1; z-index: 3;
+  border: 1px solid var(--border); background: var(--bg);
+  color: var(--text-soft); cursor: pointer; font-size: 20px; line-height: 1; z-index: 3;
 }
-.lb-nav:hover { background: rgba(29, 31, 32, .8); border-color: rgba(242, 242, 243, .8); }
-.lb-prev { left: 10px; }
-.lb-next { right: 10px; }
+.lb-nav:hover { border-color: var(--accent); color: var(--text); }
+.lb-prev { left: -22px; }
+.lb-next { right: -22px; }
+@media (max-width: 1200px) { .lb-prev { left: 10px; } .lb-next { right: 10px; } }
 
-/* A deck slide rendered from the presentation's own text ----------------- */
+/* A deck slide, rendered from the presentation's own text -----------------
+   Styled as a sheet in the site's own paper/blueprint language rather than a
+   dark panel, so the viewer reads as part of the site and the slide text sits
+   on the same ground as the rest of the page. */
 .slide {
   position: absolute; inset: 0; display: flex; flex-direction: column;
-  padding: 44px 54px; overflow: auto; color: #f2f2f3; text-align: left;
+  padding: 52px 60px 62px; overflow: auto; text-align: left;
+  background: var(--bg); color: var(--text);
 }
-.slide-n { font-size: 10px; letter-spacing: .2em; color: #94bce3; margin: 0 0 18px; }
-.slide-title { font-size: 34px; line-height: 1.1; margin: 0 0 22px; color: #f2f2f3; }
-.slide-body { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.slide-n {
+  font-size: 10px; letter-spacing: .2em; color: var(--accent-dark); margin: 0 0 20px;
+  padding-bottom: 12px; border-bottom: 1px solid var(--border);
+}
+.slide-title {
+  font-family: "Barlow Condensed", sans-serif; font-weight: 600;
+  font-size: 38px; line-height: 1.06; margin: 0 0 24px; color: var(--text);
+}
+.slide-body { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 13px; }
 .slide-body li {
-  font-size: 16.5px; line-height: 1.5; color: rgba(242, 242, 243, .84);
-  padding-left: 18px; position: relative;
+  font-size: 16.5px; line-height: 1.5; color: var(--text-muted);
+  padding-left: 20px; position: relative;
 }
 .slide-body li::before {
-  content: ""; position: absolute; left: 0; top: .62em; width: 7px; height: 1px; background: #94bce3;
+  content: ""; position: absolute; left: 0; top: .66em; width: 9px; height: 1px;
+  background: var(--accent);
+}
+.slide-foot {
+  position: absolute; right: 60px; bottom: 40px; margin: 0;
+  font-size: 10px; letter-spacing: .18em; color: var(--text-faint);
 }
 /* A slide whose only content is its title (a section divider, or a slide
    carrying just a diagram) reads better centred than top-aligned. */
 .slide-cover { justify-content: center; }
-.slide-cover .slide-title { font-size: 40px; max-width: 20ch; }
+.slide-cover .slide-title { font-size: 46px; max-width: 20ch; }
+.slide-cover .slide-n { border-bottom: 0; padding-bottom: 0; }
 
 /* Methodology reader ---------------------------------------------------- */
 .doc-panel {

@@ -432,7 +432,7 @@ class Component extends DCLogic {
 }
 // ---------------------------------------------------------------- viewer ---
 Component.prototype.lightboxVals = function () {
-  const empty = { title: "", hasText: false, hasImage: false, slideKicker: "", slideTitle: "", slideBody: [], slideClass: "", currentImage: "", position: 1, total: 1 };
+  const empty = { title: "", hasText: false, hasImage: false, slideKicker: "", slideTitle: "", slideBody: [], slideClass: "", slideFoot: "", currentImage: "", position: 1, total: 1 };
   if (!this.state.lightbox) return empty;
   const { projectId, title, index } = this.state.lightbox;
   const slides = deckSlides(projectId);
@@ -444,10 +444,11 @@ Component.prototype.lightboxVals = function () {
     hasImage: !!slide.image,
     hasText: !slide.image,
     currentImage: slide.image || "",
-    slideKicker: projectId,
+    slideKicker: projectId + " · " + (DECKS[projectId] ? DECKS[projectId].slides.length : 0) + " SLIDES",
     slideTitle: slide.title || title,
     slideBody: body,
     slideClass: body.length ? "" : "slide-cover",
+    slideFoot: String(index + 1).padStart(2, "0") + " / " + String(slides.length).padStart(2, "0"),
     position: index + 1,
     total: slides.length
   };

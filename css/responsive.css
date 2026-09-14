@@ -78,7 +78,8 @@
   [data-r="lbwrap"] { padding: 12px !important; justify-content: flex-start !important; background: #1d1f20 !important; }
   [data-r="lbhead"] { margin-top: 10px !important; }
   [data-r="lbstage"] { aspect-ratio: auto !important; flex: 1 1 auto !important; min-height: 0 !important; }
-  .slide { padding: 26px 22px 72px !important; }
+  .slide { padding: 26px 22px 76px !important; }
+  .slide-foot { right: 22px !important; bottom: 56px !important; }
   .slide-title { font-size: 23px !important; }
   .slide-body li { font-size: 14.5px !important; }
   .lb-nav { top: auto !important; bottom: 12px !important; transform: none !important; width: 52px !important; height: 44px !important; }
