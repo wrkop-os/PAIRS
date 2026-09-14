@@ -78,6 +78,11 @@
   [data-r="lbwrap"] { padding: 12px !important; justify-content: flex-start !important; background: #1d1f20 !important; }
   [data-r="lbhead"] { margin-top: 10px !important; }
   [data-r="lbstage"] { aspect-ratio: auto !important; flex: 1 1 auto !important; min-height: 0 !important; }
+  /* An image slide letterboxes inside that stage, and on a phone the stage is
+     as tall as the viewport allows — a paper-white one then reads as a huge
+     blank sheet around a small slide. Drop the sheet for image slides and let
+     them sit on the dark overlay; the text slides still want the paper. */
+  [data-r="lbstage"]:has(image-slot) { background: transparent !important; }
   .slide { padding: 26px 22px 76px !important; }
   .slide-foot { right: 22px !important; bottom: 56px !important; }
   .slide-title { font-size: 23px !important; }

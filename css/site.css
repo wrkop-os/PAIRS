@@ -48,6 +48,14 @@ a:hover { color: var(--accent); }
 .mcard:hover { border-color: var(--accent); background: rgba(89, 128, 166, .05); }
 .award-icon-slot image-slot::part(frame) { background: transparent; }
 
+/* Photo framing. A card frame is landscape and a portrait photo is cropped
+   top and bottom to fill it; centred, that cuts the two subjects below off at
+   the face. Keyed on the file rather than the card's generated id so it
+   survives a rebuild. The percentage is where in the photo the crop window
+   sits, so a smaller number shows more of the top — the face moves down. */
+image-slot[src$="Sumit Deb.png"]::part(image) { object-position: 50% 12%; }
+image-slot[src$="Tirtha Saha.png"]::part(image) { object-position: 50% 22%; }
+
 /* Blueprint frame + registration marks ---------------------------------- */
 .blueprint { position: relative; border: 1px solid var(--border); background: transparent; border-radius: 0; }
 .corner { position: absolute; width: 9px; height: 9px; color: var(--accent); opacity: .62; pointer-events: none; z-index: 2; }
