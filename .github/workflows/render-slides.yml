@@ -8,6 +8,13 @@ name: Render deck slides
 #   https://drive.google.com/drive/folders/1L_wC6d70zFuG8VAIq9j6E1BeBQ4GFfWY
 
 on:
+  # A push trigger scoped to the renderer itself: it creates a run that can be
+  # re-run on demand (re-running works from any branch, while workflow_dispatch
+  # requires the file to sit on the default branch).
+  push:
+    paths:
+      - 'tools/render_slides.py'
+      - '.github/workflows/render-slides.yml'
   workflow_dispatch:
     inputs:
       projects:

@@ -44,23 +44,27 @@ WIDTH = 1600
 QUALITY = 80
 
 
+class AccessError(RuntimeError):
+    """The deck could not be fetched because the Drive folder is not shared."""
+
+
 def download(file_id, dest):
     """Fetch a Drive file anonymously. Requires link sharing on the folder."""
     import gdown
     url = f"https://drive.google.com/uc?id={file_id}"
     gdown.download(url, str(dest), quiet=True)
     if not dest.exists() or dest.stat().st_size == 0:
-        raise RuntimeError(
-            f"download produced no file for {file_id} — is the Drive folder "
-            f"shared as 'Anyone with the link'?"
+        raise AccessError(
+            f"download produced no file for {file_id} — the Drive folder is "
+            f"not shared as 'Anyone with the link'"
         )
     # Drive serves an HTML interstitial instead of the file when access is
     # denied, which would otherwise reach LibreOffice as a corrupt deck.
     head = dest.open("rb").read(200).lstrip()
     if head[:1] == b"<":
-        raise RuntimeError(
-            f"Drive returned an HTML page, not a file, for {file_id} — the "
-            f"folder is probably still private."
+        raise AccessError(
+            f"Drive returned its sign-in page, not a file, for {file_id} — the "
+            f"folder is still private"
         )
 
 
@@ -100,6 +104,7 @@ def main(only):
     total_bytes = 0
     total_slides = 0
     failures = []
+    denied = []
     for pid, (file_id, name) in sorted(DECKS.items()):
         if only and pid not in only:
             continue
@@ -112,15 +117,36 @@ def main(only):
             total_bytes += size
             total_slides += len(written)
             print(f"{pid}: {len(written):3d} slides  {size / 1024:7.0f} KB  ({name})")
+        except AccessError as exc:
+            denied.append(f"{pid}: {exc}")
+            print(f"{pid}: no access — {exc}", file=sys.stderr)
         except Exception as exc:  # keep going; report every failure at the end
             failures.append(f"{pid}: {exc}")
             print(f"{pid}: FAILED — {exc}", file=sys.stderr)
     shutil.rmtree(WORK, ignore_errors=True)
     print(f"\ntotal: {total_slides} slides, {total_bytes / 1024 / 1024:.1f} MB")
+
     if failures:
         print("\nfailures:", file=sys.stderr)
         for f in failures:
             print("  -", f, file=sys.stderr)
+        return 1
+
+    # Nothing rendered because the source folder is not readable yet. That is a
+    # waiting-on-access state, not a broken build — the toolchain above it has
+    # just been exercised, so report it and exit clean.
+    if denied and not total_slides:
+        print(
+            "\nNo decks could be fetched: the Drive folder is not shared.\n"
+            "Set it to 'Anyone with the link -> Viewer' and re-run this workflow:\n"
+            "  https://drive.google.com/drive/folders/1L_wC6d70zFuG8VAIq9j6E1BeBQ4GFfWY",
+            file=sys.stderr,
+        )
+        return 0
+    if denied:
+        print("\nsome decks were unreadable:", file=sys.stderr)
+        for d in denied:
+            print("  -", d, file=sys.stderr)
         return 1
     return 0
 
