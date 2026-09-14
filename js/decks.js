@@ -384,220 +384,93 @@ window.PAIRS_DECKS = {
   "slides": [
    {
     "n": 1,
+    "image": "uploads/slides/P-04/01.webp",
     "title": "Physics-Informed Machine Learning for Multi-Chemistry Battery Voltage Prediction",
-    "body": [
-     "PAIRS Summer Research Progress Presentation · Methodology, Research Design & Expected Next Steps"
-    ]
+    "body": []
    },
    {
     "n": 2,
+    "image": "uploads/slides/P-04/02.webp",
     "title": "Research Motivation",
-    "body": [
-     "EV Performance & Safety",
-     "Accurate battery voltage prediction is vital for electric vehicle performance, safety, and extending battery life.",
-     "Multi-Chemistry Challenges",
-     "Current models struggle with the complexities of diverse battery chemistries (LFP, NCA, NMC, etc.).",
-     "Physics-Informed ML",
-     "Physics-informed Machine Learning can bridge empirical data with electrochemical principles for better models.",
-     "Generalizable Framework",
-     "Our goal is to develop a flexible prediction framework that works across various battery chemistries."
-    ]
+    "body": []
    },
    {
     "n": 3,
+    "image": "uploads/slides/P-04/03.webp",
     "title": "The Problem – Why This Matters",
-    "body": [
-     "Critical State Variable",
-     "Accurate battery voltage is essential for precise State-of-Charge (SOC) and State-of-Health (SOH) estimations.",
-     "Safety & Performance Risks",
-     "Misestimation leads to significant safety hazards, unreliable range prediction, and premature battery aging.",
-     "Limited Scalability",
-     "Existing models are often chemistry-specific, limiting their applicability and generalizability across diverse battery types.",
-     "Demand for Generalization",
-     "There's a critical need for models that can generalize across chemistries and offer greater interpretability."
-    ]
+    "body": []
    },
    {
     "n": 4,
+    "image": "uploads/slides/P-04/04.webp",
     "title": "Literature Gap – What's Missing",
-    "body": [
-     "Single-Chemistry Focus",
-     "Most battery ML research focuses exclusively on single-chemistry systems, limiting broader applicability (Yao et al., 2021; Ng et al., 2022).",
-     "PINNs Underexplored",
-     "While physics-informed neural networks (PINNs) are emerging, their application to multi-chemistry battery prediction remains largely unexplored.",
-     "Limited Transfer Learning",
-     "There is minimal work on effectively applying transfer learning methodologies across diverse battery chemistries.",
-     "Key Opportunity",
-     "A significant opportunity exists to combine physics constraints with machine learning to enhance generalization and reduce data requirements."
-    ]
+    "body": []
    },
    {
     "n": 5,
+    "image": "uploads/slides/P-04/05.webp",
     "title": "Research Question",
-    "body": [
-     "Can physics-informed machine learning models predict battery voltage across multiple chemistries with improved generalization and interpretability?",
-     "Sub-questions:",
-     "How do physics constraints improve model performance on synthetic and real data?",
-     "What features and architectures best capture multi-chemistry behavior?",
-     "How well do models transfer across chemistries with limited target-chemistry data?"
-    ]
+    "body": []
    },
    {
     "n": 6,
+    "image": "uploads/slides/P-04/06.webp",
     "title": "Physics Foundation – Electrochemistry Basics",
-    "body": [
-     "1 Nernst Equation & Kinetics",
-     "Battery voltage is fundamentally governed by the Nernst equation and electrochemical kinetics.",
-     "2 Key Influencing Factors",
-     "Important parameters include Open-Circuit Voltage (OCV), overpotential, internal resistance, temperature, and State-of-Charge (SOC).",
-     "3 Physics-Informed Integration",
-     "Physics-informed ML embeds these electrochemical relationships directly into the model as constraints or loss terms.",
-     "4 Enhanced Generalization",
-     "This approach allows models to learn from both data and physical laws, significantly improving generalization across different battery chemistries."
-    ]
+    "body": []
    },
    {
     "n": 7,
+    "image": "uploads/slides/P-04/07.webp",
     "title": "Methodology Overview",
-    "body": [
-     "Stage 1: Baseline ML Models",
-     "Random Forest, Gradient Boosting, Neural Networks",
-     "Applied to synthetic and real battery data for initial performance benchmarks.",
-     "Stage 2: Physics-Informed Variants",
-     "Embed electrochemical constraints directly into model loss functions.",
-     "Focus on improving generalization and interpretability.",
-     "Evaluation & Analysis",
-     "Performance Metrics: Evaluate models using Root Mean Squared Error (RMSE), Mean Absolute Error (MAE), and R² on held-out test sets.",
-     "Ablation Study: Compare physics-informed models against baseline versions to isolate the specific contribution of physics constraints.",
-     "Transfer Learning: Assess model generalization capabilities across different battery chemistries, especially with limited target-chemistry data."
-    ]
+    "body": []
    },
    {
     "n": 8,
+    "image": "uploads/slides/P-04/08.webp",
     "title": "Dataset Strategy",
-    "body": [
-     "Primary Data Source",
-     "Synthetic data from electrochemical simulations (PyBaMM) for controlled experimentation and initial model training.",
-     "Secondary Data Source",
-     "Real-world battery-aging data from reputable sources like NASA and the Materials Project for robust model validation.",
-     "Battery Chemistries",
-     "Focus on Lithium Iron Phosphate (LFP), Nickel Cobalt Aluminum (NCA), and Nickel Manganese Cobalt (NMC) to cover diverse applications.",
-     "Feature Set",
-     "Includes current, voltage, temperature, State-of-Charge (SOC), cycle count, and a unique chemistry identifier for each cell.",
-     "Data Split",
-     "An 80/20 train/test split, stratified by both battery chemistry and specific cycle regime to ensure balanced representation."
-    ]
+    "body": []
    },
    {
     "n": 9,
+    "image": "uploads/slides/P-04/09.webp",
     "title": "Feature Engineering",
-    "body": [
-     "Electrochemical Features",
-     "Fundamental properties like Open-Circuit Voltage (OCV), overpotential, and internal resistance, derived from electrochemical models.",
-     "Temporal Features",
-     "Time-dependent data including cycle count and aggregated statistics like rolling means and standard deviations of current and voltage.",
-     "Chemistry-Aware Features",
-     "Categorical encoding for specific battery chemistries (LFP, NCA, NMC) and chemistry-specific data scaling for unique properties.",
-     "Normalization",
-     "Applying StandardScaler to all features ensures a consistent scale, preventing dominance of features with larger magnitudes during model training.",
-     "Feature Importance Analysis",
-     "Post-modeling analysis to identify which engineered features contribute most significantly to voltage predictions across different battery types."
-    ]
+    "body": []
    },
    {
     "n": 10,
+    "image": "uploads/slides/P-04/10.webp",
     "title": "Model Architectures",
-    "body": [
-     "Baseline Models",
-     "Random Forest: Captures non-linear relationships, provides feature importance.",
-     "Gradient Boosting (XGBoost): Sequential learning, strong empirical performance.",
-     "Neural Network: Dense layers with ReLU activation, dropout for regularization.",
-     "Physics-Informed Variants",
-     "Integrate electrochemical loss terms (e.g., Nernst constraint penalty) directly into baseline model loss functions.",
-     "Hyperparameter Tuning",
-     "Utilize grid search with cross-validation on the training set to systematically optimize model performance."
-    ]
+    "body": []
    },
    {
     "n": 11,
+    "image": "uploads/slides/P-04/11.webp",
     "title": "Preventing Circular Logic – A Critical Methodological Control",
-    "body": [
-     "A significant risk in physics-informed machine learning is circular logic: if the physics constraints are derived from the same data used for model training, the model may overfit to synthetic patterns rather than learning generalizable physics. This would undermine the core benefit of PINNs.",
-     "Control 1: Data Separation",
-     "Ensure synthetic data generation is independent from model training data by using different random seeds and parameter ranges. This prevents the model from simply 'memorizing' the synthetic data's underlying physics.",
-     "Control 2: Real-World Validation",
-     "Routinely validate models on entirely distinct real battery data (e.g., from NASA, Materials Project). This verifies that the embedded physics constraints transfer effectively to practical, real-world scenarios.",
-     "Control 3: Ablation Study",
-     "Conduct an ablation study comparing physics-informed models against baseline versions on real data. If physics constraints genuinely improve performance on unseen real data, it confirms their generalizability, not just their fit to synthetic data.",
-     "Importance: Ensuring Generalization",
-     "Implementing these controls is essential for claiming that physics constraints improve generalization across chemistries and experimental conditions, rather than merely fitting the specific characteristics of the synthetic training data."
-    ]
+    "body": []
    },
    {
     "n": 12,
+    "image": "uploads/slides/P-04/12.webp",
     "title": "Evaluation Metrics & Validation Strategy",
-    "body": [
-     "Primary Metrics",
-     "Model performance will be rigorously assessed using Root Mean Squared Error (RMSE), Mean Absolute Error (MAE), and R² on unseen, held-out test sets to ensure accuracy.",
-     "Cross-Validation",
-     "A 5-fold stratified cross-validation strategy will be applied to the training data to ensure model stability and robustness across different data partitions and prevent overfitting.",
-     "Baseline Comparison",
-     "Physics-informed models will be directly compared against standard machine learning models to quantify the improvements brought by embedding physical constraints in predictive accuracy and generalization.",
-     "Chemistry-Specific Evaluation",
-     "Performance metrics will be analyzed separately for Lithium Iron Phosphate (LFP), Nickel Cobalt Aluminum (NCA), and Nickel Manganese Cobalt (NMC) chemistries to evaluate generalization capabilities across diverse battery types.",
-     "Transfer Learning Assessment",
-     "The ability of models to generalize to novel conditions will be evaluated by training on one battery chemistry (source) and testing on another (target) with limited data, highlighting transfer learning efficacy."
-    ]
+    "body": []
    },
    {
     "n": 13,
+    "image": "uploads/slides/P-04/13.webp",
     "title": "Expected Results – Projected Performance",
-    "body": [
-     "These are projected benchmarks based on literature and preliminary synthetic-data experiments. Actual results will be reported after model training and validation.",
-     "Baseline ML (Synthetic Data)",
-     "RMSE ~0.05–0.10 V",
-     "R² ~0.85–0.92",
-     "Physics-Informed (Synthetic Data)",
-     "Expected improvement:",
-     "RMSE ~0.03–0.07 V",
-     "R² ~0.90–0.95",
-     "Real-Data Validation",
-     "Performance drop expected (~10–20%) due to domain shift; physics constraints should mitigate this degradation.",
-     "Transfer Learning",
-     "Expect 15–25% performance degradation when transferring to new chemistry with limited data, which physics constraints aim to reduce."
-    ]
+    "body": []
    },
    {
     "n": 14,
+    "image": "uploads/slides/P-04/14.webp",
     "title": "Limitations & Challenges",
-    "body": [
-     "Synthetic-Data Limitations",
-     "PyBaMM simulations may not capture all real-world degradation mechanisms and nuances present in actual battery behavior.",
-     "Domain Shift",
-     "Real battery data often exhibits significant differences from synthetic data in terms of noise, aging patterns, and operating conditions, requiring robust adaptation.",
-     "Limited Real-World Data",
-     "The availability of comprehensive public battery-aging datasets is constrained, which can hinder extensive validation and model training on diverse scenarios.",
-     "Computational Cost",
-     "Training physics-informed models, especially those with complex loss functions, can be computationally expensive and time-consuming.",
-     "Generalization Uncertainty",
-     "Success on a limited set of chemistries (e.g., LFP, NCA, NMC) doesn't inherently guarantee performance on novel or unexplored battery chemistries."
-    ]
+    "body": []
    },
    {
     "n": 15,
+    "image": "uploads/slides/P-04/15.webp",
     "title": "Research Contribution & Significance",
-    "body": [
-     "Novel Approach",
-     "First systematic study of physics-informed ML for multi-chemistry battery voltage prediction, filling a critical gap in current research.",
-     "Methodological Rigor",
-     "Incorporates explicit controls for circular logic and robust domain-shift validation, ensuring generalizable and reliable scientific findings.",
-     "Practical Impact",
-     "Developed framework is directly applicable to optimizing battery management systems in electric vehicles and grid-scale energy storage solutions.",
-     "Broader Implications",
-     "Demonstrates a powerful paradigm for improving ML generalization through physics constraints, extending to diverse materials science applications.",
-     "Open Science",
-     "Commitment to transparency: all code and synthetic datasets will be publicly available to promote reproducibility and collaborative research."
-    ]
+    "body": []
    }
   ]
  },
@@ -1207,216 +1080,105 @@ window.PAIRS_DECKS = {
   "slides": [
    {
     "n": 1,
+    "image": "uploads/slides/P-10/01.webp",
     "title": "PICASO",
-    "body": [
-     "Physics-Informed Cross-Attention Solar Optimizer",
-     "Machine Learning Project By:",
-     "Tirtha Saha & Alexander Soll"
-    ]
+    "body": []
    },
    {
     "n": 2,
+    "image": "uploads/slides/P-10/02.webp",
     "title": "Introduction & Significance",
-    "body": [
-     "Solar flares are large outbursts on the sun that send bursts of energy, light, and fast-moving particles into space.",
-     "Solar flares are grouped by power:",
-     "A, B, and C: These are small flares, and are barely noticeable on Earth",
-     "M-Class: Medium flares that can cause brief radio blackouts near Earth’s poles",
-     "X-Class: The strongest explosions in the solar system, and can cause planet-wide radio blackouts and radiation storms",
-     "Active Region: A temporary area with an intense twisted magnetic field up to 1,000x stronger than the normal background",
-     "Magnetograms: Shows the magnetic field of the sun",
-     "Active Region Number"
-    ]
+    "body": []
    },
    {
     "n": 3,
+    "image": "uploads/slides/P-10/03.webp",
     "title": "Introduction & Significance Con’t",
-    "body": [
-     "Forecasting and predicting the large flares (i.e., M and X) are important so that we can ensure safety and protect technology",
-     "Solar flares disrupt Earth’s communication, navigation, and power system",
-     "Due to intense bursts of electromagnetic radiation",
-     "Endangers astronauts from radiation",
-     "Traditional methods struggle with rapid and complex magnetic dynamics, and existing AI/ML models lack multi-modal fusion and physical explainability"
-    ]
+    "body": []
    },
    {
     "n": 4,
+    "image": "uploads/slides/P-10/04.webp",
     "title": "An AI can achieve high accuracy scores by simply guessing ‘quiet’",
-    "body": [
-     "This graph shows that while traditional AI (LSTM) accurately predicts normal, middle-of-the-road solar conditions, it fails completely during extreme situations due to data limitations. At the extremes, the model produces highly scattered errors and mathematically impossible values because it lacks an inherent understanding of physical laws."
-    ]
+    "body": []
    },
    {
     "n": 5,
+    "image": "uploads/slides/P-10/05.webp",
     "title": "Model Description",
-    "body": [
-     "We created a CNN to predict M and X Class Solar Flares using Knowledge-Informed Learning",
-     "Using AI Explainability techniques, we are also attempting to solve the “Black Box” problem in order to see why the model is specifically making its decisions",
-     "Training data consists of magnetograms, and physical qualities that correlate with solar flare activity",
-     "Collected via SunPy and drms, which library that can be used to access solar physics data",
-     "Attention Map",
-     "Grad-cam",
-     "Magnetogram of X-Class Solar Flare",
-     "White contour lines: Polarity Inversion Line, where magnetic field changes from positive to negative"
-    ]
+    "body": []
    },
    {
     "n": 6,
+    "image": "uploads/slides/P-10/06.webp",
     "title": "Tabular Data",
-    "body": [
-     "Our tabular data was fetched from the SHARP* database, a solar physics dataset published by NASA derived from their Helioseismic and Magnetic Imager instrument (HMI) aboard the Solar Dynamics Observatory (SDO).",
-     "*SHARP — Space-weather HMI Active Region Patch",
-     "Unit Key",
-     "Mx | Short for “Maxwells” – a unit of magnetic flux",
-     "erg | 1 erg = 10-7 Joules (Energy)",
-     "arcsec² | Area on the surface of the sun (1 arcsec = 1/3600 of a degree)",
-     "G | Stands for “Gauss” – A unit of magnetic field strength",
-     "m | Meters"
-    ]
+    "body": []
    },
    {
     "n": 7,
+    "image": "uploads/slides/P-10/07.webp",
     "title": "Tabular Data",
-    "body": [
-     "R_VALUE | Complexity along the polarity inversion line (the “danger zone” for flares) | Mx",
-     "TOTPOT | Total magnetic energy stored in the region | erg",
-     "MEANPOT | How concentrated energy is (energy per area) | erg/cm3",
-     "USFLUX | Magnetic Strength of a region | Mx",
-     "MEANSHR | Average shear of flare-prone fields | Radians"
-    ]
+    "body": []
    },
    {
     "n": 8,
+    "image": "uploads/slides/P-10/08.webp",
     "title": "Tabular Data",
-    "body": [
-     "SHRGT45 | How much of the region is in strong shear (>45°) | arcsec²",
-     "TOTUSJH | Total current helicity | mG²",
-     "MEANJZH | Normalized helicity (twist per area) | G²",
-     "AREA_ACR | Size of the active region; larger complex regions flare more | arcsec²"
-    ]
+    "body": []
    },
    {
     "n": 9,
+    "image": "uploads/slides/P-10/09.webp",
     "title": "Data Processing",
-    "body": [
-     "We used a Cylindrical Equal Area (CEA) projection in order to ensure pixel sizes correspond to equal physical areas on the Sun",
-     "This works by wrapping a cylinder around a sphere, and then projecting the surface outward",
-     "To keep the area equal, the grid lines for latitude are spaced proportional to the sine of the latitude",
-     "To mitigate the severe class imbalance, we implemented focal loss and class weights",
-     "We used inverse log-frequency, which is based on the logarithm of a class’s scarcity",
-     "Implemented a hierarchical, multi-class balanced focal loss that extracts true class probabilities",
-     "Breaks the classification into two heads, where the first head is quiet vs. flare, and the second head is about differentiating the flare into M or X-class",
-     "CEA Projection – Example",
-     "Focal Loss"
-    ]
+    "body": []
    },
    {
     "n": 10,
+    "image": "uploads/slides/P-10/10.webp",
     "title": "Model Architecture – Diagram",
     "body": []
    },
    {
     "n": 11,
+    "image": "uploads/slides/P-10/11.webp",
     "title": "Model Architecture – Feature Extraction & Tokenization",
-    "body": [
-     "Spatial Processing:",
-     "Stripped the pooling/classification layers from a standard ResNet-18 to capture the raw spatial tensor of shape (B, 512, H’, W’)",
-     "Flattened the 2D grid into sequence-first image tokens of shape (B, H’*W’, 512)",
-     "Implemented 2D positional encoding in order to preserve spatial features",
-     "Split the 512 channels into independent vertical (256) and horizontal (256) sine/cosine grids",
-     "Processed 9 physical parameters through 9 separate MLP for each instead of a concentrated vector",
-     "Preserves the unique physical context of each parameter",
-     "Each independent parameter is projected into 512-dimensional embedding, creating a stacked sequence of shape (B, 9, 512)"
-    ]
+    "body": []
    },
    {
     "n": 12,
+    "image": "uploads/slides/P-10/12.webp",
     "title": "Model Architecture – Asymmetric Fusion & Dual Head Inference",
-    "body": [
-     "Implemented a Cross-Attention engine:",
-     "Tabular tokens act as queries, and spatial tokens act as keys/values",
-     "This answers “Which unique region of the magnetogram matters most for these specific physical measurements?”",
-     "Computed attention matrix is added directly back to the original tabular physics token (Residual Fusion)",
-     "Guarantees the network remembers input parameters after spatial contextualization",
-     "Transformer Encoder Layer: Forces the 9 parameters to talk to each other only after they have fully processed the spatial image conext",
-     "Dual Linear Heads: The final averaged vector (from Global Pooling is fed into the parallel MLPs to simultaneously output:",
-     "Head 1: Flare vs. No Flare (Binary)",
-     "Head 2: M-Class vs. X-Class",
-     "Model also outputs attention weights, which is where the model is focusing on"
-    ]
+    "body": []
    },
    {
     "n": 13,
+    "image": "uploads/slides/P-10/13.webp",
     "title": "Results",
-    "body": [
-     "After testing many different variations of our model, we found that epoch 2 of the 11th iteration of our model yielded the best results.",
-     "True Negatives | 5036",
-     "False Positives | 1929",
-     "False Negatives | 26",
-     "True Positives | 229",
-     "F1 Score | 0.1898052217157066",
-     "True Skill Statistic | 0.6210830060667483",
-     "Heidke Skill Score | 0.13517199631401458"
-    ]
+    "body": []
    },
    {
     "n": 14,
+    "image": "uploads/slides/P-10/14.webp",
     "title": "Interpreting The Results:",
-    "body": [
-     "True Negatives | 5036",
-     "False Positives | 1929",
-     "False Negatives | 26",
-     "True Positives | 229",
-     "F1 Score | 0.1898052217157066",
-     "True Skill Statistic | 0.6210830060667483",
-     "Heidke Skill Score | 0.13517199631401458",
-     "Low F1 & HSS scores due to the high FP rates and low precision",
-     "Most likely from the class imbalance as flares only made it up about 3% of our total data",
-     "To minimize being penalized heavily, the model may have guessed ‘yes’ and risk false positive",
-     "Some magnetograms may look dangerous and erupt as a flare, but many stressed regions can rotate out of view without actually erupting",
-     "The TSS score was high as TSS calculates the difference between the true positive rate and the false positive rate",
-     "This means that TSS is independent of the class imbalance",
-     "Our .62 TSS score shows that our model is able to differentiate a quiet and flare event"
-    ]
+    "body": []
    },
    {
     "n": 15,
+    "image": "uploads/slides/P-10/15.webp",
     "title": "Model Explainability",
-    "body": [
-     "To test whether our model is explainable, we used: attention maps that were created from the attention weights outputs from our model,",
-     "Grad-CAM and specifically the attention map shows that the model targeted active-region green zones, which shows high magnetic strength, but suffered from boundary shortcut learning near edge padding",
-     "Edge = high contrast between mangetogram and empty space, leading to more attraction of CNN filters",
-     "The model did not focus highly on the Polarity Inversion Line, which is where most flares happen",
-     "Spatial Ablation: Blurring edge pixels actually increased confidence slightly",
-     "This may have been because it removed boundary noise (i.e., from the edges), allowing the model to focus on the Polarity Inversion Line and other green zones"
-    ]
+    "body": []
    },
    {
     "n": 16,
+    "image": "uploads/slides/P-10/16.webp",
     "title": "Model Explainability Con’t",
-    "body": [
-     "To test whether our model is explainable, we used: attention maps that were created from the attention weights outputs from our model,",
-     "Modality Ablation:",
-     "Removing images entirely caused a 6.5% drop in confidence,",
-     "Removing the entire tabular data caused a 36.8% drop in confidence",
-     "This shows that the model relied heavily on tabular data and confirming that images provided vital spatial context",
-     "SHAP plot proved that current helicity (TOTUSJH, R_VALUE, MEANJZH) and magnetic shear (MEANSHR) drove flare prediction",
-     "Evaluation set contains mostly non-flaring regions evaluated against a 30-flare baseline, meaning when the model encounters a region with low magnetic current and helicity, it pushes its prediction away from a flare",
-     "Key Takeaway: The model is physically grounded and context-aware but is constrained by computer vision biases"
-    ]
+    "body": []
    },
    {
     "n": 17,
+    "image": "uploads/slides/P-10/17.webp",
     "title": "Conclusion & Discussion",
-    "body": [
-     "The model was able to successfully differentiate flares vs. no flares, as well as figure out potentially dangerous magnetograms",
-     "SHAP & Ablation analysis confirmed the model’s decisions were driven by real solar physics indicators like current helicity and magnetic shear, but Grad-CAM revealed a tendency for boundary shortcut learning",
-     "Future work:",
-     "Explicitly guiding future architectures to focus on the Polarity Inversion Line through a loss function",
-     "Temporal Data: Allows the model to track the evolution of a specific active region (e.g., 24 hour time span)",
-     "Real-World Application: Enhances automated space weather forecasting to protect infrastructure and public safety",
-     "Unlike traditional models that analyze data like magnetograms in isolation, our architecture dynamically uses tabular and spatial data, forcing the model to learn mathematically and physically consistent precursors to solar flares"
-    ]
+    "body": []
    }
   ]
  },
