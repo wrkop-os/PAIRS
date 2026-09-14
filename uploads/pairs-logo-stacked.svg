@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150" width="200" height="150" role="img" aria-label="PAIRS">
+  <g fill="none" stroke="#5980a6" stroke-width="2.6">
+    <circle cx="70" cy="30" r="7"/><circle cx="100" cy="62" r="7"/><circle cx="130" cy="30" r="7"/>
+    <circle cx="100" cy="14" r="7"/>
+    <line x1="75" y1="35" x2="95" y2="57"/><line x1="125" y1="35" x2="105" y2="57"/>
+    <line x1="95" y1="18" x2="76" y2="26"/><line x1="105" y1="18" x2="124" y2="26"/>
+  </g>
+  <text x="100" y="130" fill="#1d1f20" text-anchor="middle"
+        font-family="'Barlow Condensed','Arial Narrow',Helvetica,sans-serif"
+        font-size="52" font-weight="600" letter-spacing="5">PAIRS</text>
+</svg>

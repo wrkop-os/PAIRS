@@ -1,0 +1,219 @@
+{
+  "source": "Tirtha Saha - Final Presentation Materials.pptx",
+  "title": "PICASO",
+  "slides": [
+    {
+      "n": 1,
+      "title": "PICASO",
+      "body": [
+        "Physics-Informed Cross-Attention Solar Optimizer",
+        "Machine Learning Project By:",
+        "Tirtha Saha & Alexander Soll"
+      ]
+    },
+    {
+      "n": 2,
+      "title": "Introduction & Significance",
+      "body": [
+        "Solar flares are large outbursts on the sun that send bursts of energy, light, and fast-moving particles into space.",
+        "Solar flares are grouped by power:",
+        "A, B, and C: These are small flares, and are barely noticeable on Earth",
+        "M-Class: Medium flares that can cause brief radio blackouts near Earth’s poles",
+        "X-Class: The strongest explosions in the solar system, and can cause planet-wide radio blackouts and radiation storms",
+        "Active Region: A temporary area with an intense twisted magnetic field up to 1,000x stronger than the normal background",
+        "Magnetograms: Shows the magnetic field of the sun",
+        "Active Region Number"
+      ]
+    },
+    {
+      "n": 3,
+      "title": "Introduction & Significance Con’t",
+      "body": [
+        "Forecasting and predicting the large flares (i.e., M and X) are important so that we can ensure safety and protect technology",
+        "Solar flares disrupt Earth’s communication, navigation, and power system",
+        "Due to intense bursts of electromagnetic radiation",
+        "Endangers astronauts from radiation",
+        "Traditional methods struggle with rapid and complex magnetic dynamics, and existing AI/ML models lack multi-modal fusion and physical explainability"
+      ]
+    },
+    {
+      "n": 4,
+      "title": "An AI can achieve high accuracy scores by simply guessing ‘quiet’",
+      "body": [
+        "This graph shows that while traditional AI (LSTM) accurately predicts normal, middle-of-the-road solar conditions, it fails completely during extreme situations due to data limitations. At the extremes, the model produces highly scattered errors and mathematically impossible values because it lacks an inherent understanding of physical laws."
+      ]
+    },
+    {
+      "n": 5,
+      "title": "Model Description",
+      "body": [
+        "We created a CNN to predict M and X Class Solar Flares using Knowledge-Informed Learning",
+        "Using AI Explainability techniques, we are also attempting to solve the “Black Box” problem in order to see why the model is specifically making its decisions",
+        "Training data consists of magnetograms, and physical qualities that correlate with solar flare activity",
+        "Collected via SunPy and drms, which library that can be used to access solar physics data",
+        "Attention Map",
+        "Grad-cam",
+        "Magnetogram of X-Class Solar Flare",
+        "White contour lines: Polarity Inversion Line, where magnetic field changes from positive to negative"
+      ]
+    },
+    {
+      "n": 6,
+      "title": "Tabular Data",
+      "body": [
+        "Our tabular data was fetched from the SHARP* database, a solar physics dataset published by NASA derived from their Helioseismic and Magnetic Imager instrument (HMI) aboard the Solar Dynamics Observatory (SDO).",
+        "*SHARP — Space-weather HMI Active Region Patch",
+        "Unit Key",
+        "Mx | Short for “Maxwells” – a unit of magnetic flux",
+        "erg | 1 erg = 10-7 Joules (Energy)",
+        "arcsec² | Area on the surface of the sun (1 arcsec = 1/3600 of a degree)",
+        "G | Stands for “Gauss” – A unit of magnetic field strength",
+        "m | Meters"
+      ]
+    },
+    {
+      "n": 7,
+      "title": "Tabular Data",
+      "body": [
+        "R_VALUE | Complexity along the polarity inversion line (the “danger zone” for flares) | Mx",
+        "TOTPOT | Total magnetic energy stored in the region | erg",
+        "MEANPOT | How concentrated energy is (energy per area) | erg/cm3",
+        "USFLUX | Magnetic Strength of a region | Mx",
+        "MEANSHR | Average shear of flare-prone fields | Radians"
+      ]
+    },
+    {
+      "n": 8,
+      "title": "Tabular Data",
+      "body": [
+        "SHRGT45 | How much of the region is in strong shear (>45°) | arcsec²",
+        "TOTUSJH | Total current helicity | mG²",
+        "MEANJZH | Normalized helicity (twist per area) | G²",
+        "AREA_ACR | Size of the active region; larger complex regions flare more | arcsec²"
+      ]
+    },
+    {
+      "n": 9,
+      "title": "Data Processing",
+      "body": [
+        "We used a Cylindrical Equal Area (CEA) projection in order to ensure pixel sizes correspond to equal physical areas on the Sun",
+        "This works by wrapping a cylinder around a sphere, and then projecting the surface outward",
+        "To keep the area equal, the grid lines for latitude are spaced proportional to the sine of the latitude",
+        "To mitigate the severe class imbalance, we implemented focal loss and class weights",
+        "We used inverse log-frequency, which is based on the logarithm of a class’s scarcity",
+        "Implemented a hierarchical, multi-class balanced focal loss that extracts true class probabilities",
+        "Breaks the classification into two heads, where the first head is quiet vs. flare, and the second head is about differentiating the flare into M or X-class",
+        "CEA Projection – Example",
+        "Focal Loss"
+      ]
+    },
+    {
+      "n": 10,
+      "title": "Model Architecture – Diagram",
+      "body": []
+    },
+    {
+      "n": 11,
+      "title": "Model Architecture – Feature Extraction & Tokenization",
+      "body": [
+        "Spatial Processing:",
+        "Stripped the pooling/classification layers from a standard ResNet-18 to capture the raw spatial tensor of shape (B, 512, H’, W’)",
+        "Flattened the 2D grid into sequence-first image tokens of shape (B, H’*W’, 512)",
+        "Implemented 2D positional encoding in order to preserve spatial features",
+        "Split the 512 channels into independent vertical (256) and horizontal (256) sine/cosine grids",
+        "Processed 9 physical parameters through 9 separate MLP for each instead of a concentrated vector",
+        "Preserves the unique physical context of each parameter",
+        "Each independent parameter is projected into 512-dimensional embedding, creating a stacked sequence of shape (B, 9, 512)"
+      ]
+    },
+    {
+      "n": 12,
+      "title": "Model Architecture – Asymmetric Fusion & Dual Head Inference",
+      "body": [
+        "Implemented a Cross-Attention engine:",
+        "Tabular tokens act as queries, and spatial tokens act as keys/values",
+        "This answers “Which unique region of the magnetogram matters most for these specific physical measurements?”",
+        "Computed attention matrix is added directly back to the original tabular physics token (Residual Fusion)",
+        "Guarantees the network remembers input parameters after spatial contextualization",
+        "Transformer Encoder Layer: Forces the 9 parameters to talk to each other only after they have fully processed the spatial image conext",
+        "Dual Linear Heads: The final averaged vector (from Global Pooling is fed into the parallel MLPs to simultaneously output:",
+        "Head 1: Flare vs. No Flare (Binary)",
+        "Head 2: M-Class vs. X-Class",
+        "Model also outputs attention weights, which is where the model is focusing on"
+      ]
+    },
+    {
+      "n": 13,
+      "title": "Results",
+      "body": [
+        "After testing many different variations of our model, we found that epoch 2 of the 11th iteration of our model yielded the best results.",
+        "True Negatives | 5036",
+        "False Positives | 1929",
+        "False Negatives | 26",
+        "True Positives | 229",
+        "F1 Score | 0.1898052217157066",
+        "True Skill Statistic | 0.6210830060667483",
+        "Heidke Skill Score | 0.13517199631401458"
+      ]
+    },
+    {
+      "n": 14,
+      "title": "Interpreting The Results:",
+      "body": [
+        "True Negatives | 5036",
+        "False Positives | 1929",
+        "False Negatives | 26",
+        "True Positives | 229",
+        "F1 Score | 0.1898052217157066",
+        "True Skill Statistic | 0.6210830060667483",
+        "Heidke Skill Score | 0.13517199631401458",
+        "Low F1 & HSS scores due to the high FP rates and low precision",
+        "Most likely from the class imbalance as flares only made it up about 3% of our total data",
+        "To minimize being penalized heavily, the model may have guessed ‘yes’ and risk false positive",
+        "Some magnetograms may look dangerous and erupt as a flare, but many stressed regions can rotate out of view without actually erupting",
+        "The TSS score was high as TSS calculates the difference between the true positive rate and the false positive rate",
+        "This means that TSS is independent of the class imbalance",
+        "Our .62 TSS score shows that our model is able to differentiate a quiet and flare event"
+      ]
+    },
+    {
+      "n": 15,
+      "title": "Model Explainability",
+      "body": [
+        "To test whether our model is explainable, we used: attention maps that were created from the attention weights outputs from our model,",
+        "Grad-CAM and specifically the attention map shows that the model targeted active-region green zones, which shows high magnetic strength, but suffered from boundary shortcut learning near edge padding",
+        "Edge = high contrast between mangetogram and empty space, leading to more attraction of CNN filters",
+        "The model did not focus highly on the Polarity Inversion Line, which is where most flares happen",
+        "Spatial Ablation: Blurring edge pixels actually increased confidence slightly",
+        "This may have been because it removed boundary noise (i.e., from the edges), allowing the model to focus on the Polarity Inversion Line and other green zones"
+      ]
+    },
+    {
+      "n": 16,
+      "title": "Model Explainability Con’t",
+      "body": [
+        "To test whether our model is explainable, we used: attention maps that were created from the attention weights outputs from our model,",
+        "Modality Ablation:",
+        "Removing images entirely caused a 6.5% drop in confidence,",
+        "Removing the entire tabular data caused a 36.8% drop in confidence",
+        "This shows that the model relied heavily on tabular data and confirming that images provided vital spatial context",
+        "SHAP plot proved that current helicity (TOTUSJH, R_VALUE, MEANJZH) and magnetic shear (MEANSHR) drove flare prediction",
+        "Evaluation set contains mostly non-flaring regions evaluated against a 30-flare baseline, meaning when the model encounters a region with low magnetic current and helicity, it pushes its prediction away from a flare",
+        "Key Takeaway: The model is physically grounded and context-aware but is constrained by computer vision biases"
+      ]
+    },
+    {
+      "n": 17,
+      "title": "Conclusion & Discussion",
+      "body": [
+        "The model was able to successfully differentiate flares vs. no flares, as well as figure out potentially dangerous magnetograms",
+        "SHAP & Ablation analysis confirmed the model’s decisions were driven by real solar physics indicators like current helicity and magnetic shear, but Grad-CAM revealed a tendency for boundary shortcut learning",
+        "Future work:",
+        "Explicitly guiding future architectures to focus on the Polarity Inversion Line through a loss function",
+        "Temporal Data: Allows the model to track the evolution of a specific active region (e.g., 24 hour time span)",
+        "Real-World Application: Enhances automated space weather forecasting to protect infrastructure and public safety",
+        "Unlike traditional models that analyze data like magnetograms in isolation, our architecture dynamically uses tabular and spatial data, forcing the model to learn mathematically and physically consistent precursors to solar flares"
+      ]
+    }
+  ]
+}

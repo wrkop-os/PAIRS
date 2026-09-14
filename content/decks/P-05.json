@@ -1,0 +1,282 @@
+{
+  "source": "Timescale-Aware Neural ODEs for 6-DOF Aircraft Dynamics.pptx",
+  "title": "Timescale-Aware Neural ODEs for 6-DOF Aircraft Dynamics",
+  "slides": [
+    {
+      "n": 1,
+      "title": "Timescale-Aware Neural ODEs for 6-DOF Aircraft Dynamics",
+      "body": [
+        "Timescale-Aware",
+        "Neural ODEs for",
+        "6-DOF Aircraft Dynamics",
+        "Learning fast and slow flight dynamics across operating regimes"
+      ]
+    },
+    {
+      "n": 2,
+      "title": "The Problem",
+      "body": [
+        "Aircraft dynamics evolve at very different times",
+        "A single aircraft state contains both rapid rotational responses and much slower translational motion."
+      ]
+    },
+    {
+      "n": 3,
+      "title": "Research Question",
+      "body": [
+        "Does physically separating fast and slow dynamics improve Neural ODE trajectory prediction?",
+        "Does derivative scaling alone help?",
+        "Does fast/slow partition matter?",
+        "Do flight regimes matter?",
+        "“A standard Neural ODE asks one vector field to learn both at once. I wanted to know whether explicitly respecting that structure helps.”"
+      ]
+    },
+    {
+      "n": 4,
+      "title": "How a Neural ODE works?",
+      "body": []
+    },
+    {
+      "n": 5,
+      "title": "Standard Neural ODE vs Multiscale Neural ODE",
+      "body": [
+        "Standard Neural ODE",
+        "Learns a continuous-time dynamics model",
+        "Predicts all state derivatives",
+        "Numerical ODE solver rolls the state forward in time",
+        "Represents all dynamics in one shared vector field.",
+        "Multiscale Neural ODE",
+        "Preserves the Neural ODE formulation",
+        "Splits derivative predictions into fast and slow branches",
+        "Both branches use the same full state and control input",
+        "Output partition is based on timescale structure",
+        "Vs",
+        "Neural ODE:",
+        "Both branches use the same full state and control input"
+      ]
+    },
+    {
+      "n": 6,
+      "title": "Data Generation",
+      "body": [
+        "Datasets were generated using the publicly available JSBSim F-15 Model",
+        "Each dataset has:",
+        "1,000 trajectories",
+        "15s trajectory",
+        "120 Hz Native Sampling",
+        "5 datasets → 5,000 trajectories",
+        "Subsonic Baseline",
+        "A",
+        "High/Low Altitude",
+        "Chigh/Clow",
+        "Supersonic",
+        "B",
+        "Aggressive Maneuvers",
+        "D"
+      ]
+    },
+    {
+      "n": 7,
+      "title": "Exploratory Data Analysis",
+      "body": []
+    },
+    {
+      "n": 8,
+      "title": "Exploratory Data Analysis",
+      "body": []
+    },
+    {
+      "n": 9,
+      "title": "Exploratory Data Analysis",
+      "body": []
+    },
+    {
+      "n": 10,
+      "title": "Secondary Experiment: Multi Regime Learning",
+      "body": [
+        "From our EDA we see that there are distinct flight regimes across Mach and altitude",
+        "A Neural ODE learns on a continuous vector field",
+        "Can one shared vector field represent dynamics across these separated flight regimes?",
+        "Hypothesis:",
+        "Explicitly providing regime information may help the model specialize across operating conditions",
+        "Does explicit conditioning outperform training on diverse regimes?",
+        "All models train on the same pooled A + B + Chigh + Clow trajectories",
+        "M5C",
+        "M5",
+        "M6",
+        "No regime information given",
+        "Learned Regime Embedding",
+        "FiLM conditioning",
+        "Same training trajectories",
+        "Evaluated on A, B, Chigh , Clow , and D",
+        "D is never used for training"
+      ]
+    },
+    {
+      "n": 11,
+      "title": "Primary Experiment: Timescale-Aware Architecture",
+      "body": [
+        "(Training: Dataset A only)",
+        "M1: baseline",
+        "M1w: does more capacity help?",
+        "M2: does scaling help?",
+        "M3: does multiscale branching help?",
+        "M3b: does the fast-state partition matter?",
+        "Multiscale Vector Field. The fast and slow branches receive the same state-control input but predict different subsets of the state derivatives. The outputs are scaled and reassembled into the full 12-dimensional derivative vector.",
+        "Multi-Regime Conditioning. Models are trained across datasets A, B, Chigh, Clow, with regime information supplied through either a learned embedding or FiM modulation."
+      ]
+    },
+    {
+      "n": 12,
+      "title": "Numerical Solvers: Turning Derivatives into Trajectory",
+      "body": [
+        "A Neural ODE only gives:",
+        "01",
+        "But that only gives instantaneous slope. A numerical solver repeatedly use those slopes to estimate:",
+        "02",
+        "Euler",
+        "RK4",
+        "Implicit",
+        "Dopri5",
+        "Uses one slope at the start of the step",
+        "Combines 4 slope estimates across the step",
+        "Compare 5th/4th order estimates and adapt h",
+        "Future state appears in the equation. Each step solved iteratively"
+      ]
+    },
+    {
+      "n": 13,
+      "title": "Training Protocol",
+      "body": [
+        "01",
+        "Split By Trajectory",
+        "70% Train",
+        "15% Validation",
+        "15% Test",
+        "02",
+        "Training Window",
+        "360 raw samples at 120 Hz",
+        "2 random windows",
+        "Supervise every 4th timestep",
+        "03",
+        "Optimize",
+        "Adam learning rate: 10-3",
+        "Batch Size: 32",
+        "04",
+        "Select Model",
+        "Best validation checkpoint retained",
+        "Core: 10 seeds",
+        "Multi-regime: 5 seeds",
+        "Trained on short windows",
+        "Final performance measured using full 15s rollouts."
+      ]
+    },
+    {
+      "n": 14,
+      "title": "Evaluation Metrics",
+      "body": [
+        "04",
+        "Per-state RMSE",
+        "RMSEn, RMSEe, … ,RMSEwb",
+        "Computes error for each state",
+        "Show which states drive improvements or failures",
+        "02",
+        "Slow group RMSE",
+        "n,e,h,ϕ,θ,ψ,ub,vb,wb",
+        "Remaining 9 states",
+        "Position, altitude and translational dynamics",
+        "01",
+        "Fast Group RMSE",
+        "p,q,r",
+        "Body angular rates",
+        "Measures the rapid rotational dynamics",
+        "03",
+        "Aggregate RMSE",
+        "All 12 states",
+        "One overall trajectory error value",
+        "Main comparison metric"
+      ]
+    },
+    {
+      "n": 15,
+      "title": "Finding 1: Rates-only multiscale was the strongest core architecture",
+      "body": [
+        "M3b had the lowest mean aggregate RMSE on both A and D",
+        "Increasing model capacity didn’t improve accuracy"
+      ]
+    },
+    {
+      "n": 16,
+      "title": "",
+      "body": []
+    },
+    {
+      "n": 17,
+      "title": "Finding 2: The Fast State Partition is an Improvement",
+      "body": [
+        "Restricting the fast branch to body rates strongly improved attitude prediction but introduced an altitude tradeoff.",
+        "Same parameter count; only fast state partition changes."
+      ]
+    },
+    {
+      "n": 18,
+      "title": "Finding 3: Multi-Regime Training Greatly Expanded Environmental Coverage",
+      "body": [
+        "Environmental Shift:",
+        "B: A-only Models ~ 0.23 RMSE while Multi-Regime ~ 0.044",
+        "Chigh : A-only models ~ 0.87 - 0.94 while Multi-regime ~ 0.047 - 0.052",
+        "D remains worse for multi regime models: 0.232 - 0.266 vs M3B 0.165",
+        "Exposure to broader environment solved the B/C extrapolation problem but didn’t improve unseen maneuver generalization"
+      ]
+    },
+    {
+      "n": 19,
+      "title": "Finding 4: Explicit Regime Conditioning added little",
+      "body": [
+        "Results:",
+        "Embedding (M5) has small mixed changes across regimes",
+        "FiLM (M6) lowers D error by 11.7% but worsened A/B/C by about 5-6%",
+        "Conditioning did not consistently outperform plain pooled training."
+      ]
+    },
+    {
+      "n": 20,
+      "title": "",
+      "body": []
+    },
+    {
+      "n": 21,
+      "title": "Limitations & Future Directions",
+      "body": [
+        "Limitations",
+        "&",
+        "Future Directions",
+        "Singe Simulated Aircraft",
+        "Results are limited to a F-15 and may not generalize to other aircraft",
+        "01",
+        "Limited Maneuver",
+        "Datasets D tests held-out aggressive maneuvers but only a subset of possible flight behaviors and disturbances",
+        "03",
+        "Architecture tested separately",
+        "Rates only multiscale model and multi-regime models were not combined.",
+        "05",
+        "Hybrid multiscale + Multi regime model",
+        "Tests whether rates only branching retains its benefit across different operating regimes",
+        "02",
+        "Spectral/Wavelet Analysis",
+        "Use FFT and wavelet transform to quantity which state contain fast frequency content and when those dynamics appear",
+        "04",
+        "Broader and Adaptive Validation",
+        "Extend to more maneuvers, aircraft, disturbances, and possibly real flight data. Learn regime/timescale routing instead of fixing it manually",
+        "06"
+      ]
+    },
+    {
+      "n": 22,
+      "title": "",
+      "body": [
+        "THE END"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 60" width="260" height="60" role="img" aria-label="PAIRS">
+  <g fill="none" stroke="#5980a6" stroke-width="2.4">
+    <circle cx="14" cy="30" r="6"/><circle cx="44" cy="14" r="6"/><circle cx="44" cy="46" r="6"/>
+    <circle cx="74" cy="30" r="6"/>
+    <line x1="20" y1="27" x2="38" y2="17"/><line x1="20" y1="33" x2="38" y2="43"/>
+    <line x1="50" y1="17" x2="68" y2="27"/><line x1="50" y1="43" x2="68" y2="33"/>
+  </g>
+  <text x="96" y="43" fill="#1d1f20" font-family="'Barlow Condensed','Arial Narrow',Helvetica,sans-serif"
+        font-size="40" font-weight="600" letter-spacing="3.5">PAIRS</text>
+</svg>
