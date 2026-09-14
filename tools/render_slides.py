@@ -52,7 +52,18 @@ def download(file_id, dest):
     """Fetch a Drive file anonymously. Requires link sharing on the folder."""
     import gdown
     url = f"https://drive.google.com/uc?id={file_id}"
-    gdown.download(url, str(dest), quiet=True)
+    try:
+        gdown.download(url, str(dest), quiet=True)
+    except Exception as exc:
+        # gdown raises its own FileURLRetrievalError when Drive refuses an
+        # anonymous fetch. That is the not-shared case, not a broken build.
+        text = str(exc)
+        if "public link" in text or "permission" in text or "Permission" in text:
+            raise AccessError(
+                f"Drive refused an anonymous download of {file_id}: the folder "
+                f"is not shared as 'Anyone with the link'"
+            ) from exc
+        raise
     if not dest.exists() or dest.stat().st_size == 0:
         raise AccessError(
             f"download produced no file for {file_id} — the Drive folder is "
