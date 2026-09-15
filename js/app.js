@@ -39,6 +39,23 @@ const AWARD_DESCRIPTIONS = {
   "PAIRS Distinguished Scholar Award": "The strongest overall project, balancing originality, technical quality, execution, impact, and communication."
 };
 const TRACKS = ["Computer Vision", "NLP", "Clustering / PCA", "Graph Neural Nets", "Regression", "Time Series"];
+
+// The curriculum as taught, one entry per live session topic, so the
+// Specializations and Applied Fields panels show the whole summer rather than
+// only the techniques a project happened to pick up.
+const TAUGHT_METHODS = [
+  "Regression", "Clustering & PCA", "Unsupervised Learning", "Neural Networks",
+  "Computer Vision", "Natural Language Processing", "Reinforcement Learning",
+  "Time Series", "Ensemble Learning", "Graph Neural Networks", "Neural ODEs",
+  "Recommendation Systems", "Knowledge-Informed Learning",
+  "Physics-Informed Neural Networks", "Causal ML", "Survival Analysis",
+  "Neuromorphic Computing", "Explainability & Interpretability"
+];
+const TAUGHT_FIELDS = [
+  "Education", "Medicine", "Genomics", "Structural Biology", "Climate",
+  "Aerospace", "Automotive", "Robotics", "Electronics",
+  "Mechanical Engineering", "Sports Analytics", "Media"
+];
 const STUDENTS = [
   { name: "Dennis Zhuo", photo: R("st-01", "uploads/Dennis Zhuo.jpg"), bio: "I'm not a very sporty person but enjoy badminton and handball quite often. You'll also find me fixated on word or logic games. I listen to music that makes me question my identity." },
   { name: "Arthur Zin", photo: R("st-02", "uploads/Arthur Zin.png"), bio: "" },
@@ -53,7 +70,8 @@ const STUDENTS = [
   { name: "Areeb Ahmed", photo: R("st-11", "uploads/Areeb Ahmed.jpg"), bio: "Hi, my name is Areeb. I am a student from Bronx Science and I live in Queens. I have great interests in STEM, especially areas related to engineering. Outside of school, I enjoy playing soccer with my friends." },
   { name: "Sumit Deb", photo: R("st-12", "uploads/Sumit Deb.png"), bio: "I like to play soccer and I want to major in mechanical engineering." },
   { name: "Wasi Hossain", photo: R("st-13", "uploads/Wasi Hossain.jpg"), bio: "Hello, my name is Wasi Hossain. I am a rising senior at Brooklyn Technical High School. I have a passion for robotics as it helps me pursue my dream of being an engineer. I love solving problems and learning new things. Learning about machine learning and incorporating my previous knowledge was really fun." },
-  { name: "Ethan Tan", photo: R("st-14", "uploads/Ethan Tan.jpg"), bio: "Student at Bronx High School of Science. 2028'" }
+  { name: "Ethan Tan", photo: R("st-14", "uploads/Ethan Tan.jpg"), bio: "Student at Bronx High School of Science. 2028'" },
+  { name: "Rishav Banik", photo: R("st-15", "uploads/Rishav Banik.jpg"), bio: "Hello, I am Rishav Banik a senior from the Bronx High School of Science. I participate in various activities related to coding and engineering such as preparing for physics and engineering events in Science Olympiad, coding graphics engines, as well as building AI powered nerf turrets. I look forward to integrating AI into chip design to automate optimizing power and performance of future chips." }
 ];
 
 const PROJECTS = [
@@ -346,10 +364,10 @@ class Component extends DCLogic {
       ],
 
       defs: [
-        { num: "DEF.01", term: "Model", body: "A function with adjustable numbers inside it. Feed it an input, it returns a guess. Training is the act of setting those numbers." },
-        { num: "DEF.02", term: "Training data", body: "The examples you learn from — inputs paired with the answers you want back. The model never sees anything else." },
-        { num: "DEF.03", term: "Loss", body: "One number saying how wrong the guess was. Learning is the search for numbers inside the model that make loss small." },
-        { num: "DEF.04", term: "Generalization", body: "Doing well on data you have never seen. Memorizing the training set is easy; this is the actual goal." }
+        { num: "DEF.01", term: "Model", body: "A function with adjustable numbers inside it. Give it an input and it returns a guess. Training is how those numbers get set." },
+        { num: "DEF.02", term: "Training data", body: "The examples the model learns from. Each one is an input paired with the answer you want back, and the model never sees anything else." },
+        { num: "DEF.03", term: "Loss", body: "One number saying how wrong the guess was. Learning is the search for settings that make that number small." },
+        { num: "DEF.04", term: "Generalization", body: "Doing well on data the model has never seen. Memorizing the training set is easy, and this is the part that actually matters." }
       ],
 
       pipeline: [
@@ -360,8 +378,13 @@ class Component extends DCLogic {
         { step: "STEP 05", title: "Iterate", body: "Change the features, the model or the question, and go back to step one." }
       ],
 
-      methods: Array.from(new Set(PROJECTS.map((p) => p.method))),
-      fields: Array.from(new Set(PROJECTS.map((p) => p.field))),
+      // The curriculum, not a summary of the project list: the summer covered
+      // specializations that no project ended up using. TAUGHT_* carries the
+      // session topics; whatever a project used is folded in after, so a new
+      // project can never introduce a tag the page then fails to show.
+      methods: Array.from(new Set([...TAUGHT_METHODS, ...PROJECTS.map((p) => p.method)])),
+      fields: Array.from(new Set([...TAUGHT_FIELDS, ...PROJECTS.map((p) => p.field)])),
+      studentCount: STUDENTS.length,
 
       mentors: MENTORS.map((m) => ({
         ...m,

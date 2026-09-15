@@ -47,7 +47,7 @@
   [data-r="hero"] { height: auto !important; min-height: 0 !important; }
   [data-r="hero-text"] { position: relative !important; padding: 64px 18px 72px !important; }
   #pairs-hero-canvas { opacity: .45; }
-  [data-r="hero-logo"] { height: 96px !important; margin-bottom: 20px !important; }
+  [data-r="hero-logo"] { height: 150px !important; margin-bottom: 18px !important; }
   [data-r="h1"] { font-size: 30px !important; }
   [data-r="hero-lede"] { font-size: 16px !important; }
   [data-r="h2"] { font-size: 28px !important; }
