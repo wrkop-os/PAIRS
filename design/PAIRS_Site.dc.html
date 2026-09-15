@@ -223,9 +223,9 @@ a:hover{color:#5980a6}
       <canvas id="pairs-hero-canvas" style="position:absolute;inset:0;width:100%;height:100%;display:block"></canvas>
       <div id="pairs-hero-text" style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:0 40px;pointer-events:none">
         <div style="max-width:640px">
-          <img src="uploads/pairs-logo-stacked.svg" alt="PAIRS" style="height:150px;width:auto;display:block;margin:0 0 26px">
+          <img src="uploads/pairs-logo-stacked.svg" alt="PAIRS" style="height:260px;width:auto;display:block;margin:0 0 22px">
           <h1 style="font-size:48px;line-height:1.05;letter-spacing:-.01em;margin:0 0 22px">Program for Applied Independent Research in the Summer</h1>
-          <p style="font-size:19px;line-height:1.5;max-width:520px;margin:0 0 28px;color:#424244">Ten weeks. Four mentors, thirty-plus students, twenty projects. You start at machine-learning fundamentals and finish with an independent AI/ML project of your own design, solo or in a group.</p>
+          <p style="font-size:19px;line-height:1.5;max-width:520px;margin:0 0 28px;color:#424244">10 weeks. Four mentors, 30+ students, 20 projects. You start at machine-learning fundamentals and finish with an independent AI/ML project of your own design, solo or in a group.</p>
 
         </div>
       </div>
@@ -252,7 +252,7 @@ a:hover{color:#5980a6}
       </div>
       <div style="display:grid;grid-template-columns:1.05fr 1fr;gap:64px;align-items:start;margin-bottom:56px">
         <h2 style="font-size:46px;line-height:1.05;margin:0">What is machine learning?</h2>
-        <p style="font-size:18px;line-height:1.6;color:#424244;margin:0">Instead of writing the rules by hand, you show a program examples and let it work the rules out itself. That is the whole idea. Everything below is a variation on it: what the examples look like, how the program measures being wrong, and what it does about it.</p>
+        <p style="font-size:18px;line-height:1.6;color:#424244;margin:0">Instead of writing the rules by hand, you show a program examples and let it work the rules out itself. The four terms below are the pieces of that idea. They cover what the examples look like, how the program measures a wrong answer, and what it changes in response.</p>
       </div>
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:26px">
         <sc-for list="{{ defs }}" as="d" hint-placeholder-count="4">
@@ -270,9 +270,9 @@ a:hover{color:#5980a6}
       <div style="max-width:1240px;margin:0 auto">
         <div style="display:flex;align-items:baseline;justify-content:space-between;border-bottom:1px solid rgba(242,242,243,.22);padding-bottom:10px;margin-bottom:44px">
           <p class="mono" style="font-size:11px;letter-spacing:.22em;color:#94bce3;margin:0">02 / A PIPELINE</p>
-          <p class="mono" style="font-size:10px;letter-spacing:.18em;color:rgba(242,242,243,.55);margin:0">FIG. 02 — HOW AN ML SYSTEM IS BUILT</p>
+          <p class="mono" style="font-size:10px;letter-spacing:.18em;color:rgba(242,242,243,.55);margin:0">FIG. 02 · HOW AN ML MODEL IS BUILT</p>
         </div>
-        <h2 style="font-size:46px;line-height:1.05;margin:0 0 16px;max-width:720px">An ML system is five steps in a loop.</h2>
+        <h2 style="font-size:46px;line-height:1.05;margin:0 0 16px;max-width:720px">An ML model's prediction comes out of five steps in a loop.</h2>
         <p style="font-size:17px;line-height:1.6;color:rgba(242,242,243,.72);max-width:600px;margin:0 0 56px">Every project in PAIRS walks this pipeline. Most of the summer is spent going back around it.</p>
         <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:rgba(242,242,243,.22);border:1px solid rgba(242,242,243,.22)">
           <sc-for list="{{ pipeline }}" as="p" hint-placeholder-count="5">
@@ -347,7 +347,7 @@ a:hover{color:#5980a6}
 
     <div style="display:flex;align-items:baseline;justify-content:space-between;border-bottom:1px solid rgba(29,31,32,.16);padding-bottom:10px;margin-bottom:36px">
       <p class="mono" style="font-size:11px;letter-spacing:.22em;color:#416180;margin:0">02 / STUDENTS</p>
-      <p class="mono" style="font-size:10px;letter-spacing:.18em;color:#7a7a7d;margin:0">COHORT '26 · 14 ENTRIES</p>
+      <p class="mono" style="font-size:10px;letter-spacing:.18em;color:#7a7a7d;margin:0">COHORT '26 · {{ studentCount }} ENTRIES</p>
     </div>
     <h2 style="font-size:46px;line-height:1.05;margin:0 0 48px">The 2026 cohort.</h2>
     <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:22px">
@@ -368,6 +368,7 @@ a:hover{color:#5980a6}
         </article>
       </sc-for>
     </div>
+    <p class="mono consent-note" style="font-size:11px;line-height:1.6;letter-spacing:.06em;color:#7a7a7d;max-width:640px;margin:44px 0 0;padding-top:16px;border-top:1px solid rgba(29,31,32,.16)">Only members who gave us consent to be featured on the PAIRS website and social media appear here, so the 2026 cohort was larger than this roster.</p>
   </div>
   </sc-if>
 
@@ -407,6 +408,7 @@ a:hover{color:#5980a6}
         </article>
       </sc-for>
     </div>
+    <p class="mono consent-note" style="font-size:11px;line-height:1.6;letter-spacing:.06em;color:#7a7a7d;max-width:640px;margin:44px 0 0;padding-top:16px;border-top:1px solid rgba(29,31,32,.16)">Only projects whose teams gave us consent to publish on the PAIRS website and social media appear here, so more were completed in 2026 than this gallery shows.</p>
   </div>
   </sc-if>
 
@@ -545,6 +547,23 @@ const AWARD_DESCRIPTIONS = {
   "PAIRS Distinguished Scholar Award": "The strongest overall project, balancing originality, technical quality, execution, impact, and communication."
 };
 const TRACKS = ["Computer Vision", "NLP", "Clustering / PCA", "Graph Neural Nets", "Regression", "Time Series"];
+
+// The curriculum as taught, one entry per live session topic, so the
+// Specializations and Applied Fields panels show the whole summer rather than
+// only the techniques a project happened to pick up.
+const TAUGHT_METHODS = [
+  "Regression", "Clustering & PCA", "Unsupervised Learning", "Neural Networks",
+  "Computer Vision", "Natural Language Processing", "Reinforcement Learning",
+  "Time Series", "Ensemble Learning", "Graph Neural Networks", "Neural ODEs",
+  "Recommendation Systems", "Knowledge-Informed Learning",
+  "Physics-Informed Neural Networks", "Causal ML", "Survival Analysis",
+  "Neuromorphic Computing", "Explainability & Interpretability"
+];
+const TAUGHT_FIELDS = [
+  "Education", "Medicine", "Genomics", "Structural Biology", "Climate",
+  "Aerospace", "Automotive", "Robotics", "Electronics",
+  "Mechanical Engineering", "Sports Analytics", "Media"
+];
 const STUDENTS = [
   { name: "Dennis Zhuo", photo: R("st-01", "uploads/Dennis Zhuo.jpg"), bio: "I'm not a very sporty person but enjoy badminton and handball quite often. You'll also find me fixated on word or logic games. I listen to music that makes me question my identity." },
   { name: "Arthur Zin", photo: R("st-02", "uploads/Arthur Zin.png"), bio: "" },
@@ -559,7 +578,8 @@ const STUDENTS = [
   { name: "Areeb Ahmed", photo: R("st-11", "uploads/Areeb Ahmed.jpg"), bio: "Hi, my name is Areeb. I am a student from Bronx Science and I live in Queens. I have great interests in STEM, especially areas related to engineering. Outside of school, I enjoy playing soccer with my friends." },
   { name: "Sumit Deb", photo: R("st-12", "uploads/Sumit Deb.png"), bio: "I like to play soccer and I want to major in mechanical engineering." },
   { name: "Wasi Hossain", photo: R("st-13", "uploads/Wasi Hossain.jpg"), bio: "Hello, my name is Wasi Hossain. I am a rising senior at Brooklyn Technical High School. I have a passion for robotics as it helps me pursue my dream of being an engineer. I love solving problems and learning new things. Learning about machine learning and incorporating my previous knowledge was really fun." },
-  { name: "Ethan Tan", photo: R("st-14", "uploads/Ethan Tan.jpg"), bio: "Student at Bronx High School of Science. 2028'" }
+  { name: "Ethan Tan", photo: R("st-14", "uploads/Ethan Tan.jpg"), bio: "Student at Bronx High School of Science. 2028'" },
+  { name: "Rishav Banik", photo: R("st-15", "uploads/Rishav Banik.jpg"), bio: "Hello, I am Rishav Banik a senior from the Bronx High School of Science. I participate in various activities related to coding and engineering such as preparing for physics and engineering events in Science Olympiad, coding graphics engines, as well as building AI powered nerf turrets. I look forward to integrating AI into chip design to automate optimizing power and performance of future chips." }
 ];
 
 const PROJECTS = [
@@ -836,10 +856,10 @@ class Component extends DCLogic {
       ],
 
       defs: [
-        { num: "DEF.01", term: "Model", body: "A function with adjustable numbers inside it. Feed it an input, it returns a guess. Training is the act of setting those numbers." },
-        { num: "DEF.02", term: "Training data", body: "The examples you learn from — inputs paired with the answers you want back. The model never sees anything else." },
-        { num: "DEF.03", term: "Loss", body: "One number saying how wrong the guess was. Learning is the search for numbers inside the model that make loss small." },
-        { num: "DEF.04", term: "Generalization", body: "Doing well on data you have never seen. Memorizing the training set is easy; this is the actual goal." }
+        { num: "DEF.01", term: "Model", body: "A function with adjustable numbers inside it. Give it an input and it returns a guess. Training is how those numbers get set." },
+        { num: "DEF.02", term: "Training data", body: "The examples the model learns from. Each one is an input paired with the answer you want back, and the model never sees anything else." },
+        { num: "DEF.03", term: "Loss", body: "One number saying how wrong the guess was. Learning is the search for settings that make that number small." },
+        { num: "DEF.04", term: "Generalization", body: "Doing well on data the model has never seen. Memorizing the training set is easy, and this is the part that actually matters." }
       ],
 
       pipeline: [
@@ -850,8 +870,13 @@ class Component extends DCLogic {
         { step: "STEP 05", title: "Iterate", body: "Change the features, the model or the question, and go back to step one." }
       ],
 
-      methods: Array.from(new Set(PROJECTS.map((p) => p.method))),
-      fields: Array.from(new Set(PROJECTS.map((p) => p.field))),
+      // The curriculum, not a summary of the project list: the summer covered
+      // specializations that no project ended up using. TAUGHT_* carries the
+      // session topics; whatever a project used is folded in after, so a new
+      // project can never introduce a tag the page then fails to show.
+      methods: Array.from(new Set([...TAUGHT_METHODS, ...PROJECTS.map((p) => p.method)])),
+      fields: Array.from(new Set([...TAUGHT_FIELDS, ...PROJECTS.map((p) => p.field)])),
+      studentCount: STUDENTS.length,
 
       mentors: MENTORS.map((m) => ({
         ...m,

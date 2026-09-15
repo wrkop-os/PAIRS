@@ -39,9 +39,9 @@
       <canvas id="pairs-hero-canvas" style="position:absolute;inset:0;width:100%;height:100%;display:block"></canvas>
       <div data-r="hero-text" id="pairs-hero-text" style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:0 40px;pointer-events:none">
         <div style="max-width:640px">
-          <img data-r="hero-logo" src="uploads/pairs-logo-stacked.svg" alt="PAIRS" style="height:150px;width:auto;display:block;margin:0 0 26px">
+          <img data-r="hero-logo" src="uploads/pairs-logo-stacked.svg" alt="PAIRS" style="height:260px;width:auto;display:block;margin:0 0 22px">
           <h1 data-r="h1" style="font-size:48px;line-height:1.05;letter-spacing:-.01em;margin:0 0 22px">Program for Applied Independent Research in the Summer</h1>
-          <p data-r="hero-lede" style="font-size:19px;line-height:1.5;max-width:520px;margin:0 0 28px;color:#424244">Ten weeks. Four mentors, thirty-plus students, twenty projects. You start at machine-learning fundamentals and finish with an independent AI/ML project of your own design, solo or in a group.</p>
+          <p data-r="hero-lede" style="font-size:19px;line-height:1.5;max-width:520px;margin:0 0 28px;color:#424244">10 weeks. Four mentors, 30+ students, 20 projects. You start at machine-learning fundamentals and finish with an independent AI/ML project of your own design, solo or in a group.</p>
 
         </div>
       </div>
@@ -68,7 +68,7 @@
       </div>
       <div data-r="two" style="display:grid;grid-template-columns:1.05fr 1fr;gap:64px;align-items:start;margin-bottom:56px">
         <h2 data-r="h2" style="font-size:46px;line-height:1.05;margin:0">What is machine learning?</h2>
-        <p data-r="lede" style="font-size:18px;line-height:1.6;color:#424244;margin:0">Instead of writing the rules by hand, you show a program examples and let it work the rules out itself. That is the whole idea. Everything below is a variation on it: what the examples look like, how the program measures being wrong, and what it does about it.</p>
+        <p data-r="lede" style="font-size:18px;line-height:1.6;color:#424244;margin:0">Instead of writing the rules by hand, you show a program examples and let it work the rules out itself. The four terms below are the pieces of that idea. They cover what the examples look like, how the program measures a wrong answer, and what it changes in response.</p>
       </div>
       <div data-r="grid4" style="display:grid;grid-template-columns:repeat(4,1fr);gap:26px">
         <sc-for list="{{ defs }}" as="d" hint-placeholder-count="4">
@@ -86,9 +86,9 @@
       <div style="max-width:1240px;margin:0 auto">
         <div style="display:flex;align-items:baseline;justify-content:space-between;border-bottom:1px solid rgba(242,242,243,.22);padding-bottom:10px;margin-bottom:44px">
           <p class="mono" style="font-size:11px;letter-spacing:.22em;color:#94bce3;margin:0">02 / A PIPELINE</p>
-          <p class="mono" style="font-size:10px;letter-spacing:.18em;color:rgba(242,242,243,.55);margin:0">FIG. 02 — HOW AN ML SYSTEM IS BUILT</p>
+          <p class="mono" style="font-size:10px;letter-spacing:.18em;color:rgba(242,242,243,.55);margin:0">FIG. 02 · HOW AN ML MODEL IS BUILT</p>
         </div>
-        <h2 data-r="h2" style="font-size:46px;line-height:1.05;margin:0 0 16px;max-width:720px">An ML system is five steps in a loop.</h2>
+        <h2 data-r="h2" style="font-size:46px;line-height:1.05;margin:0 0 16px;max-width:720px">An ML model's prediction comes out of five steps in a loop.</h2>
         <p style="font-size:17px;line-height:1.6;color:rgba(242,242,243,.72);max-width:600px;margin:0 0 56px">Every project in PAIRS walks this pipeline. Most of the summer is spent going back around it.</p>
         <div data-r="pipeline" style="display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:rgba(242,242,243,.22);border:1px solid rgba(242,242,243,.22)">
           <sc-for list="{{ pipeline }}" as="p" hint-placeholder-count="5">
@@ -163,7 +163,7 @@
 
     <div style="display:flex;align-items:baseline;justify-content:space-between;border-bottom:1px solid rgba(29,31,32,.16);padding-bottom:10px;margin-bottom:36px">
       <p class="mono" style="font-size:11px;letter-spacing:.22em;color:#416180;margin:0">02 / STUDENTS</p>
-      <p data-r="meta-right" class="mono" style="font-size:10px;letter-spacing:.18em;color:#7a7a7d;margin:0">COHORT '26 · 14 ENTRIES</p>
+      <p data-r="meta-right" class="mono" style="font-size:10px;letter-spacing:.18em;color:#7a7a7d;margin:0">COHORT '26 · {{ studentCount }} ENTRIES</p>
     </div>
     <h2 data-r="h2" style="font-size:46px;line-height:1.05;margin:0 0 48px">The 2026 cohort.</h2>
     <div data-r="grid5" style="display:grid;grid-template-columns:repeat(5,1fr);gap:22px">
@@ -184,6 +184,7 @@
         </article>
       </sc-for>
     </div>
+    <p class="mono consent-note" style="font-size:11px;line-height:1.6;letter-spacing:.06em;color:#7a7a7d;max-width:640px;margin:44px 0 0;padding-top:16px;border-top:1px solid rgba(29,31,32,.16)">Only members who gave us consent to be featured on the PAIRS website and social media appear here, so the 2026 cohort was larger than this roster.</p>
   </div>
   </sc-if>
 
@@ -223,6 +224,7 @@
         </article>
       </sc-for>
     </div>
+    <p class="mono consent-note" style="font-size:11px;line-height:1.6;letter-spacing:.06em;color:#7a7a7d;max-width:640px;margin:44px 0 0;padding-top:16px;border-top:1px solid rgba(29,31,32,.16)">Only projects whose teams gave us consent to publish on the PAIRS website and social media appear here, so more were completed in 2026 than this gallery shows.</p>
   </div>
   </sc-if>
 
