@@ -56,6 +56,15 @@ a:hover { color: var(--accent); }
 image-slot[src$="Sumit Deb.png"]::part(image) { object-position: 50% 12%; }
 image-slot[src$="Tirtha Saha.png"]::part(image) { object-position: 50% 22%; }
 
+/* Shahzeb's photo is full-length, so at a card's scale he reads as a distant
+   figure beside the other mentors' portraits. Enlarge the image inside the
+   frame, which clips it, rather than cropping the file: same framing, original
+   photo untouched. The percentages are of the frame, and these hold up in both
+   the card's landscape frame and the modal's square one. */
+image-slot[src$="Shahzeb Wali.jpg"]::part(image) {
+  width: 190%; height: 190%; margin-left: -58%; margin-top: -44%;
+}
+
 /* Blueprint frame + registration marks ---------------------------------- */
 .blueprint { position: relative; border: 1px solid var(--border); background: transparent; border-radius: 0; }
 .corner { position: absolute; width: 9px; height: 9px; color: var(--accent); opacity: .62; pointer-events: none; z-index: 2; }

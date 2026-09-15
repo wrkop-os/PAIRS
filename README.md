@@ -82,19 +82,17 @@ Slide decks and methodology write-ups live in `content/decks/` — see
 [content/decks/README.md](content/decks/README.md) for where each came from and
 how the text was extracted.
 
-## Known gaps
+## Logo
 
-- `uploads/Shahzeb Wali.jpg` and `uploads/Brandon Sweet.jpeg` are missing, so
-  those two mentor cards show a placeholder frame. Drop the files in at those
-  exact paths and they appear — no code change needed.
-- `uploads/pairs-logo-horizontal.svg` and `uploads/pairs-logo-stacked.svg` both
-  carry the real program seal. If the horizontal and stacked lockups (the seal
-  set beside or above the wordmark) are wanted instead, replace those two files
-  at the same paths — the header sizes the mark by height alone, so either
-  shape fits.
+`uploads/pairs-logo-horizontal.svg` and `uploads/pairs-logo-stacked.svg` both
+carry the real program seal. If the horizontal and stacked lockups (the seal set
+beside or above the wordmark) are wanted instead, replace those two files at the
+same paths — the header sizes the mark by height alone, so either shape fits.
 
 ## Deploying
 
-`.github/workflows/deploy-pages.yml` publishes to the `gh-pages` branch on a push
-to `claude/ml-mentorship-website-vo7qpq`. Any static host works too: serve the
-folder as-is.
+Live at <https://pairs-ml.vercel.app>. Vercel builds that project from this
+repository's default branch, `claude/ml-mentorship-website-vo7qpq`, so a merge
+to it deploys to production on its own; other branches get a preview URL.
+`.github/workflows/deploy-pages.yml` also publishes to `gh-pages` on the same
+push. Any static host works too: serve the folder as-is.
