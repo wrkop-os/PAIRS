@@ -1,0 +1,213 @@
+{
+  "source": "QSAR_Presentation.pptx",
+  "title": "High-Dimensional Molecular Feature Selection for Acute Oral Toxicity Prediction",
+  "slides": [
+    {
+      "n": 1,
+      "title": "High-Dimensional Molecular Feature Selection",
+      "body": [
+        "for Acute Oral Toxicity Prediction",
+        "Combining Sure Independence Screening with Elastic Net Regularization Machine Learning in Computational Toxicology"
+      ]
+    },
+    {
+      "n": 2,
+      "title": "Context: The Problem",
+      "body": [
+        "In drug discovery, testing each candidate compound for toxicity is expensive and slow:",
+        "Single toxicity assay: $1,000s of dollars",
+        "Testing timeline: weeks to months per compound",
+        "Bottleneck: hundreds of synthetic candidates need screening",
+        "Our Question",
+        "Can we predict toxicity from molecular structure alone—before expensive physical testing?",
+        "Molecules have 1,024+ molecular features (fingerprints).",
+        "Most are noise.",
+        "How do we identify the critical few?",
+        "The Challenge:",
+        "⚗️",
+        "Drug Discovery Pipeline",
+        "Synthesis → Screening → Testing → Refinement"
+      ]
+    },
+    {
+      "n": 3,
+      "title": "The Dataset: QSAR Oral Toxicity",
+      "body": [
+        "Dataset Specifications",
+        "8,992",
+        "Chemical compounds",
+        "1,024",
+        "Binary molecular fingerprints per compound",
+        "1 : 11",
+        "Toxic to Non-toxic ratio (class imbalance)",
+        "Key Challenge",
+        "Class Imbalance: 9% toxic, 91% non-toxic compounds. Standard accuracy is useless—a model predicting \"always non-toxic\" is 91% accurate but worthless.",
+        "Solution: Use PR-AUC, F1-Score, and MCC instead. Apply balanced class weights during training."
+      ]
+    },
+    {
+      "n": 4,
+      "title": "Our Approach: Four Stages",
+      "body": [
+        "1. Preprocess",
+        "Remove zero-variance features. Stratified 70-15-15 train-val-test split.",
+        "2. Feature Selection (SIS)",
+        "Rank 1,024 features by chi-squared statistics. Select top 40.",
+        "3. Model Training",
+        "Train 7 models (baselines + proposed). Compare performance.",
+        "4. Evaluation & Analysis",
+        "Measure PR-AUC, F1, MCC, ROC-AUC. Ablation study: SIS impact. Feature importance analysis."
+      ]
+    },
+    {
+      "n": 5,
+      "title": "Sure Independence Screening (SIS)",
+      "body": [
+        "What is SIS?",
+        "A statistical method that ranks features by their marginal association with the target.",
+        "The Metric: Chi-Squared",
+        "For each molecular feature, we build a 2×2 contingency table:",
+        "Interpretation: High χ² = strong feature-toxicity association.",
+        "Advantages",
+        "Fast: O(p) where p = feature count",
+        "Interpretable: ranked feature list",
+        "Result: Top 40 features capture most signal"
+      ]
+    },
+    {
+      "n": 6,
+      "title": "Seven Models: Baseline to Proposed",
+      "body": [
+        "Baseline (Sanity Check)",
+        "Dummy: Always predicts majority class",
+        "Unpenalized (1,024 features)",
+        "Logistic Regression: Standard, no regularization",
+        "Ensemble Baseline",
+        "Random Forest: 100 trees, depth=15. Strong nonlinear baseline."
+      ]
+    },
+    {
+      "n": 7,
+      "title": "Proposed: SIS + Elastic Net",
+      "body": [
+        "First: SIS reduces to 40 features. Then: Elastic Net learns sparse coefficients. Combines statistical screening with modern regularization.",
+        "Penalized (1,024 features)",
+        "LASSO (L1): Encourages zerosRidge (L2): Smooth shrinkageElastic Net (L1+L2): Hybrid"
+      ]
+    },
+    {
+      "n": 8,
+      "title": "Why These Metrics Matter",
+      "body": [
+        "Not Accuracy",
+        "With 91% non-toxic baseline, accuracy is misleading. Predicting \"always non-toxic\" = 91% accurate but useless.",
+        "Our Metrics",
+        "PR-AUC: Precision-Recall curve. Best for imbalanced data. Focuses on minority class (toxic) detection.",
+        "F1-Score: Harmonic mean of precision & recall. Single number summary of balance.",
+        "MCC: Matthews Correlation Coefficient. Robust correlation measure. Ranges -1 to +1.",
+        "ROC-AUC: True positive vs false positive tradeoff at all thresholds.",
+        "Expected Metric Ranges",
+        "PR-AUC (Imbalanced)",
+        "0.0 – 1.0",
+        "Higher is better. Our baseline: ~0.09 (random).",
+        "F1-Score (Balanced)",
+        "0.0 – 1.0",
+        "Typically 0.2–0.4 with severe imbalance."
+      ]
+    },
+    {
+      "n": 9,
+      "title": "Results: Model Comparison on Test Set",
+      "body": [
+        "Four metrics:",
+        "PR-AUC, F1-Score, MCC, ROC-AUC",
+        "Key Insight:",
+        "SIS + Elastic Net achieves best PR-AUC (0.340, most important for imbalance).",
+        "Random Forest wins on F1 (0.806) but uses all 1,024 features (black box).",
+        "The tradeoff: Accept slightly lower accuracy for 40 interpretable features."
+      ]
+    },
+    {
+      "n": 10,
+      "title": "Ablation Study: Does SIS Actually Help?",
+      "body": [
+        "The Question",
+        "Is SIS actually improving performance, or just luck?",
+        "The Experiment",
+        "Train Elastic Net with 5 different L1-L2 mixing parameters (α: 0 to 1) in two conditions:",
+        "Blue: SIS + Elastic Net (40 features)",
+        "Orange: Full Features (1,024 features)",
+        "The Result",
+        "by +3–5% F1-score across all α values. This proves: SIS filtering is essential in high dimensions.",
+        "SIS consistently outperforms",
+        "Why? With 1,024 features and ~700 training samples, noise features dominate. SIS pre-filters to top 40 signals, giving regularizer a fighting chance.",
+        "F1-score vs. L1-L2 mixing parameter"
+      ]
+    },
+    {
+      "n": 11,
+      "title": "Feature Sparsity & Dimensionality Reduction",
+      "body": [
+        "Dimensionality Reduction",
+        "96%",
+        "Feature space reduction",
+        "Original: 1,024 features",
+        "After SIS: 40 features",
+        "Removed: 984 features (noise)",
+        "Practical Impact",
+        "40× faster inference in production",
+        "40× less memory for model storage",
+        "40× simpler to explain to chemists",
+        "Model Sparsity",
+        "SIS + Elastic Net",
+        "40",
+        "non-zero coefficients",
+        "LASSO (full data)",
+        "950",
+        "non-zero coefficients (93% original)",
+        "Ridge / LR (no penalty)",
+        "1,024"
+      ]
+    },
+    {
+      "n": 12,
+      "title": "",
+      "body": []
+    },
+    {
+      "n": 13,
+      "title": "Top 5 Toxicophore Fragments",
+      "body": [
+        "The Practical Deliverable",
+        "A ranked list of 40 molecular fragments that predict toxicity. Chemists can use immediately:",
+        "Real-World Use",
+        "Chemist synthesizes a candidate drug. Instant screen: contains Feature 878? 777? 155? If 3+ critical fragments present → predicted toxic → avoid this structure.",
+        "🎯",
+        "40 Toxicophore Alerts",
+        "Actionable screening checklistfor drug discovery teams",
+        "Impact: Saves months of testing. Prevents synthesis of obviously toxic compounds."
+      ]
+    },
+    {
+      "n": 14,
+      "title": "Key Findings & Conclusions",
+      "body": [
+        "Finding 1",
+        "SIS is effective. 96% dimensionality reduction while improving F1 by 3–5%. High-dimensional noise is real.",
+        "Finding 2",
+        "Interpretability wins. SIS + Elastic Net trades ~5% accuracy for 1,000× simpler model. Worth it.",
+        "Finding 3",
+        "Imbalance matters. Wrong metrics (accuracy) fail. Right metrics (PR-AUC, F1, MCC) reveal truth.",
+        "Why This Matters",
+        "40× faster inference. Reduces production costs.",
+        "Computational Efficiency:",
+        "Chemists understand 40 molecular fragments. Can't explain 1,024 features.",
+        "Interpretability:",
+        "Works for any toxicity endpoint (liver, kidney, cardiac). Transfer learning possible.",
+        "Scalability:",
+        "Bottom Line",
+        "In drug discovery, converting 1,024 opaque features into 40 actionable molecular alerts is the real innovation—not squeezing out 5% more accuracy."
+      ]
+    }
+  ]
+}
