@@ -44,7 +44,7 @@ against `js/dc-runtime.js`, `js/image-slot.js` and `css/site.css` instead.
 
 ## Slide images
 
-All twelve projects show their deck's real slides — 222 images, rendered from
+All thirteen projects show their deck's real slides — 236 images, rendered from
 the source files to `uploads/slides/P-XX/NN.webp`. `tools/build-content.py`
 picks those up automatically and the viewer switches from text slides to image
 slides; a project with no images falls back to rendering its deck's text.

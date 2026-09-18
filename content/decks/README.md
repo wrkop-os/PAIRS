@@ -3,7 +3,7 @@
 Source content for the in-site slideshow and the methodology reader.
 `tools/build-content.py` bundles everything here into `js/decks.js`.
 
-## Slide decks — `P-01.json` … `P-12.json`
+## Slide decks — `P-01.json` … `P-13.json`
 
 One file per project, keyed by the project ID used in `js/app.js`. Each holds the
 deck's own text, slide by slide:
@@ -20,6 +20,10 @@ written to be spoken, names things the slide does not show, and is often in the
 first person, so it does not belong on a public page. A slide that carries only a
 title (its body was narration, or it holds just a diagram) renders as a centred
 title card.
+
+`P-13.json` came later than the rest: the deck was not in the shared folder
+with the other twelve and was supplied separately, so its slide text was pulled
+straight out of the `.pptx` rather than from the original extraction pass.
 
 The original decks themselves are not in this repo. The design file references
 them under `uploads/*.pptx`, but those files were never part of the handoff, and
