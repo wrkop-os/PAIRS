@@ -1403,6 +1403,96 @@ window.PAIRS_DECKS = {
     "body": []
    }
   ]
+ },
+ "P-13": {
+  "source": "QSAR_Presentation.pptx",
+  "title": "High-Dimensional Molecular Feature Selection for Acute Oral Toxicity Prediction",
+  "slides": [
+   {
+    "n": 1,
+    "image": "uploads/slides/P-13/01.webp",
+    "title": "High-Dimensional Molecular Feature Selection",
+    "body": []
+   },
+   {
+    "n": 2,
+    "image": "uploads/slides/P-13/02.webp",
+    "title": "Context: The Problem",
+    "body": []
+   },
+   {
+    "n": 3,
+    "image": "uploads/slides/P-13/03.webp",
+    "title": "The Dataset: QSAR Oral Toxicity",
+    "body": []
+   },
+   {
+    "n": 4,
+    "image": "uploads/slides/P-13/04.webp",
+    "title": "Our Approach: Four Stages",
+    "body": []
+   },
+   {
+    "n": 5,
+    "image": "uploads/slides/P-13/05.webp",
+    "title": "Sure Independence Screening (SIS)",
+    "body": []
+   },
+   {
+    "n": 6,
+    "image": "uploads/slides/P-13/06.webp",
+    "title": "Seven Models: Baseline to Proposed",
+    "body": []
+   },
+   {
+    "n": 7,
+    "image": "uploads/slides/P-13/07.webp",
+    "title": "Proposed: SIS + Elastic Net",
+    "body": []
+   },
+   {
+    "n": 8,
+    "image": "uploads/slides/P-13/08.webp",
+    "title": "Why These Metrics Matter",
+    "body": []
+   },
+   {
+    "n": 9,
+    "image": "uploads/slides/P-13/09.webp",
+    "title": "Results: Model Comparison on Test Set",
+    "body": []
+   },
+   {
+    "n": 10,
+    "image": "uploads/slides/P-13/10.webp",
+    "title": "Ablation Study: Does SIS Actually Help?",
+    "body": []
+   },
+   {
+    "n": 11,
+    "image": "uploads/slides/P-13/11.webp",
+    "title": "Feature Sparsity & Dimensionality Reduction",
+    "body": []
+   },
+   {
+    "n": 12,
+    "image": "uploads/slides/P-13/12.webp",
+    "title": "",
+    "body": []
+   },
+   {
+    "n": 13,
+    "image": "uploads/slides/P-13/13.webp",
+    "title": "Top 5 Toxicophore Fragments",
+    "body": []
+   },
+   {
+    "n": 14,
+    "image": "uploads/slides/P-13/14.webp",
+    "title": "Key Findings & Conclusions",
+    "body": []
+   }
+  ]
  }
 };
 window.PAIRS_METHODOLOGIES = {
