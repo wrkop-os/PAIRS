@@ -56,8 +56,12 @@
   [data-r="section"] { padding-left: 18px !important; padding-right: 18px !important; }
   [data-r="section-tall"] { padding: 52px 18px 72px !important; }
   [data-r="band"] { padding: 56px 18px !important; }
+  /* Grid and flex children refuse to shrink past their content by default, so
+     a 44px figure like "1,200+" held the stat strip and the award card wider
+     than a 320px screen and the browser zoomed the whole page out to fit. */
   [data-r="stats"] { grid-template-columns: repeat(2, 1fr) !important; row-gap: 26px !important; }
-  [data-r="stats"] > div { padding: 0 14px !important; }
+  [data-r="stats"] > div { padding: 0 12px !important; min-width: 0 !important; }
+  [data-r="stats"] > div > div > span:first-child { font-size: 34px !important; }
   [data-r="grid5"], [data-r="grid4"], [data-r="grid3"], [data-r="pipeline"] {
     grid-template-columns: 1fr !important;
     gap: 18px !important;
@@ -92,6 +96,18 @@
   .doc-panel { max-height: 100vh !important; height: 100vh !important; padding: 20px 18px 40px !important; }
   .doc-title { font-size: 26px !important; }
 
+  /* Award card: badge beside text, which together could not fit a narrow
+     screen. The badge comes down a size and the text column is allowed to
+     shrink; the project title is mono and unbreakable, so it may break
+     anywhere rather than set the card's width. */
+  [data-r="grid2"] > article { gap: 16px !important; padding: 20px 18px !important; }
+  [data-r="grid2"] > article > div:last-child { min-width: 0; }
+  [data-r="grid2"] .award-icon-slot { width: 72px !important; height: 72px !important; }
+  [data-r="grid2"] > article p.mono { overflow-wrap: anywhere; }
+
+  /* Tabs sit in a scrolling strip, so give them a thumb-sized row. */
+  [data-r="nav"] .tabbtn { padding: 11px 2px !important; }
+
   [data-r="footer"] { padding: 22px 18px 34px !important; }
   [data-r="footer"] > div { flex-direction: column !important; gap: 8px !important; }
 }
@@ -103,4 +119,17 @@
 
 @media (prefers-reduced-motion: reduce) {
   .pcard { transition: none; }
+}
+
+/* Very narrow phones (iPhone SE and similar). Two stat columns cannot hold a
+   figure and its label at this width without the page zooming out. */
+@media (max-width: 380px) {
+  [data-r="stats"] { grid-template-columns: 1fr !important; row-gap: 22px !important; }
+  [data-r="stats"] > div { padding: 0 0 0 12px !important; }
+
+  /* All four tabs fit here rather than leaving one half off the edge of a
+     strip whose scrollbar is hidden. */
+  [data-r="header"] { padding: 12px 14px !important; }
+  [data-r="nav"] { gap: 10px !important; }
+  [data-r="nav"] .tabbtn { font-size: 12.5px !important; letter-spacing: .04em !important; }
 }
