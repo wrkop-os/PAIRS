@@ -72,7 +72,8 @@ const STUDENTS = [
   { name: "Wasi Hossain", photo: R("st-13", "uploads/Wasi Hossain.jpg"), bio: "Hello, my name is Wasi Hossain. I am a rising senior at Brooklyn Technical High School. I have a passion for robotics as it helps me pursue my dream of being an engineer. I love solving problems and learning new things. Learning about machine learning and incorporating my previous knowledge was really fun." },
   { name: "Ethan Tan", photo: R("st-14", "uploads/Ethan Tan.jpg"), bio: "Student at Bronx High School of Science. 2028'" },
   { name: "Rishav Banik", photo: R("st-15", "uploads/Rishav Banik.jpg"), bio: "Hello, I am Rishav Banik a senior from the Bronx High School of Science. I participate in various activities related to coding and engineering such as preparing for physics and engineering events in Science Olympiad, coding graphics engines, as well as building AI powered nerf turrets. I look forward to integrating AI into chip design to automate optimizing power and performance of future chips." },
-  { name: "Yeaden Alamin", photo: R("st-16", ""), bio: "" }
+  { name: "Yeaden Alamin", photo: R("st-16", ""), bio: "" },
+  { name: "Aditta Roy", photo: R("st-17", "uploads/Aditta Roy.jpg"), bio: "I’ve been using a computer for 9 years now. I play competitive Rainbow 6. Computers make life way easier too!" }
 ];
 
 const PROJECTS = [
