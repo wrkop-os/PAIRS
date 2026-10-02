@@ -49,12 +49,13 @@ a:hover { color: var(--accent); }
 .award-icon-slot image-slot::part(frame) { background: transparent; }
 
 /* Photo framing. A card frame is landscape and a portrait photo is cropped
-   top and bottom to fill it; centred, that cuts the two subjects below off at
-   the face. Keyed on the file rather than the card's generated id so it
+   top and bottom to fill it; centred, that cuts the subjects below off at the
+   face or the hairline. Keyed on the file rather than the card's generated id so it
    survives a rebuild. The percentage is where in the photo the crop window
    sits, so a smaller number shows more of the top — the face moves down. */
 image-slot[src$="Sumit Deb.png"]::part(image) { object-position: 50% 12%; }
 image-slot[src$="Tirtha Saha.png"]::part(image) { object-position: 50% 22%; }
+image-slot[src$="Aditta Roy.jpg"]::part(image) { object-position: 50% 40%; }
 
 /* Shahzeb's photo is full-length, so at a card's scale he reads as a distant
    figure beside the other mentors' portraits. Enlarge the image inside the
